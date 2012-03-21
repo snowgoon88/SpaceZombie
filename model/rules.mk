@@ -63,7 +63,7 @@ TAG_FILES	:= $(TAG_FILES) $(CORE_SRC_$(d))
 $(CORE_OBJS_$(d)):	$(d)/rules.mk
 
 $(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) -Isrc -Imvc \
-                                  -Wno-deprecated
+                                  -Wno-deprecated \
 
 # Local libs
 # Force remake if rules are changed

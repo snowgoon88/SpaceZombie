@@ -20,15 +20,13 @@ d		:= $(dir)
 # may create, i.e. the ones we want deleted by a make clean command.)
 
 # Local rules and target
-CORE_SRC_$(d)	:= $(d)/world_scigl.h $(d)/world_scigl.cc \
-                   $(d)/ref_frame_scigl.h $(d)/ref_frame_scigl.cc \
+CORE_SRC_$(d)	:= $(d)/arrow_scigl.h $(d)/arrow_scigl.cc \
 
-CORE_OBJS_$(d)	:= $(d)/world_scigl.o \
-                   $(d)/ref_frame_scigl.o \
+CORE_OBJS_$(d)	:= $(d)/arrow_scigl.o \
 
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 
-TGTS_$(d)	:= $(d)/libviewer.a
+TGTS_$(d)	:= $(d)/libshape.a
 
 DEPS_$(d)	:= $(TGTS_$(d):%=%.d)
 
@@ -58,7 +56,7 @@ TAG_FILES	:= $(TAG_FILES) $(CORE_SRC_$(d))
 # Force remake if rules are changed
 $(CORE_OBJS_$(d)):	$(d)/rules.mk
 
-$(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) -Isrc -Imodel -Imvc \
+$(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) -Isrc \
                                   -I$(SCIGL_ROOT)/scigl -I/opt/local/include\
                                   -Wno-deprecated  \
 
@@ -79,7 +77,7 @@ $(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) -Isrc -Imodel -Imvc \
 # $(d)/test_neurone:	$(d)/test_neurone.cc $(CORE_OBJS_$(d)) 
 #			$(COMPLINK)
 
-$(d)/libviewer.a:	$(CORE_OBJS_$(d))
+$(d)/libshape.a:	$(CORE_OBJS_$(d))
 	@echo "***** Generating $@"
 	$(ARCH)
 

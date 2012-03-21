@@ -13,17 +13,19 @@ DIR_PROJET	:= SpaceZombie
 
 SCIGL_ROOT	:= ../Scigl
 SZ_ROOT	:= .
-EIGEN_ROOT	:= /Users/dutech/Work/SVN_loriakhep/NeuralNetwork/DSOM/eigen-eigen-65ee2328342f
 ifeq ($(PLATFORM), Darwin) 
 GLFW_HOME       := /Users/dutech/Work/SVN_loriakhep/glfw-2.7
+EIGEN_ROOT	:= /Users/dutech/Work/SVN_loriakhep/NeuralNetwork/DSOM/eigen-eigen-65ee2328342f
 else
 GLFW_HOME       := /usr
+EIGEN_ROOT      := /usr/include/eigen2
 endif
 ANTTW_HOME	:= ../Inertia/AntTweakBar
 
 ### Build flags for all targets
 #
-CF_ALL          = -g -Wall
+CF_ALL          = -g -Wall \
+                  -I$(EIGEN_ROOT) -I$(ANTTW_HOME)/include
 #CF_ALL          = -O3
 LF_ALL          = 
 LL_ALL          =

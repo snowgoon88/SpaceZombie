@@ -29,8 +29,10 @@ d		:= $(dir)
 CORE_SRC_$(d)	:= $(DIR_PROJET)/$(d)/test_model.cc \
                    $(DIR_PROJET)/$(d)/test_scigl.cc \
                    $(DIR_PROJET)/$(d)/test_physic_scigl.cc \
+                   $(DIR_PROJET)/$(d)/test_arrow_scigl.cc \
                    $(DIR_PROJET)/$(d)/test_timer.cc \
                    $(DIR_PROJET)/$(d)/test_format.cc \
+                   $(DIR_PROJET)/$(d)/test_vect.cc \
 
 CORE_OBJS_$(d)	:= 
 
@@ -39,8 +41,10 @@ CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 TGTS_$(d)	:= $(d)/test_model \
                    $(d)/test_scigl \
                    $(d)/test_physic_scigl \
+                   $(d)/test_arrow_scigl \
                    $(d)/test_timer \
                    $(d)/test_format \
+                   $(d)/test_vect \
 
 DEPS_$(d)	:= $(TGTS_$(d):%=%.d)
 
@@ -48,8 +52,8 @@ TGT_BIN		:= $(TGT_BIN) verbose_$(d) $(TGTS_$(d))
 
 TAR_SRC		:= $(TAR_SRC) $(CORE_SRC_$(d)) $(DIR_PROJET)/$(d)/rules.mk
 
-CLEAN		:= $(CLEAN) $(TGTS_$(d)) $(DEPS_$(d))
-VERYCLEAN	:= $(VERYCLEAN) $(d)/*~ $(d)/*.dSYM 
+CLEAN		:= $(CLEAN) $(DEPS_$(d))
+VERYCLEAN	:= $(VERYCLEAN) $(TGTS_$(d)) $(d)/*~ $(d)/*.dSYM 
 
 TAG_FILES	:= $(TAG_FILES)
 
@@ -77,7 +81,9 @@ ifeq ($(PLATFORM), Darwin)
 $(TGTS_$(d)):	CF_TGT := -I$(d) -Isrc -I/opt/local/include \
                           -I$(SCIGL_ROOT)/scigl -I$(GLFW_HOME)/include \
                           -I$(ANTTW_HOME)/include \
+                          -I$(EIGEN_ROOT) \
                           -I$(SZ_ROOT)/model -I$(SZ_ROOT)/viewer -I$(SZ_ROOT)/mvc\
+                          -I$(SZ_ROOT)/shape3D \
 
 $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
                           -framework OpenGL -framework Cocoa \
@@ -92,6 +98,7 @@ $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 
 $(TGTS_$(d)):	LL_TGT := $(SZ_ROOT)/model/libmodel.a \
                           $(SZ_ROOT)/viewer/libviewer.a \
+                          $(SZ_ROOT)/shape3D/libshape.a \
                           $(SZ_ROOT)/mvc/libmvc.a \
                           $(SZ_ROOT)/src/libsrc.a \
                           $(SCIGL_ROOT)/scigl/libscigl.a \
@@ -101,8 +108,8 @@ $(TGTS_$(d)):	LL_TGT := $(SZ_ROOT)/model/libmodel.a \
 else
 $(TGTS_$(d)):	CF_TGT := -I$(d) -Isrc \
                           -I$(SCIGL_ROOT)/scigl -I$(GLFW_HOME)/include \
-                          -I$(ANTTW_HOME)/include \
                           -I$(SZ_ROOT)/model -I$(SZ_ROOT)/viewer -I$(SZ_ROOT)/mvc\
+                          -I$(SZ_ROOT)/shape3D \
 
 $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 
@@ -113,6 +120,7 @@ $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 
 $(TGTS_$(d)):	LL_TGT := $(SZ_ROOT)/model/libmodel.a \
                           $(SZ_ROOT)/viewer/libviewer.a \
+                          $(SZ_ROOT)/shape3D/libshape.a \
                           $(SZ_ROOT)/mvc/libmvc.a \
                           $(SZ_ROOT)/src/libsrc.a \
                           $(SCIGL_ROOT)/scigl/libscigl.a \
@@ -131,11 +139,20 @@ $(d)/test_model: 	$(d)/test_model.cc src/libsrc.a model/libmodel.a viewer/libvie
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
+$(d)/test_vect: 	$(d)/test_vect.cc 
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK)
+
+
 $(d)/test_scigl:	$(d)/test_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a $(SCIGL_ROOT)/scigl/libscigl.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
 $(d)/test_physic_scigl:	$(d)/test_physic_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a $(SCIGL_ROOT)/scigl/libscigl.a
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK)
+
+$(d)/test_arrow_scigl:	$(d)/test_arrow_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a shape3D/libshape.a mvc/libmvc.a $(SCIGL_ROOT)/scigl/libscigl.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 

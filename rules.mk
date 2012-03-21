@@ -14,6 +14,8 @@ dir		:= model
 include		$(dir)/rules.mk
 dir		:= viewer
 include		$(dir)/rules.mk
+dir		:= shape3D
+include		$(dir)/rules.mk
 dir		:= mvc
 include		$(dir)/rules.mk
 dir		:= test
