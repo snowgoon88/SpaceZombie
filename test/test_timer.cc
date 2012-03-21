@@ -13,7 +13,7 @@
 #include <iostream>
 #include <cmath>
 #include <ctime>
-#include "Timer.h"
+#include "timer.h"
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     }
 
     cout << CLOCKS_PER_SEC << endl;
-    cout << CLK_TCK << endl;
+    // obsolete cout << CLK_TCK << endl;
     cout << clock()/CLOCKS_PER_SEC << endl;
 
     return 0;

@@ -1,1 +1,1 @@
-/Users/dutech/Work/SVN_loriakhep/NeuralNetwork/DSOM/mvc/view/observer.cc
+../../Scigl/mvc/view/observer.cc

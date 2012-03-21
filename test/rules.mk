@@ -73,6 +73,7 @@ TAG_FILES	:= $(TAG_FILES)
 # Local libs
 # Force remake if rules are changed
 #$(TGTS_$(d)): $(d)/rules.mk
+ifeq ($(PLATFORM), Darwin) 
 $(TGTS_$(d)):	CF_TGT := -I$(d) -Isrc -I/opt/local/include \
                           -I$(SCIGL_ROOT)/scigl -I$(GLFW_HOME)/include \
                           -I$(ANTTW_HOME)/include \
@@ -97,7 +98,30 @@ $(TGTS_$(d)):	LL_TGT := $(SZ_ROOT)/model/libmodel.a \
                           $(ANTTW_HOME)/lib/libAntTweakBar.dylib \
                           $(GLFW_HOME)/lib/cocoa/libglfw.a \
                           -lboost_thread-mt
+else
+$(TGTS_$(d)):	CF_TGT := -I$(d) -Isrc \
+                          -I$(SCIGL_ROOT)/scigl -I$(GLFW_HOME)/include \
+                          -I$(ANTTW_HOME)/include \
+                          -I$(SZ_ROOT)/model -I$(SZ_ROOT)/viewer -I$(SZ_ROOT)/mvc\
 
+$(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
+
+# $(TGTS_$(d)):	LL_TGT := $(GDK_LIBS) $(GTK_LIBS) \
+# 			  $(UTILS_LIBS) \
+# 	                  $(VID_LIBS) $(GST_LIBS) $(OPENCV_LIBS) \
+# 	                  -lgthread-2.0 -lboost_thread
+
+$(TGTS_$(d)):	LL_TGT := $(SZ_ROOT)/model/libmodel.a \
+                          $(SZ_ROOT)/viewer/libviewer.a \
+                          $(SZ_ROOT)/mvc/libmvc.a \
+                          $(SZ_ROOT)/src/libsrc.a \
+                          $(SCIGL_ROOT)/scigl/libscigl.a \
+                          $(ANTTW_HOME)/lib/libAntTweakBar.so \
+                          -lglfw \
+                          -lGL -lGLU -lGLEW \
+                          -lboost_thread-mt
+
+endif
 
 #$(CORE_OBJS_$(d)):	CF_TGT := -I. -I$(d) $(shell pkg-config --cflags gtkmm-2.4)
 #$(OBJS_$(d)):	LF_TGT := -lgsl -lgslcblas -lm 

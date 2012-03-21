@@ -69,6 +69,7 @@ TAG_FILES	:= $(TAG_FILES)
 # Local libs
 # Force remake if rules are changed
 #$(TGTS_$(d)): $(d)/rules.mk
+ifeq ($(PLATFORM), Darwin) 
 $(TGTS_$(d)):	CF_TGT := -I$(d) -I/opt/local/include \
 
 $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
@@ -80,7 +81,20 @@ $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 # 	                  -lgthread-2.0 -lboost_thread
 
 $(TGTS_$(d)):	LL_TGT := -llua
+else
+$(TGTS_$(d)):	CF_TGT := -I$(d) -I/usr/include/lua5.1 \
 
+$(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
+                          -L/opt/local/lib \
+
+# $(TGTS_$(d)):	LL_TGT := $(GDK_LIBS) $(GTK_LIBS) \
+# 			  $(UTILS_LIBS) \
+# 	                  $(VID_LIBS) $(GST_LIBS) $(OPENCV_LIBS) \
+# 	                  -lgthread-2.0 -lboost_thread
+
+$(TGTS_$(d)):	LL_TGT := -llua5.1
+
+endif
 
 #$(CORE_OBJS_$(d)):	CF_TGT := -I. -I$(d) $(shell pkg-config --cflags gtkmm-2.4)
 #$(OBJS_$(d)):	LF_TGT := -lgsl -lgslcblas -lm 

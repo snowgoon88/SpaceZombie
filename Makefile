@@ -11,7 +11,7 @@ VERYCLEAN	:= *~
 PROJET		:= sz
 DIR_PROJET	:= SpaceZombie
 
-SCIGL_ROOT	:= /Users/dutech/Work/SVN_loriakhep/NeuralNetwork/DSOM
+SCIGL_ROOT	:= ../Scigl
 SZ_ROOT	:= .
 EIGEN_ROOT	:= /Users/dutech/Work/SVN_loriakhep/NeuralNetwork/DSOM/eigen-eigen-65ee2328342f
 ifeq ($(PLATFORM), Darwin) 
@@ -19,7 +19,7 @@ GLFW_HOME       := /Users/dutech/Work/SVN_loriakhep/glfw-2.7
 else
 GLFW_HOME       := /usr
 endif
-ANTTW_HOME	:= /Users/dutech/Perso/Inertia/AntTweakBar
+ANTTW_HOME	:= ../Inertia/AntTweakBar
 
 ### Build flags for all targets
 #
