@@ -44,6 +44,19 @@ void vec_to_angle(float x, float y, float z)
     }    
   }
 }
+void test_product()
+{
+  TVec3 x(1,0,0);
+  TVec3 y(0,1,0);
+  TVec3 z(0,0,1);
+
+  std::cout << "x x y = " << line_repr( x.cross(y) ) << "\n";
+
+  std::cout << "n=" << line_repr( (x-z).cross(y-z)) << "\n";
+  std::cout << "n=" << line_repr( (x-y).cross(z-y)) << "\n";
+
+}
+
 
 int main(int argc, char *argv[] )
 {
@@ -52,4 +65,5 @@ int main(int argc, char *argv[] )
   vec_to_angle(1, 0, 1);
   vec_to_angle(0.5, 0.5, 0.707);
   vec_to_angle(0, 0, 2);
+  test_product();
 }

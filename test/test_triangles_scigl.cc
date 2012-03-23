@@ -3,8 +3,8 @@
  * Alain - Jan 2012
  */
 /**
- * Drawing a simple world and an arrow.
- * Derived from test_physics_scigl.cc
+ * Drawing a simple world and triangles
+ * Derived from test_arrow_scigl.cc
  */
 #include "utils.h"
 #include "object.h" 
@@ -24,7 +24,7 @@
 #include <cstdlib>
 #include "scene.h"
 #include "ref_frame_scigl.h"
-#include "arrow_scigl.h"
+#include "triangles_scigl.h"
 #include "textbox.h" 
 // AntTweakBar
 #include <AntTweakBar.h>
@@ -33,13 +33,8 @@
 ScenePtr _scene = ScenePtr (new Scene);
 TextBoxPtr _textbox;
 TwBar *_bar;         // Pointer to a tweak bar
-SVec3 _pos_arrow = {0.0, 0.0, 0.0};
-SVec3 _vec_arrow = {1.0, 1.0, 1.0};
-ArrowPtr _arrow = ArrowPtr( new Arrow );
-ArrowPtr _arrow_p = ArrowPtr( new Arrow );
-ArrowPtr _arrow_x = ArrowPtr( new Arrow );
-ArrowPtr _arrow_xy = ArrowPtr( new Arrow );
-ArrowPtr _arrow_xyz = ArrowPtr( new Arrow );
+TrianglesPtr _triangles = TrianglesPtr( new Triangles );
+std::vector<TVec3> _vec_vertex;
 
 // FPS
 Timer _timer_fps;
@@ -161,6 +156,11 @@ int main (int argc, char **argv)
   // Some graphic parameters
   int width, height;
 
+  // init triangles
+  _vec_vertex.push_back( TVec3( 1, 0, 0 ) );
+  _vec_vertex.push_back( TVec3( 0, 0, 1 ) );
+  _vec_vertex.push_back( TVec3( 0, 1, 0 ) );
+
   // Initialise GLFW
   if( !glfwInit() ) {
     fprintf( stderr, "Failed to initialize GLFW\n" );
@@ -187,13 +187,17 @@ int main (int argc, char **argv)
   //glutReshapeWindow (400,400);
 
   // Initialize AntTweakBar
+  float tw_tri_dir[3] = {1, 0, 0}; // direction pointing to +x and +y
   TwInit(TW_OPENGL, NULL);
   // Create a tweak bar
   _bar = TwNewBar("_scene");
   TwType tw_SVec3 = TwDefineStruct("Vec3", SVec3Members, 3, sizeof(SVec3), NULL, NULL);
-  TwAddVarRW( _bar, "_vec_arrow", tw_SVec3, &_vec_arrow, " Group='Arrow' Label='Vector' ");
-  TwAddVarRW( _bar, "_pos_arrow", tw_SVec3, &_pos_arrow, " Group='Arrow' Label='Position' ");
-
+  TwAddVarRW( _bar, "_vec0", tw_SVec3, &(_vec_vertex[0]), " Label='Point_0' ");
+  TwAddVarRW( _bar, "_vec1", tw_SVec3, &(_vec_vertex[1]), " Label='Point_1' ");
+  TwAddVarRW( _bar, "_vec2", tw_SVec3, &(_vec_vertex[2]), " Label='Point_2' ");
+// ...
+  TwAddVarRW( _bar, "_tri_dir", TW_TYPE_DIR3F, &tw_tri_dir, " Label='Dir'");
+  TwAddVarRW( _bar, "fg_normal", TW_TYPE_BOOLCPP, &(_triangles->_fg_normal), " Label='fg_normal'" );
   //TwDefine( " _world iconified=true position='10 50'");
   //TwDefine( " GLOBAL help='AntTweak to alter rotation angle.' "); // Msg to the help bar.
   // TwAddVarRW( _bar, "fg_physic", TW_TYPE_BOOLCPP, &(_fg_physics),
@@ -239,12 +243,9 @@ int main (int argc, char **argv)
   _ref->_ang_Oz2 =  0.0;
   _scene->add( _ref );
 
-  // Some Arrow
-  _scene->add( _arrow );
-  _scene->add( _arrow_p );
-  _scene->add( _arrow_x );
-  _scene->add( _arrow_xy );
-  _scene->add( _arrow_xyz );
+  // Some Triangles
+  _triangles->attach_vertex( &(_vec_vertex) );
+  _scene->add( _triangles );
 
   _scene->set_zoom(0.5);
   _scene->set_orientation( 70.0, 80.0 );
@@ -281,20 +282,8 @@ int main (int argc, char **argv)
     
     // display
     double time_frame_before = _timer_fps.getElapsedTimeInMilliSec();
-    TVec3 arrow_vec( _vec_arrow.x, _vec_arrow.y, _vec_arrow.z);
-    TVec3 arrow_pos( _pos_arrow.x, _pos_arrow.y, _pos_arrow.z);
-    _arrow->compute_from_vec( arrow_vec );
-    std::cout << "ang_z1=" << to_deg( _arrow->_ang_z1 ) << " (" << _arrow->_ang_z1 << ")\n";
-    _arrow->set_position( arrow_pos );
-    _arrow_p->compute_from_vec( arrow_pos );
-    TVec3 ex(1,0,0); TVec3 ey(0,1,0); TVec3 ez(0,0,1);
-    _arrow_x->set_position( arrow_pos );
-    _arrow_x->compute_from_vec( ex * ex.dot(arrow_vec) );
-    _arrow_xy->set_position( arrow_pos + ex * ex.dot(arrow_vec) );
-    _arrow_xy->compute_from_vec( ey * ey.dot(arrow_vec) );
-    _arrow_xyz->set_position( arrow_pos + ex * ex.dot(arrow_vec) + ey * ey.dot(arrow_vec));
-    _arrow_xyz->compute_from_vec( ez * ez.dot(arrow_vec) );
     
+    _triangles->orient_from_vec( TVec3( tw_tri_dir[0], tw_tri_dir[1], tw_tri_dir[2] ));
     display();
 
     // update FPS

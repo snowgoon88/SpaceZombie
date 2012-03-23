@@ -30,6 +30,7 @@ CORE_SRC_$(d)	:= $(DIR_PROJET)/$(d)/test_model.cc \
                    $(DIR_PROJET)/$(d)/test_scigl.cc \
                    $(DIR_PROJET)/$(d)/test_physic_scigl.cc \
                    $(DIR_PROJET)/$(d)/test_arrow_scigl.cc \
+                   $(DIR_PROJET)/$(d)/test_triangles_scigl.cc \
                    $(DIR_PROJET)/$(d)/test_timer.cc \
                    $(DIR_PROJET)/$(d)/test_format.cc \
                    $(DIR_PROJET)/$(d)/test_vect.cc \
@@ -42,6 +43,7 @@ TGTS_$(d)	:= $(d)/test_model \
                    $(d)/test_scigl \
                    $(d)/test_physic_scigl \
                    $(d)/test_arrow_scigl \
+                   $(d)/test_triangles_scigl \
                    $(d)/test_timer \
                    $(d)/test_format \
                    $(d)/test_vect \
@@ -135,7 +137,7 @@ endif
 #$(OBJS_$(d)):	LF_TGT := -lgsl -lgslcblas -lm 
 #$(OBJS_$(d)):	LL_TGT := $(S_LL_INET) cpp/core.a dana-cpp/dana.a
 
-$(d)/test_model: 	$(d)/test_model.cc src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a
+$(d)/test_model: 	$(d)/test_model.cc src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a shape3D/libshape.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
@@ -144,17 +146,22 @@ $(d)/test_vect: 	$(d)/test_vect.cc
 			$(COMPLINK)
 
 
-$(d)/test_scigl:	$(d)/test_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a $(SCIGL_ROOT)/scigl/libscigl.a
+$(d)/test_scigl:	$(d)/test_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a shape3D/libshape.a $(SCIGL_ROOT)/scigl/libscigl.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
-$(d)/test_physic_scigl:	$(d)/test_physic_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a $(SCIGL_ROOT)/scigl/libscigl.a
+$(d)/test_physic_scigl:	$(d)/test_physic_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a shape3D/libshape.a $(SCIGL_ROOT)/scigl/libscigl.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
 $(d)/test_arrow_scigl:	$(d)/test_arrow_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a shape3D/libshape.a mvc/libmvc.a $(SCIGL_ROOT)/scigl/libscigl.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
+
+$(d)/test_triangles_scigl:	$(d)/test_triangles_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a shape3D/libshape.a mvc/libmvc.a $(SCIGL_ROOT)/scigl/libscigl.a
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK)
+
 
 $(d)/test_timer:	$(d)/test_timer.cc src/libsrc.a
 			@echo "===== Compiling and Linking $@"

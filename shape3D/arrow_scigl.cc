@@ -133,25 +133,7 @@ void Arrow::render( void )
 // ********************************************************************* COMPUTE
 void Arrow::compute_from_vec( TVec3 v )
 {
-  // Projection on Oxy
-  TVec3 vxy = v;
-  vxy(2) = 0;
-  if( vxy.norm() > 0.0001 ) {
-    // Angle Ox,vxy
-    TVec3 ux( 1, 0, 0);
-    _ang_z1 = acos( ux.dot( vxy ) / vxy.norm() / ux.norm());
-    // Angle vxy v
-    _ang_y2 = - acos( vxy.dot( v ) / v.norm() / vxy.norm() );
-  }
-  else {
-    _ang_z1 = 0;
-    if( v(2) > 0 ) {
-      _ang_y2 = - M_PI / 2.0;
-    }
-    else {
-      _ang_y2 = - M_PI / 2.0;
-    }
-  }
+  ang_from_vec( v, _ang_z1, _ang_y2 );
   // length
   _length = v.norm();
 }
