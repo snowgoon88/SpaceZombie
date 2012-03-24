@@ -28,6 +28,10 @@ Triangles::Triangles( void ) : Object()
   fade_in_delay_ = 0;
   fade_out_delay_ = 0;
 
+  _fg_normal = false;
+  _fg_light = false;
+
+
   orient_from_vec( TVec3( 1, 0, 0) );
 
   std::ostringstream oss;
@@ -58,6 +62,17 @@ void Triangles::render( void )
     }
   }
 
+  // save Light Attributes
+  glPushAttrib( GL_LIGHTING_BIT );
+  
+  // lighting or not
+  if( _fg_light ) {
+    glEnable( GL_LIGHTING );
+  }
+  else {
+    glDisable( GL_LIGHTING );
+  }
+
   // save transformation matrix, then translate and scale.
   glPushMatrix();
   glTranslatef (get_position().x, get_position().y, get_position().z);
@@ -78,7 +93,11 @@ void Triangles::render( void )
 	//   (*_vertex)[i+0](0)*(*_vertex)[i+1](1) -
 	//   (*_vertex)[i+0](1)*(*_vertex)[i+1](0) ;
 	_normals[i] = ((*_vertex)[i+0] - (*_vertex)[i+1]).cross( ((*_vertex)[i+2] - (*_vertex)[i+1]));
+	_normals[i].normalize();
 	glNormal3f( _normals[i](0), _normals[i](1), _normals[i](2) );
+      }
+      else {
+	glNormal3f( 0, 0, 0 );
       }
       glVertex3f( (*_vertex)[i+0](0), (*_vertex)[i+0](1), (*_vertex)[i+0](2) ); 
       glVertex3f( (*_vertex)[i+1](0), (*_vertex)[i+1](1), (*_vertex)[i+1](2) ); 
@@ -106,6 +125,10 @@ void Triangles::render( void )
   
   // restore transformation matrix
   glPopMatrix();
+
+  // restore attributes
+  glPopAttrib();
+
 }
 // ********************************************************************** ATTACH
 void Triangles::attach_vertex( std::vector<TVec3> * v )

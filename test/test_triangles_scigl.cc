@@ -198,6 +198,7 @@ int main (int argc, char **argv)
 // ...
   TwAddVarRW( _bar, "_tri_dir", TW_TYPE_DIR3F, &tw_tri_dir, " Label='Dir'");
   TwAddVarRW( _bar, "fg_normal", TW_TYPE_BOOLCPP, &(_triangles->_fg_normal), " Label='fg_normal'" );
+  TwAddVarRW( _bar, "fg_light", TW_TYPE_BOOLCPP, &(_triangles->_fg_light), " Label='fg_light'" );
   //TwDefine( " _world iconified=true position='10 50'");
   //TwDefine( " GLOBAL help='AntTweak to alter rotation angle.' "); // Msg to the help bar.
   // TwAddVarRW( _bar, "fg_physic", TW_TYPE_BOOLCPP, &(_fg_physics),

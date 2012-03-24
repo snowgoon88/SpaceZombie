@@ -74,6 +74,8 @@ public:
     std::vector<TVec3> _normals;
     /** With or without normals */
     bool _fg_normal;
+    /** With or without lighting */
+    bool _fg_light;
 };
 
 #endif // __TRIANGLES_H__
