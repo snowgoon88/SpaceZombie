@@ -88,22 +88,19 @@ void Arrow::render( void )
     {{1,0,0,  lh,0,-wh,  lh,wh,0}, { 0, 0, 0}, 0, "3"},
     {{1,0,0,  lh,wh,0,  lh,0,wh}, { 0, 0, 0}, 0, "4"}
   };
+
+  // save Light Attributes and remove lighting to get "full" RGB
+  // colors
+  glPushAttrib( GL_LIGHTING_BIT );
+  glDisable( GL_LIGHTING );
     
-  /* Compute normals : one normal for each face, will be used
-   * for all the vertex of the face in rendering below */
-  for( int i=0; i<nb_head_faces; i++ ) {
-    head_faces[i].normal[0] = head_faces[i].vertices[0+1] * head_faces[i].vertices[1+2] - head_faces[i].vertices[0+2] * head_faces[i].vertices[1+1];
-    head_faces[i].normal[1] = head_faces[i].vertices[0+2] * head_faces[i].vertices[1+0] - head_faces[i].vertices[0+0] * head_faces[i].vertices[1+2];
-    head_faces[i].normal[2] = head_faces[i].vertices[0+0] * head_faces[i].vertices[1+1] - head_faces[i].vertices[0+1] * head_faces[i].vertices[1+0];
-    }
-
-
   // save transformation matrix, then translate and scale.
   glPushMatrix();
   glTranslatef (get_position().x, get_position().y, get_position().z);
   glRotatef( to_deg(_ang_z1), 0, 0, 1); // rotation around 0z
   glRotatef( to_deg(_ang_y2), 0, 1 ,0); // rotation around 0y
-  glScalef ( _length, _length, _length );
+  glScalef ( _length, 1.0, 1.0 );
+
     
   // draw line
   glColor4fv( get_br_color().data );
@@ -129,6 +126,9 @@ void Arrow::render( void )
 
   // restore transformation matrix
   glPopMatrix();
+  // restore attributes
+  glPopAttrib();
+
 }
 // ********************************************************************* COMPUTE
 void Arrow::compute_from_vec( TVec3 v )

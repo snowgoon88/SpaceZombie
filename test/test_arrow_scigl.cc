@@ -240,6 +240,17 @@ int main (int argc, char **argv)
   _scene->add( _ref );
 
   // Some Arrow
+  _arrow->set_br_color( 0, 0, 1, 1 );
+  _arrow->set_fg_color( 0, 0, 1, 1 );
+  _arrow_p->set_br_color( 0.6, 0.6, 0.6, 1 );
+  _arrow_p->set_fg_color( 0.6, 0.6, 0.6, 1 );
+  _arrow_x->set_br_color( 0, 0, 0, 1 );
+  _arrow_x->set_fg_color( 0, 0, 0, 1 );
+  _arrow_xy->set_br_color( 0, 0, 0, 1 );
+  _arrow_xy->set_fg_color( 0, 0, 0, 1 );
+  _arrow_xyz->set_br_color( 0, 0, 0, 1 );
+  _arrow_xyz->set_fg_color( 0, 0, 0, 1 );
+  
   _scene->add( _arrow );
   _scene->add( _arrow_p );
   _scene->add( _arrow_x );
