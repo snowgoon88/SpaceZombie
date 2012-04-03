@@ -63,7 +63,7 @@ void on_mouse_button( int button, int action )
   glfwGetMousePos( &x, &y);
   //std::cout <<"Mouse Button at (" << x <<  ", " << y << ")\n";
 
-  if( !TwEventMouseButtonGLFW( button, action ) )  { // send event to AntTweakBar
+  if( !TwEventMouseButtonGLFW( button, action ) )  { // send event to AntTweakBarg
     // event has not been handled by AntTweakBar
     // your code here to handle the event
     // ...
@@ -146,7 +146,7 @@ void update_textbox()
 void display (void) {
     glClearColor (1,1,1,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _scene->render ();
+    _scene->render_with_view_orientation();
     _textbox->render();
 
     // Draw tweak bars
@@ -242,6 +242,7 @@ int main (int argc, char **argv)
   // Some Arrow
   _arrow->set_br_color( 0, 0, 1, 1 );
   _arrow->set_fg_color( 0, 0, 1, 1 );
+  _arrow->_fg_text = true;
   _arrow_p->set_br_color( 0.6, 0.6, 0.6, 1 );
   _arrow_p->set_fg_color( 0.6, 0.6, 0.6, 1 );
   _arrow_x->set_br_color( 0, 0, 0, 1 );
@@ -295,6 +296,9 @@ int main (int argc, char **argv)
     TVec3 arrow_vec( _vec_arrow.x, _vec_arrow.y, _vec_arrow.z);
     TVec3 arrow_pos( _pos_arrow.x, _pos_arrow.y, _pos_arrow.z);
     _arrow->compute_from_vec( arrow_vec );
+    std::stringstream sstr;
+    sstr << arrow_vec.norm();
+    _arrow->set_text( sstr.str() );
     std::cout << "ang_z1=" << to_deg( _arrow->_ang_z1 ) << " (" << _arrow->_ang_z1 << ")\n";
     _arrow->set_position( arrow_pos );
     _arrow_p->compute_from_vec( arrow_pos );
