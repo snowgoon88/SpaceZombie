@@ -118,6 +118,7 @@ void Arrow::render( void )
   }
   glEnd();
 
+  glColor4fv (get_fg_color().data);
   // draw text
   if( _fg_text ) {
     glPushAttrib( GL_ENABLE_BIT );
@@ -135,7 +136,6 @@ void Arrow::render( void )
 
   // draw head
   glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-  glColor4fv (get_fg_color().data);
   glBegin (GL_TRIANGLES); {
     for (int i=0; i<nb_head_faces; i++) {
       //glNormal3f (head_faces[i].normal[0], head_faces[i].normal[1], head_faces[i].normal[2]);
@@ -205,6 +205,7 @@ void Arrow::render( float view_rotation[4][4] )
   }
   glEnd();
 
+  glColor4fv (get_fg_color().data);
   // draw text
   if( _fg_text ) {
     glPushAttrib( GL_ENABLE_BIT );
@@ -227,7 +228,6 @@ void Arrow::render( float view_rotation[4][4] )
 
   // draw head
   glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-  glColor4fv (get_fg_color().data);
   glTranslatef( _length, 0, 0 );
   glBegin (GL_TRIANGLES); {
     for (int i=0; i<nb_head_faces; i++) {

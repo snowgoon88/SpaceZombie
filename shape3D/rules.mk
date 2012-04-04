@@ -22,9 +22,11 @@ d		:= $(dir)
 # Local rules and target
 CORE_SRC_$(d)	:= $(d)/arrow_scigl.h $(d)/arrow_scigl.cc \
                    $(d)/triangles_scigl.h $(d)/triangles_scigl.cc \
+                   $(d)/ref_frame_scigl.h $(d)/ref_frame_scigl.cc \
 
 CORE_OBJS_$(d)	:= $(d)/arrow_scigl.o \
                    $(d)/triangles_scigl.o \
+                   $(d)/ref_frame_scigl.o \
 
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 

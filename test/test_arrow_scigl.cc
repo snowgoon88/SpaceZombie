@@ -20,6 +20,7 @@
 #include "timer.h"
 
 #include <iostream>
+#include <iomanip> // setw, setprecision
 // Graphic
 #include <cstdlib>
 #include "scene.h"
@@ -297,9 +298,9 @@ int main (int argc, char **argv)
     TVec3 arrow_pos( _pos_arrow.x, _pos_arrow.y, _pos_arrow.z);
     _arrow->compute_from_vec( arrow_vec );
     std::stringstream sstr;
-    sstr << arrow_vec.norm();
+    sstr << std::setiosflags(std::ios::fixed) << std::setprecision(2) << arrow_vec.norm();
     _arrow->set_text( sstr.str() );
-    std::cout << "ang_z1=" << to_deg( _arrow->_ang_z1 ) << " (" << _arrow->_ang_z1 << ")\n";
+    //std::cout << "ang_z1=" << to_deg( _arrow->_ang_z1 ) << " (" << _arrow->_ang_z1 << ")\n";
     _arrow->set_position( arrow_pos );
     _arrow_p->compute_from_vec( arrow_pos );
     TVec3 ex(1,0,0); TVec3 ey(0,1,0); TVec3 ez(0,0,1);

@@ -28,7 +28,9 @@
 
 
 /**
- * 3D arrow as a ligne and a head (4 triangles + quad )
+ * 3D arrow as a ligne and a head (4 triangles + quad ).
+ * br_color : color of the line
+ * fg_color : color of head and text.
  */
 class Arrow : public Object {
 

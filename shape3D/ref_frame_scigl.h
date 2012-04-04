@@ -19,6 +19,7 @@
 #ifndef __REF_FRAME_H__
 #define __REF_FRAME_H__
 #include "object.h"
+#include "arrow_scigl.h"
 
 #ifdef HAVE_BOOST
     typedef boost::shared_ptr<class RefFrame> RefFramePtr;
@@ -54,10 +55,10 @@ public:
     /**
      *  @name Rendering
      */
-    /**
-     * Render the cube
-     */
+    /** Render as 3 arrows and grid */
     virtual void render (void);
+    /** Render as 3 arrows, grid and X,Y,Z */
+    virtual void render( float view_rotation[4][4] );
     //@}
 
     /** Angle around Oz */
@@ -70,6 +71,8 @@ public:
     int _nb_points;
     /** WireSphere */
     float *_pt_sphere;
+    /** Arrow3D */
+    Arrow _arr_X, _arr_Y, _arr_Z;
 };
 
 #endif
