@@ -15,7 +15,7 @@ SCIGL_ROOT	:= ../Scigl
 SZ_ROOT	:= .
 ifeq ($(PLATFORM), Darwin) 
 GLFW_HOME       := /Users/dutech/Work/SVN_loriakhep/glfw-2.7
-EIGEN_ROOT	:= /Users/dutech/Work/SVN_loriakhep/NeuralNetwork/DSOM/eigen-eigen-65ee2328342f
+EIGEN_ROOT	:= /Users/dutech/Work/SVN_loriakhep/NeuralNetwork/eigen-eigen-65ee2328342f
 else
 GLFW_HOME       := /usr
 EIGEN_ROOT      := /usr/include/eigen2

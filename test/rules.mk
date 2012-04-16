@@ -34,6 +34,7 @@ CORE_SRC_$(d)	:= $(DIR_PROJET)/$(d)/test_model.cc \
                    $(DIR_PROJET)/$(d)/test_timer.cc \
                    $(DIR_PROJET)/$(d)/test_format.cc \
                    $(DIR_PROJET)/$(d)/test_vect.cc \
+                   $(DIR_PROJET)/$(d)/test_torsor.cc \
 
 CORE_OBJS_$(d)	:= 
 
@@ -47,6 +48,8 @@ TGTS_$(d)	:= $(d)/test_model \
                    $(d)/test_timer \
                    $(d)/test_format \
                    $(d)/test_vect \
+                   $(d)/test_torsor \
+
 
 DEPS_$(d)	:= $(TGTS_$(d):%=%.d)
 
@@ -142,6 +145,10 @@ $(d)/test_model: 	$(d)/test_model.cc src/libsrc.a model/libmodel.a viewer/libvie
 			$(COMPLINK)
 
 $(d)/test_vect: 	$(d)/test_vect.cc 
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK)
+
+$(d)/test_torsor: 	$(d)/test_vect.cc src/libsrc.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 

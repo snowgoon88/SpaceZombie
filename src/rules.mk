@@ -23,14 +23,17 @@ d		:= $(dir)
 CORE_SRC_$(d)	:= $(d)/utils.h $(d)/utils.cc \
                    $(d)/timer.h $(d)/timer.cc \
                    $(d)/state.h $(d)/state.cc \
+                   $(d)/torsor/h $(d)/torsor.cc \
 
 CORE_OBJS_$(d)	:= $(d)/utils.o \
                    $(d)/timer.o \
                    $(d)/state.o \
+                   $(d)/torsor.o \
 
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 
-TGTS_$(d)	:= $(d)/libsrc.a
+TGTS_$(d)	:= $(d)/libsrc.a \
+                   $(d)/test_torsor
 
 DEPS_$(d)	:= $(TGTS_$(d):%=%.d)
 
@@ -83,6 +86,11 @@ $(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) \
 $(d)/libsrc.a:	$(CORE_OBJS_$(d))
 	@echo "***** Generating $@"
 	$(ARCH)
+
+$(d)/test_torsor: 	$(d)/test_torsor.cc src/libsrc.a
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK) src/libsrc.a
+
 
 .PHONY : verbose_$(d)
 verbose_$(d): $(TGTS_$(d))
