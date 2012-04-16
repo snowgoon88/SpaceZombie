@@ -33,7 +33,6 @@ CORE_OBJS_$(d)	:= $(d)/utils.o \
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 
 TGTS_$(d)	:= $(d)/libsrc.a \
-                   $(d)/test_torsor
 
 DEPS_$(d)	:= $(TGTS_$(d):%=%.d)
 
@@ -86,11 +85,6 @@ $(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) \
 $(d)/libsrc.a:	$(CORE_OBJS_$(d))
 	@echo "***** Generating $@"
 	$(ARCH)
-
-$(d)/test_torsor: 	$(d)/test_torsor.cc src/libsrc.a
-			@echo "===== Compiling and Linking $@"
-			$(COMPLINK) src/libsrc.a
-
 
 .PHONY : verbose_$(d)
 verbose_$(d): $(TGTS_$(d))
