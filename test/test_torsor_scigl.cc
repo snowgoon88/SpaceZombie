@@ -236,7 +236,7 @@ int main (int argc, char **argv)
   // Some Ref_Frame
   RefFramePtr _ref = RefFramePtr( new RefFrame());
   _ref->set_position( 0, 0, 0.0 );
-  _ref->set_size( 0.5, 0.5, 0.5 );
+  //_ref->set_size( 0.5, 0.5, 0.5 );
   _ref->_ang_Oz1 =  0.0;
   _ref->_ang_Ox1 =  0.0;
   _ref->_ang_Oz2 =  0.0;

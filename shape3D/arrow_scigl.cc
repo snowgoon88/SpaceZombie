@@ -89,14 +89,14 @@ void Arrow::render( void )
   int nb_head_faces = 4;
   float sh = 1.0;            // scale of head   
   float wh = 0.025 * sh;     // width of head
-  float lh = 1 - 0.1 * sh;   // length og head
+  float lh = (- 0.1 * sh);   // length og head
   // front face have vertex in couter-clockwise order
   face head_faces[6] = {
     // 4 triangles make the head tip
-    {{1,0,0,  lh,0,wh,  lh,-wh,0}, { 0, 0, 0}, 0, "1"},
-    {{1,0,0,  lh,-wh,0,  lh,0,-wh}, { 0, 0, 0}, 0, "2"},
-    {{1,0,0,  lh,0,-wh,  lh,wh,0}, { 0, 0, 0}, 0, "3"},
-    {{1,0,0,  lh,wh,0,  lh,0,wh}, { 0, 0, 0}, 0, "4"}
+    {{0,0,0,  lh,0,wh,  lh,-wh,0}, { 0, 0, 0}, 0, "1"},
+    {{0,0,0,  lh,-wh,0,  lh,0,-wh}, { 0, 0, 0}, 0, "2"},
+    {{0,0,0,  lh,0,-wh,  lh,wh,0}, { 0, 0, 0}, 0, "3"},
+    {{0,0,0,  lh,wh,0,  lh,0,wh}, { 0, 0, 0}, 0, "4"}
   };
 
   // save Light Attributes and remove lighting to get "full" RGB
@@ -109,7 +109,7 @@ void Arrow::render( void )
   glTranslatef (get_position().x, get_position().y, get_position().z);
   glRotatef( to_deg(_ang_z1), 0, 0, 1); // rotation around 0z
   glRotatef( to_deg(_ang_y2), 0, 1 ,0); // rotation around 0y
-  glScalef ( _length, 1.0, 1.0 );
+  //glScalef ( _length, 1.0, 1.0 );
 
     
   // draw line
@@ -117,7 +117,7 @@ void Arrow::render( void )
   glLineWidth( 1.0 );
   glBegin( GL_LINES ); {
     glVertex3f( 0, 0, 0 );
-    glVertex3f( 1, 0, 0 );
+    glVertex3f( _length, 0, 0 );
   }
   glEnd();
 
@@ -130,7 +130,7 @@ void Arrow::render( void )
     glEnable( GL_BLEND );
     FontPtr font = FontPtr( Font::Font32() );
     glPushMatrix();
-    glTranslatef ( 1.2f, 0.0f, 0.0f);
+    glTranslatef ( _length + 0.2f, 0.0f, 0.0f);
     glScalef( 0.0025, 0.0025, 0.0025 );
     font->render (_text);
     glPopMatrix();
@@ -139,6 +139,7 @@ void Arrow::render( void )
 
   // draw head
   glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+  glTranslatef( _length, 0, 0 );
   glBegin (GL_TRIANGLES); {
     for (int i=0; i<nb_head_faces; i++) {
       //glNormal3f (head_faces[i].normal[0], head_faces[i].normal[1], head_faces[i].normal[2]);
@@ -185,7 +186,7 @@ void Arrow::render( float view_rotation[4][4] )
   // front face have vertex in couter-clockwise order
   face head_faces[6] = {
     // 4 triangles make the head tip
-    {{0,0,0,  lh,0,wh,  lh,-wh,0}, { 0, 0, 0}, 0, "1"},
+    {{1,0,0,  lh,0,wh,  lh,-wh,0}, { 0, 0, 0}, 0, "1"},
     {{0,0,0,  lh,-wh,0,  lh,0,-wh}, { 0, 0, 0}, 0, "2"},
     {{0,0,0,  lh,0,-wh,  lh,wh,0}, { 0, 0, 0}, 0, "3"},
     {{0,0,0,  lh,wh,0,  lh,0,wh}, { 0, 0, 0}, 0, "4"}

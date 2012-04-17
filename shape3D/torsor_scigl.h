@@ -28,6 +28,11 @@ class TorsorScigl : public Object
   virtual void render (void);
   //@}
 
+  /** Color */
+  void set_color( float r=0, float g=0, float b=0, float a=1 ) ;
+  void set_color( Color color );
+
+
  public:
   /** Resultant arrow */
   Arrow _arr_res;
