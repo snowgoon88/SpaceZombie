@@ -26,7 +26,6 @@
     typedef class Arrow * ArrowPtr;
 #endif
 
-
 /**
  * 3D arrow as a ligne and a head (4 triangles + quad ).
  * br_color : color of the line
@@ -35,44 +34,47 @@
 class Arrow : public Object {
 
 public:
-    /**
-     * @name Creation/Destruction
-     */
-    /** Default constructor */
-    Arrow( void );
-    Arrow( TVec3 v );
-    /** Destructor */
-    virtual ~Arrow( void );
-    //@}
-
-    /**
-     *  @name Rendering
-     */
-    /** Render arrow as line and faces */
-    virtual void render (void);
-    /** Render arrow as line and face, with text facing viewer */
-    virtual void render( float view_rotation[4][4] );
-    //@}
-
-    /** Set position */
-    virtual void set_position( TVec3 p );
-    /** Compute euler angles and length from a vector */
-    void compute_from_vec( TVec3 v );
-
-    /** Set text */
-    void set_text( std::string text );
-
-    /** 1st euler angle, around Oz */
-    float _ang_z1;
-    /** 2nd euler angle, around Oy (beware of sign ) */
-    float _ang_y2;
-    /** length of vector */
-    float _length;
-    
-    /** display text ? */
-    bool _fg_text;
-    /** text to display */
-    std::string _text;
+  /**
+   * @name Creation/Destruction
+   */
+  /** Default constructor */
+  Arrow( void );
+  Arrow( TVec3 v );
+  /** Destructor */
+  virtual ~Arrow( void );
+  //@}
+  
+  /**
+   *  @name Rendering
+   */
+  /** Render arrow as line and faces */
+  virtual void render (void);
+  /** Render arrow as line and face, with text facing viewer */
+  virtual void render( float view_rotation[4][4] );
+  //@}
+  
+  /** Set position */
+  virtual void set_position( TVec3 p );
+  /** Compute euler angles and length from a vector */
+  void compute_from_vec( TVec3 v );
+  
+  /** Set text */
+  void set_text( std::string text );
+  
+  /** 1st euler angle, around Oz */
+  float _ang_z1;
+  /** 2nd euler angle, around Oy (beware of sign ) */
+  float _ang_y2;
+  /** length of vector */
+  float _length;
+  
+  /** moment arrow */
+  bool _fg_moment;
+  
+  /** display text ? */
+  bool _fg_text;
+  /** text to display */
+  std::string _text;
 };
 
 #endif // __ARROW_H__

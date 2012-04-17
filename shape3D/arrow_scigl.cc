@@ -16,6 +16,7 @@
  */
 
 #include "arrow_scigl.h"
+#include "basic_shapes.h"
 #include "font.h"
 #include <iostream>
 
@@ -32,6 +33,7 @@ Arrow::Arrow( void ) : Object()
   fade_in_delay_ = 0;
   fade_out_delay_ = 0;
 
+  _fg_moment = false;
   _fg_text = false;
   set_text( "" );
   
@@ -55,6 +57,7 @@ Arrow::Arrow( TVec3 v ) : Object()
   
   compute_from_vec( v );
 
+  _fg_moment = false;
   _fg_text = false;
   set_text( "" );
 
@@ -144,7 +147,12 @@ void Arrow::render( void )
       glVertex3f (head_faces[i].vertices[6], head_faces[i].vertices[7], head_faces[i].vertices[8]);
     }
   } glEnd();
-    
+
+  // Draw moment
+  if( _fg_moment ) {
+    glRotatef( 90, 0, 1, 0 );
+    draw_circle( 0, 0, 2*wh, 24);
+  }
 
   // restore transformation matrix
   glPopMatrix();
@@ -238,6 +246,11 @@ void Arrow::render( float view_rotation[4][4] )
     }
   } glEnd();
     
+  // Draw moment
+  if( _fg_moment ) {
+    glRotatef( 90, 0, 1, 0 );
+    draw_circle( 0, 0, 2*wh, 24);
+  }
 
   // restore transformation matrix
   glPopMatrix();

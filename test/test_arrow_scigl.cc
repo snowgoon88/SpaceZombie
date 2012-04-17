@@ -192,6 +192,7 @@ int main (int argc, char **argv)
   // Create a tweak bar
   _bar = TwNewBar("_scene");
   TwType tw_SVec3 = TwDefineStruct("Vec3", SVec3Members, 3, sizeof(SVec3), NULL, NULL);
+  TwAddVarRW( _bar, "_fg_moment", TW_TYPE_BOOLCPP, &(_arrow->_fg_moment), " Label='Moment' ");
   TwAddVarRW( _bar, "_vec_arrow", tw_SVec3, &_vec_arrow, " Group='Arrow' Label='Vector' ");
   TwAddVarRW( _bar, "_pos_arrow", tw_SVec3, &_pos_arrow, " Group='Arrow' Label='Position' ");
 
