@@ -64,7 +64,7 @@ TAG_FILES	:= $(TAG_FILES) $(CORE_SRC_$(d))
 # Force remake if rules are changed
 $(CORE_OBJS_$(d)):	$(d)/rules.mk
 
-$(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) -Isrc \
+$(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) -Isrc -Imvc\
                                   -I$(SCIGL_ROOT)/scigl -I/opt/local/include\
                                   -Wno-deprecated  \
 

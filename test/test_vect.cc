@@ -44,6 +44,43 @@ void vec_to_angle(float x, float y, float z)
     }    
   }
 }
+void test_ang_from_vec(float x, float y, float z)
+{
+  TVec3 v( x, y, z);
+  float ang_z1, ang_y2;
+  std::cout << "v=" << line_repr(v) << "\n";
+  // Projection on Oxy
+  TVec3 vxy = v;
+  vxy(2) = 0;
+  std::cout << "vxy=" << line_repr(vxy) << "\n";
+  if( vxy.norm() > 0.0001 ) {
+    std::cout << "||vxy|| > 0" << "\n";
+    // Angle Ox,vxy
+    TVec3 ux( 1, 0, 0);
+    ang_z1 = acos( ux.dot( vxy ) / vxy.norm() / ux.norm());
+    // Check for the right sign
+    if( vxy(1) < 0 ) ang_z1 = -ang_z1;
+    std::cout << "ang_z1=" << ang_z1 << "\n";
+    
+    // Angle vxy v
+    ang_y2 = - acos( vxy.dot( v ) / v.norm() / vxy.norm() );
+    // Check for the right sign
+    if( v(2) < 0 ) ang_y2 = -ang_y2;
+    std::cout << "ang_y2=" << ang_y2 << "\n";
+  }
+  else {
+    std::cout << "||vxy|| == 0" << "\n";
+    ang_z1 = 0;
+    std::cout << "ang_z1=" << ang_z1 << "\n";
+    if( v(2) > 0 ) {
+      ang_y2 = - M_PI / 2.0;
+    }
+    else {
+      ang_y2 = M_PI / 2.0;
+    }
+    std::cout << "ang_y2=" << ang_y2 << "\n";
+  }
+}
 void test_product()
 {
   TVec3 x(1,0,0);
@@ -60,10 +97,11 @@ void test_product()
 
 int main(int argc, char *argv[] )
 {
-  vec_to_angle(1, 1, 1);
-  vec_to_angle(1, 0, 0);
-  vec_to_angle(1, 0, 1);
-  vec_to_angle(0.5, 0.5, 0.707);
-  vec_to_angle(0, 0, 2);
-  test_product();
+  // vec_to_angle(1, 1, 1);
+  // vec_to_angle(1, 0, 0);
+  // vec_to_angle(1, 0, 1);
+  // vec_to_angle(0.5, 0.5, 0.707);
+  // vec_to_angle(0, 0, 2);
+  // test_product();
+  test_ang_from_vec( 1.41, -1.41, 0.00 );
 }

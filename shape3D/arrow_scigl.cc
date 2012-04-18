@@ -70,6 +70,10 @@ Arrow::~Arrow( void )
 // ********************************************************************** RENDER
 void Arrow::render( void )
 {
+  // std::cout << "Arrow::render";
+  // std::cout << " pos=" << get_position().x << ", " << get_position().y << ", " << get_position().z;
+  // std::cout << " _l=" << _length << " _ang_z1=" << to_deg(_ang_z1) << " _ang_y2=" << to_deg(_ang_y2) << "\n";
+
   compute_visibility();
   if (not get_visible()) return;
 
@@ -163,6 +167,7 @@ void Arrow::render( void )
 }
 void Arrow::render( float view_rotation[4][4] )
 {
+  //std::cout << "Arrow::render(view)" << "\n";
   compute_visibility();
   if (not get_visible()) return;
 

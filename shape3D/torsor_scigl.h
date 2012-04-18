@@ -5,6 +5,7 @@
 #include "object.h"
 #include "arrow_scigl.h"
 #include "torsor.h"
+#include "observer.h"
 
 #ifdef HAVE_BOOST
     typedef boost::shared_ptr<class TorsorScigl> TorsorSciglPtr;
@@ -12,15 +13,23 @@
     typedef class TorsorScigl * TorsorSciglPtr;
 #endif
 
-class TorsorScigl : public Object
+/**
+ * Graphic representation of a torsor.
+ * the central axis can be drawn as a stippled line
+ */
+class TorsorScigl : public Observer, public Object
 {
  public:
   /** Default constructor */
   TorsorScigl();
   TorsorScigl( Torsor& t);
+  TorsorScigl( TorsorPtr model );
   /** Destructor */
   ~TorsorScigl();
 
+public: // Observer
+  virtual void update( int signal=0 );
+public: // Object
   /**
    *  @name Rendering
    */
@@ -33,11 +42,16 @@ class TorsorScigl : public Object
   void set_color( Color color );
 
 
- public:
+ public: // Variables
+  TorsorPtr _model;
   /** Resultant arrow */
   Arrow _arr_res;
   /** Moment arrow */
   Arrow _arr_mom;
+  /** draw Central Axis ? */
+  bool _fg_axis;
+  /** memorize a point of the central axis and direction */
+  TVec3 _pt_axis, _dir_axis;
 };
 
 #endif // __TORSOR_SCIGL_H_

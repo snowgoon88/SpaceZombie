@@ -39,7 +39,7 @@ public:
   virtual std::string dump_string();
 
 public: // Observer
-  virtual void update( int signal );
+  virtual void update( int signal=0 );
 public: // Object
   virtual void render();
 

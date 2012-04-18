@@ -37,7 +37,6 @@
 ScenePtr _scene = ScenePtr (new Scene);
 TextBoxPtr _textbox;
 TwBar *_bar;         // Pointer to a tweak bar
-TorsorSciglPtr _tor;
 
 // FPS timer
 Timer _timer_fps;
@@ -58,11 +57,26 @@ double _time_physic_avg = 10.0;
 //bool _fg_step_physics = false;
 //float _gravity = 9.81;
 
-// BAR
+// OBJECTS of the World
+// Bar
 BarPtr _bar_phy;    
 BarSciglPtr _bar_scigl;
 SVec3 _bar_pos = {0.0, 0.0, 0.0};
-float _bar_dir[3] = {1.0, 1.0, 1.0};
+float _bar_dir[3] = {1.0, 1.0, 0.0};
+// Torsor
+Torsor _torsor;
+TorsorSciglPtr _torsor_scigl;
+SVec3 _torsor_pos = {0.0, 0.0, 0.0};
+float _torsor_res[3] = {0.0, 0.0, 1.0};
+float _torsor_mom[3] = {0.0, 0.0, 0.0};
+// Application of torsor at various position along the bar
+const unsigned int _nb_applied = 9;
+TVec3    _v_pos[_nb_applied];
+TVec3    _v_applied[_nb_applied];
+ArrowPtr _v_applied_scigl[_nb_applied];
+const unsigned int _nb_tor = 3;
+Torsor _v_tor[_nb_tor];
+TorsorSciglPtr _v_tor_scigl[_nb_tor];
 
 //*********************************************************************** PHYSIC
 void init_physic()
@@ -70,17 +84,91 @@ void init_physic()
   _bar_phy = BarPtr( new Bar( TVec3( _bar_pos.x, _bar_pos.y, _bar_pos.z),
 			      Eigen::Map<TVec3>(_bar_dir),
 			      -2.0f, 2.0f ));
+
+  _torsor = Torsor( Eigen::Map<TVec3>(_torsor_res),
+		    Eigen::Map<TVec3>(_torsor_mom),
+		    TVec3( _torsor_pos.x, _torsor_pos.y, _torsor_pos.z ));
+  
+  // Torsor applied at different points of the bar
+  //std::cout << "INIT_PHYSICS" << "\n";
+  for( unsigned int i = 0; i < _nb_applied; ++i) {
+    _bar_phy->get_point_at( -2.0 + ((float) i)/((float) (_nb_applied-1))* 4.0, _v_pos[i]); 
+    _v_applied[i] = _torsor.apply( _v_pos[i] );
+    //std::cout << "[" << i << "] pos=" << line_repr(_v_pos[i]) << " res=" <<  line_repr(_v_applied[i]) << "\n";
+  }
+
+  // Torsor reduced at different points of the bar
+  for( unsigned int i = 0; i < _nb_tor; ++i) {
+    _v_tor[i] = Torsor( _torsor );
+  }
+
 }
 void update_physic()
 {
   _bar_phy->set_position( TVec3( _bar_pos.x, _bar_pos.y, _bar_pos.z) );
   _bar_phy->set_dir( Eigen::Map<TVec3>(_bar_dir) );
+
+  _torsor._r = Eigen::Map<TVec3>(_torsor_res);
+  _torsor._m = Eigen::Map<TVec3>(_torsor_mom);
+  _torsor._p = TVec3( _torsor_pos.x, _torsor_pos.y, _torsor_pos.z );
+
+  // Torsor applied at different points of the bar
+  for( unsigned int i = 0; i < _nb_applied; ++i) {
+    
+    _bar_phy->get_point_at( -2.0 + ((float) i)/((float) (_nb_applied-1))* 4.0, _v_pos[i]); 
+    _v_applied[i] = _torsor.apply( _v_pos[i] );
+  }
+
+  // Torsor reduced at different points of the bar
+  for( unsigned int i = 0; i < _nb_tor; ++i) {
+    TVec3 point;
+    _bar_phy->get_point_at( -2.0 + ((float) i)/((float) (_nb_tor-1))* 4.0, point);
+    _v_tor[i] = _torsor;
+    _v_tor[i].reduce_at( point );
+  }
 }
 //******************************************************************** OBSERVERS
 void init_observers() 
 {
   _bar_scigl = BarSciglPtr( new BarScigl( _bar_phy ));
   _scene->add( _bar_scigl );
+  
+  _torsor_scigl = TorsorSciglPtr( new TorsorScigl( TorsorPtr(&_torsor) ));
+  _torsor_scigl->set_color( 0.8, 0.0, 0.8, 1.0 );
+  _torsor_scigl->_fg_axis = true;
+  _scene->add( _torsor_scigl );
+
+  // Torsor application
+  for( unsigned int i = 0; i < _nb_applied; ++i) {
+    _v_applied_scigl[i] = ArrowPtr( new Arrow( _v_applied[i] ));
+    _v_applied_scigl[i]->set_br_color( 0.6, 0.3, 0.0, 1.0 );
+    _v_applied_scigl[i]->set_fg_color( 0.6, 0.3, 0.0, 1.0 );
+    _scene->add( _v_applied_scigl[i] );
+  }
+
+  // Torsor reduction
+  for( unsigned int i = 0; i < _nb_tor; ++i) {
+    _v_tor_scigl[i] = TorsorSciglPtr( new TorsorScigl( TorsorPtr(&_v_tor[i]) ));
+    _v_tor_scigl[i]->set_color( 1.0, 0.686, 1.0, 1.0);
+    _scene->add( _v_tor_scigl[i] );
+  }
+}
+// @todo : should not exists...
+void update_observers()
+{
+  _torsor_scigl->update();
+  // Torsor applied at different points of the bar
+  //std::cout << "UPDATE_OBSERVERS" << "\n";
+  for( unsigned int i = 0; i < _nb_applied; ++i) {
+    _v_applied_scigl[i]->set_position( _v_pos[i] );
+    _v_applied_scigl[i]->compute_from_vec( _v_applied[i] );
+    //std::cout << "[" << i << "] pos=" << line_repr(_v_pos[i]) << " res=" <<  line_repr(_v_applied[i]) << "\n";
+  }
+  
+  // Torsor reduced
+  for( unsigned int i = 0; i < _nb_tor; ++i) {
+    _v_tor_scigl[i]->update();
+  }
 }
 //******************************************************************** INTERFACE
 /**
@@ -194,10 +282,7 @@ int main (int argc, char **argv)
 
   // init physic
   init_physic();
-
-  // init torsor
-  Torsor t1( TVec3( 1,1,1 ), TVec3( 0,0,1 ));
-  _tor = TorsorSciglPtr( new TorsorScigl( t1 ));
+  update_physic();
 
   // Initialise GLFW
   if( !glfwInit() ) {
@@ -227,31 +312,16 @@ int main (int argc, char **argv)
   // Initialize AntTweakBar
   TwInit(TW_OPENGL, NULL);
   _bar = TwNewBar("_scene");
-  TwDefine( " _scene iconified=false position='10 55'");
+  TwDefine( " _scene iconified=false position='10 55' size='230 700'");
   TwType tw_SVec3 = TwDefineStruct("Vec3", SVec3Members, 3, sizeof(SVec3), NULL, NULL);
   // BAR
   TwAddVarRW( _bar, "_bar_ori", tw_SVec3, &(_bar_pos), " Group='Bar' Label='Ori' ");
   TwAddVarRW( _bar, "_bar_dir", TW_TYPE_DIR3F, &_bar_dir, " Group='Bar' Label='Dir'");
-//   TwAddVarRW( _bar, "_vec0", tw_SVec3, &(_vec_vertex[0]), " Label='Point_0' ");
-//   TwAddVarRW( _bar, "_vec1", tw_SVec3, &(_vec_vertex[1]), " Label='Point_1' ");
-//   TwAddVarRW( _bar, "_vec2", tw_SVec3, &(_vec_vertex[2]), " Label='Point_2' ");
-// // ...
-//   TwAddVarRW( _bar, "_tri_dir", TW_TYPE_DIR3F, &tw_tri_dir, " Label='Dir'");
-//   TwAddVarRW( _bar, "fg_normal", TW_TYPE_BOOLCPP, &(_triangles->_fg_normal), " Label='fg_normal'" );
-//   TwAddVarRW( _bar, "fg_light", TW_TYPE_BOOLCPP, &(_triangles->_fg_light), " Label='fg_light'" );
-  //TwDefine( " _world iconified=true position='10 50'");
-  //TwDefine( " GLOBAL help='AntTweak to alter rotation angle.' "); // Msg to the help bar.
-  // TwAddVarRW( _bar, "fg_physic", TW_TYPE_BOOLCPP, &(_fg_physics),
-  // 	      " label='fg_physics' keyIncr=g keyDecr=G help='FLAG physics engine' ");
-  // TwAddVarRW( _bar, "fg_step_physics", TW_TYPE_BOOLCPP, &(_fg_step_physics),
-  // 	      " label='fg_step' keyIncr=f keyDecr=F help='FLAG STEP physics engine' ");
-  // Add '_angX' to bar : modifiable (RW), FLOAT, [0,360]
-  //TwAddVarRW( _bar, "angX", TW_TYPE_FLOAT, &_angX, 
-  //	      " label='AngX' min=0 max=360 step=1.0 keyIncr=x KeyDecr=X help='Rotation angle around Oz' ");
-  // Add '_angZ' to bar : modifiable (RW), FLOAT, [0,360]
-  //TwAddVarRW( _bar, "angZ", TW_TYPE_FLOAT, &_angZ, 
-  //	      " label='AngZ' min=0 max=360 step=1.0 keyIncr=z KeyDecr=Z help='Rotation angle around Oy' ");
-  
+  // TORSOR
+  TwAddVarRW( _bar, "_torsor_pos", tw_SVec3, &(_torsor_pos), " Group='Torsor Cinematique' Label='Ori' ");
+  TwAddVarRW( _bar, "_torsor_res", TW_TYPE_DIR3F, &_torsor_res, " Group='Torsor Cinematique' Label='Rotation'");
+  TwAddVarRW( _bar, "_torsor_mom", TW_TYPE_DIR3F, &_torsor_mom, " Group='Torsor Cinematique' Label='Vitesse'");
+  // ------------------------------- end AntTweakBar
 
   std::cout << "Init GLEW\n";
   if( !glewInit() ) {
@@ -302,7 +372,8 @@ int main (int argc, char **argv)
 
   // init observers
   init_observers();
-
+  update_observers();
+  
   _scene->setup();
   _scene->update();
 
@@ -337,6 +408,7 @@ int main (int argc, char **argv)
     _time_physic_avg = 0.9 * _time_physic_avg + 0.1 * delta_time_physic;
 
     // DISPLAY
+    update_observers();
     display();
     
     // TIMER FPS
