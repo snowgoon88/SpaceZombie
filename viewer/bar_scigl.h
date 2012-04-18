@@ -23,6 +23,7 @@ typedef class BarScigl * BarSciglPtr;
 
 /**
  * A Bar is represented as a line.
+ * fg_color is the color of the bar.
  * @todo thickness
  */
 class BarScigl : public Observer, public Object
