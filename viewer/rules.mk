@@ -21,8 +21,10 @@ d		:= $(dir)
 
 # Local rules and target
 CORE_SRC_$(d)	:= $(d)/world_scigl.h $(d)/world_scigl.cc \
+                   $(d)/bar_scigl.h $(d)/bar_scigl.cc \
 
 CORE_OBJS_$(d)	:= $(d)/world_scigl.o \
+                   $(d)/bar_scigl.o \
 
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 

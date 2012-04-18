@@ -24,11 +24,13 @@ CORE_SRC_$(d)	:= $(d)/cell.h $(d)/cell.cc \
                    $(d)/ground.h $(d)/ground.cc \
                    $(d)/world.h $(d)/world.cc \
                    $(d)/point.h $(d)/point.cc \
+                   $(d)/bar.h $(d)/bar.cc \
 
 CORE_OBJS_$(d)	:= $(d)/cell.o \
                    $(d)/ground.o \
                    $(d)/world.o \
-                   $(d)/point.o
+                   $(d)/point.o \
+                   $(d)/bar.o \
 
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 

@@ -29,13 +29,17 @@
 // AntTweakBar
 #include <AntTweakBar.h>
 
+// Physic and Model
+#include "bar.h"
+#include "bar_scigl.h"
+
 // Graphic
 ScenePtr _scene = ScenePtr (new Scene);
 TextBoxPtr _textbox;
 TwBar *_bar;         // Pointer to a tweak bar
 TorsorSciglPtr _tor;
 
-// FPS
+// FPS timer
 Timer _timer_fps;
 //double _time_frame_t1;
 double _time_frame_min = DBL_MAX;
@@ -45,8 +49,40 @@ double _time_frame_fps1s, _time_frame_fps5s;
 double _fps_1s, _fps_5s;
 int _frame_nb_1s = 0;
 int _frame_nb_5s = 0;
+// PHYSIC timer
+double _time_physic;
+double _time_physic_min = DBL_MAX;
+double _time_physic_max = DBL_MIN;
+double _time_physic_avg = 10.0;
+//bool _fg_physics = false;
+//bool _fg_step_physics = false;
+//float _gravity = 9.81;
 
+// BAR
+BarPtr _bar_phy;    
+BarSciglPtr _bar_scigl;
+SVec3 _bar_pos = {0.0, 0.0, 0.0};
+float _bar_dir[3] = {1.0, 1.0, 1.0};
 
+//*********************************************************************** PHYSIC
+void init_physic()
+{
+  _bar_phy = BarPtr( new Bar( TVec3( _bar_pos.x, _bar_pos.y, _bar_pos.z),
+			      Eigen::Map<TVec3>(_bar_dir),
+			      -2.0f, 2.0f ));
+}
+void update_physic()
+{
+  _bar_phy->set_position( TVec3( _bar_pos.x, _bar_pos.y, _bar_pos.z) );
+  _bar_phy->set_dir( Eigen::Map<TVec3>(_bar_dir) );
+}
+//******************************************************************** OBSERVERS
+void init_observers() 
+{
+  _bar_scigl = BarSciglPtr( new BarScigl( _bar_phy ));
+  _scene->add( _bar_scigl );
+}
+//******************************************************************** INTERFACE
 /**
  * Called after every mouse button pressed.
  * see glfwSetMouseButtonCallback().
@@ -130,8 +166,9 @@ void update_textbox()
 {
   std::stringstream ss;
   ss << _fps_5s << " : " << _fps_1s << " ";
-  ss << "Disp. " << _time_frame_min << " / " << _time_frame_avg << " / " << _time_frame_max << " ";
-  ss << "\n";
+  ss << "Disp. " << SETPREC(3) << _time_frame_min << " / " << SETPREC(3) << _time_frame_avg << " / " << SETPREC(3) <<_time_frame_max << " ";
+  ss << "  ";
+  ss << "Phy. " << SETPREC(3) << _time_physic_min << " / " << SETPREC(3) << _time_physic_avg << " / " << SETPREC(3) << _time_physic_max << " ";
   _textbox->set_buffer( ss.str() );
 }
 /**
@@ -154,6 +191,9 @@ int main (int argc, char **argv)
 {
   // Some graphic parameters
   int width, height;
+
+  // init physic
+  init_physic();
 
   // init torsor
   Torsor t1( TVec3( 1,1,1 ), TVec3( 0,0,1 ));
@@ -185,11 +225,13 @@ int main (int argc, char **argv)
   //glutReshapeWindow (400,400);
 
   // Initialize AntTweakBar
-  float tw_tri_dir[3] = {1, 0, 0}; // direction pointing to +x and +y
   TwInit(TW_OPENGL, NULL);
-  // Create a tweak bar
   _bar = TwNewBar("_scene");
-//   TwType tw_SVec3 = TwDefineStruct("Vec3", SVec3Members, 3, sizeof(SVec3), NULL, NULL);
+  TwDefine( " _scene iconified=false position='10 55'");
+  TwType tw_SVec3 = TwDefineStruct("Vec3", SVec3Members, 3, sizeof(SVec3), NULL, NULL);
+  // BAR
+  TwAddVarRW( _bar, "_bar_ori", tw_SVec3, &(_bar_pos), " Group='Bar' Label='Ori' ");
+  TwAddVarRW( _bar, "_bar_dir", TW_TYPE_DIR3F, &_bar_dir, " Group='Bar' Label='Dir'");
 //   TwAddVarRW( _bar, "_vec0", tw_SVec3, &(_vec_vertex[0]), " Label='Point_0' ");
 //   TwAddVarRW( _bar, "_vec1", tw_SVec3, &(_vec_vertex[1]), " Label='Point_1' ");
 //   TwAddVarRW( _bar, "_vec2", tw_SVec3, &(_vec_vertex[2]), " Label='Point_2' ");
@@ -243,7 +285,7 @@ int main (int argc, char **argv)
   _scene->add( _ref );
 
   // Some Torsor
-  _scene->add( _tor );
+  //_scene->add( _tor );
 
   _scene->set_zoom(0.5);
   _scene->set_orientation( 70.0, 80.0 );
@@ -257,6 +299,9 @@ int main (int argc, char **argv)
   _textbox->set_autosize( false );
   _textbox->set_size( 1.0, 50, 1 );
   update_textbox();
+
+  // init observers
+  init_observers();
 
   _scene->setup();
   _scene->update();
@@ -278,12 +323,23 @@ int main (int argc, char **argv)
     glViewport( 0, 0, width, height );
     TwWindowSize(width, height);
     
-    // display
+    // BEGIN of loop 
     double time_frame_before = _timer_fps.getElapsedTimeInMilliSec();
+    double time_physic_before = _timer_fps.getElapsedTimeInMilliSec();
     
-    display();
+    // PHYSICS
+    update_physic();
 
-    // update FPS
+    // TIMER physic
+    double delta_time_physic = _timer_fps.getElapsedTimeInMilliSec() - time_physic_before;
+    if( delta_time_physic < _time_physic_min ) _time_physic_min = delta_time_physic;
+    if( delta_time_physic > _time_physic_max ) _time_physic_max = delta_time_physic;
+    _time_physic_avg = 0.9 * _time_physic_avg + 0.1 * delta_time_physic;
+
+    // DISPLAY
+    display();
+    
+    // TIMER FPS
     double delta_time_frame = _timer_fps.getElapsedTimeInMilliSec() - time_frame_before;
     if( delta_time_frame < _time_frame_min ) _time_frame_min = delta_time_frame;
     if( delta_time_frame > _time_frame_max ) _time_frame_max = delta_time_frame;

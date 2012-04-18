@@ -154,7 +154,7 @@ $(d)/test_torsor: 	$(d)/test_torsor.cc src/libsrc.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
-$(d)/test_torsor_scigl:	$(d)/test_torsor_scigl.cc src/libsrc.a shape3D/libshape.a $(SCIGL_ROOT)/scigl/libscigl.a
+$(d)/test_torsor_scigl:	$(d)/test_torsor_scigl.cc src/libsrc.a shape3D/libshape.a $(SCIGL_ROOT)/scigl/libscigl.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
