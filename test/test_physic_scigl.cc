@@ -568,7 +568,7 @@ int main (int argc, char **argv)
   //TwAddVarRW( _bar, "angX", TW_TYPE_FLOAT, &_angX, 
   //	      " label='AngX' min=0 max=360 step=1.0 keyIncr=x KeyDecr=X help='Rotation angle around Oz' ");
   // Add '_angZ' to bar : modifiable (RW), FLOAT, [0,360]
-  //TwAddVarRW( _bar, "angZ", TW_TYPE_FLOAT, &_angZ, 
+
   //	      " label='AngZ' min=0 max=360 step=1.0 keyIncr=z KeyDecr=Z help='Rotation angle around Oy' ");
   
 

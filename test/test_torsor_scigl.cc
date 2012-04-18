@@ -32,6 +32,8 @@
 // Physic and Model
 #include "bar.h"
 #include "bar_scigl.h"
+#include "loggedT.h"
+#include "loggedTVec3_scigl.h"
 
 // Graphic
 ScenePtr _scene = ScenePtr (new Scene);
@@ -84,6 +86,11 @@ float _delta_step = 0.01;    // 10ms for integration
 float _time_step_next = 1.0;          // when is next bar, 1s
 BarPtr _bar_phy_next;            // bar at next time step 
 BarSciglPtr _bar_phy_next_scigl;
+const unsigned int _nb_pt_logged = 3;
+LoggedTPtr<TVec3>::Type _v_pt_logged[_nb_pt_logged];
+//LoggedTVec3Ptr _v_pt_logged[_nb_pt_logged];
+LoggedTVec3SciglPtr _v_pt_logged_scigl[_nb_pt_logged];
+
 
 //*********************************************************************** PHYSIC
 void update_physics( float accel ) 
@@ -105,12 +112,22 @@ void update_physics_step( float delta_t )
   // init next bar
   _bar_phy_next->set_position( _bar_phy->_ori );
   _bar_phy_next->set_dir( _bar_phy->_dir );
+  // clear logged
+  for( unsigned int i = 0; i < _nb_pt_logged; ++i) {
+    _v_pt_logged[i]->clear();
+  }
   
   for( float dt=0.0; dt < delta_t; dt += _delta_step) {
     // apply rotation to bar from central axes
-  _bar_phy_next->set_dir( _bar_phy_next->_dir + _delta_step * _torsor._r.cross( _bar_phy_next->_dir ));
-  // Move origine : its speed it the torsor applied at the point
-  _bar_phy_next->set_position( _bar_phy_next->_ori + _delta_step * _torsor.apply( _bar_phy_next->_ori ));
+    _bar_phy_next->set_dir( _bar_phy_next->_dir + _delta_step * _torsor._r.cross( _bar_phy_next->_dir ));
+    // Move origine : its speed it the torsor applied at the point
+    _bar_phy_next->set_position( _bar_phy_next->_ori + _delta_step * _torsor.apply( _bar_phy_next->_ori ));
+    // log result
+    for( unsigned int i = 0; i < _nb_pt_logged; ++i) {
+      TVec3 point;
+      _bar_phy_next->get_point_at( -2.0 + ((float) i)/((float) (_nb_pt_logged-1))* 4.0, point);
+    _v_pt_logged[i]->add_item( dt, point );
+    }
   }
   
   // std::cout << "ORI " << _bar_phy->dump_string() << "\n";
@@ -129,6 +146,12 @@ void init_physic()
 		    TVec3( _torsor_pos.x, _torsor_pos.y, _torsor_pos.z ));
   
   _bar_phy_next = BarPtr( new Bar(*_bar_phy));
+  // Logged pts of the bar
+  for( unsigned int i = 0; i < _nb_pt_logged; ++i) {
+    //_v_pt_logged[i] = LoggedTVec3Ptr (new LoggedT<TVec3>);
+    _v_pt_logged[i] = LoggedTPtr<TVec3>::Type (new LoggedT<TVec3>);
+  }
+
   update_physics_step( _time_step_next );
 
   // Torsor applied at different points of the bar
@@ -219,6 +242,14 @@ void init_observers()
     _v_tor_scigl[i]->set_color( 1.0, 0.686, 1.0, 1.0);
     _scene->add( _v_tor_scigl[i] );
   }
+
+  // pt logged along bar
+  for( unsigned int i = 0; i < _nb_pt_logged; ++i) {
+    _v_pt_logged_scigl[i] = LoggedTVec3SciglPtr (new LoggedTVec3Scigl( _v_pt_logged[i] ));
+    _v_pt_logged_scigl[i]->set_br_color( 0.0, 0.0, 0.7, 1.0 );
+    _scene->add( _v_pt_logged_scigl[i] );
+  }
+  
 }
 //******************************************************************** INTERFACE
 /**
