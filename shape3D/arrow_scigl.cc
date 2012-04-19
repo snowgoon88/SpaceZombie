@@ -93,7 +93,7 @@ void Arrow::render( void )
   int nb_head_faces = 4;
   float sh = 1.0;            // scale of head   
   float wh = 0.025 * sh;     // width of head
-  float lh = (- 0.1 * sh);   // length og head
+  float lh = (- 0.1 * sh);   // length of head
   // front face have vertex in couter-clockwise order
   face head_faces[6] = {
     // 4 triangles make the head tip

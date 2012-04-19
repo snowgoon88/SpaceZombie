@@ -49,6 +49,7 @@ TorsorScigl::TorsorScigl( TorsorPtr model )
   set_name (oss.str());
 
   _fg_axis = false;
+  _arr_mom._fg_moment = true;
 
   update();
 }

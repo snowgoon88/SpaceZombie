@@ -55,7 +55,10 @@ double _time_physic;
 double _time_physic_min = DBL_MAX;
 double _time_physic_max = DBL_MIN;
 double _time_physic_avg = 10.0;
-//bool _fg_physics = false;
+bool _fg_physic = false;
+bool _fg_physic_step = false;
+bool _fg_physic_reset = true;
+float _delta_time_physic = 0.001; // 1 ms
 //bool _fg_step_physics = false;
 //float _gravity = 9.81;
 
@@ -86,9 +89,9 @@ float _delta_step = 0.01;    // 10ms for integration
 float _time_step_next = 1.0;          // when is next bar, 1s
 BarPtr _bar_phy_next;            // bar at next time step 
 BarSciglPtr _bar_phy_next_scigl;
+bool _fg_show_logged = false;
 const unsigned int _nb_pt_logged = 3;
 LoggedTPtr<TVec3>::Type _v_pt_logged[_nb_pt_logged];
-//LoggedTVec3Ptr _v_pt_logged[_nb_pt_logged];
 LoggedTVec3SciglPtr _v_pt_logged_scigl[_nb_pt_logged];
 
 
@@ -97,13 +100,23 @@ void update_physics( float accel )
 {
   // get current time 
   double time_now = _timer_fps.getElapsedTimeInMilliSec();
-  float delta_t = (time_now - _time_physic);
+  float delta_t = (time_now - _time_physic) / 1000.0;
   _time_simu += delta_t;
 
-  // apply rotation to bar from central axes
-  _bar_phy->set_dir( _bar_phy->_dir + delta_t * _torsor._r.cross( _bar_phy->_dir ));
-  // Move origine : its speed it the torsor applied at the point
-  _bar_phy->set_position( _bar_phy->_ori + delta_t * _torsor.apply( _bar_phy->_ori ));
+  //std::cout << "PHY delta_t=" << delta_t << " t=" << time_now << " tp=" << _time_physic << " ts=" << _time_simu << "\n";
+
+  for( float dt=0.0f; dt < delta_t; dt += _delta_time_physic ) {
+    // apply rotation to bar from central axes
+    _bar_phy->set_dir( _bar_phy->_dir + _delta_time_physic * _torsor._r.cross( _bar_phy->_dir ));
+    // Move origine : its speed it the torsor applied at the point
+    _bar_phy->set_position( _bar_phy->_ori + _delta_time_physic * _torsor.apply( _bar_phy->_ori ));
+    //std::cout << "   dt=" << dt << " " << _bar_phy->dump_string() << "\n";
+  }
+
+  if( _fg_physic_step ) {
+    _fg_physic = false;
+    _fg_physic_step = false;
+  }
 
   _time_physic = _timer_fps.getElapsedTimeInMilliSec();
 }
@@ -152,7 +165,9 @@ void init_physic()
     _v_pt_logged[i] = LoggedTPtr<TVec3>::Type (new LoggedT<TVec3>);
   }
 
-  update_physics_step( _time_step_next );
+  if( _fg_show_logged ) {
+    update_physics_step( _time_step_next );
+  }
 
   // Torsor applied at different points of the bar
   //std::cout << "INIT_PHYSICS" << "\n";
@@ -172,15 +187,28 @@ void init_physic()
 // @todo use TwCallback for avoiding waste of time in updating non-changed elements or modify model to remember if changed...
 void update_interface()
 {
-  _bar_phy->set_position( TVec3( _bar_pos.x, _bar_pos.y, _bar_pos.z) );
-  _bar_phy->set_dir( Eigen::Map<TVec3>(_bar_dir) );
-
+  // Reset = simu is stopped and reseted
+  if( _fg_physic_reset ) {
+    _fg_physic = false; _fg_physic_step = false;
+    _time_physic = _timer_fps.getElapsedTimeInMilliSec();
+    _time_simu = 0.0;
+    
+    _bar_phy->set_position( TVec3( _bar_pos.x, _bar_pos.y, _bar_pos.z) );
+    _bar_phy->set_dir( Eigen::Map<TVec3>(_bar_dir) );
+  }
+  // ! fg_physic = simu is stopped
+  if( !_fg_physic and !_fg_physic_step ) {
+    _time_physic = _timer_fps.getElapsedTimeInMilliSec();
+  }
+  
   _torsor._r = Eigen::Map<TVec3>(_torsor_res);
   _torsor._m = Eigen::Map<TVec3>(_torsor_mom);
   _torsor._p = TVec3( _torsor_pos.x, _torsor_pos.y, _torsor_pos.z );
 
-  update_physics_step( _time_step_next );
-
+  if( _fg_show_logged ) {
+    update_physics_step( _time_step_next );
+  }
+  
   // Torsor applied at different points of the bar
   for( unsigned int i = 0; i < _nb_applied; ++i) {
     
@@ -200,6 +228,11 @@ void update_interface()
 // @todo : should not exists...
 void update_observers()
 {
+  for( unsigned int i = 0; i < _nb_pt_logged; ++i) {
+    _v_pt_logged_scigl[i]->set_visible( _fg_show_logged ); // control
+  }
+  _bar_phy_next_scigl->set_visible( _fg_show_logged ); // control
+
   _torsor_scigl->update();
   // Torsor applied at different points of the bar
   //std::cout << "UPDATE_OBSERVERS" << "\n";
@@ -247,6 +280,7 @@ void init_observers()
   for( unsigned int i = 0; i < _nb_pt_logged; ++i) {
     _v_pt_logged_scigl[i] = LoggedTVec3SciglPtr (new LoggedTVec3Scigl( _v_pt_logged[i] ));
     _v_pt_logged_scigl[i]->set_br_color( 0.0, 0.0, 0.7, 1.0 );
+    _v_pt_logged_scigl[i]->set_visible( _fg_show_logged );
     _scene->add( _v_pt_logged_scigl[i] );
   }
   
@@ -402,7 +436,12 @@ int main (int argc, char **argv)
   TwAddVarRW( _bar, "_torsor_pos", tw_SVec3, &(_torsor_pos), " Group='Torsor Cinematique' Label='Ori' ");
   TwAddVarRW( _bar, "_torsor_res", TW_TYPE_DIR3F, &_torsor_res, " Group='Torsor Cinematique' Label='Rotation'");
   TwAddVarRW( _bar, "_torsor_mom", TW_TYPE_DIR3F, &_torsor_mom, " Group='Torsor Cinematique' Label='Vitesse'");
+  // PHYSIC
+  TwAddVarRW( _bar, "_fg_physic_reset", TW_TYPE_BOOLCPP, &_fg_physic_reset, "Group='Physic' Label='Reset'");
+  TwAddVarRW( _bar, "_fg_physic", TW_TYPE_BOOLCPP, &_fg_physic, "Group='Physic' Label='Go'");
+  TwAddVarRW( _bar, "_fg_physic_step", TW_TYPE_BOOLCPP, &_fg_physic_step, "Group='Physic' Label='Step'");
   // TIME
+  TwAddVarRW( _bar, "_fg_show_logged", TW_TYPE_BOOLCPP, &_fg_show_logged, "Group='Time' Label='Show next'");
   TwAddVarRW( _bar, "_time_step_next", TW_TYPE_FLOAT, &_time_step_next, "Group='Time' Label='T next' min=0.0 max=300.0 step=0.1 keyIncr=t keyDecr=T");
   // ------------------------------- end AntTweakBar
 
@@ -466,6 +505,8 @@ int main (int argc, char **argv)
   double time = _timer_fps.getElapsedTimeInMilliSec();
   _time_frame_fps1s = time;
   _time_frame_fps5s = time;
+  _time_physic = time;
+  _time_step_next = 0;
 
   // Main loop of GLFW
   do {
@@ -483,6 +524,9 @@ int main (int argc, char **argv)
     
     // PHYSICS
     update_interface();
+    if( _fg_physic or _fg_physic_step) {
+      update_physics( 1.0 );
+    }
 
     // TIMER physic
     double delta_time_physic = _timer_fps.getElapsedTimeInMilliSec() - time_physic_before;
