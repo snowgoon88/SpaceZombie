@@ -109,7 +109,13 @@ void update_physics( float accel )
     // apply rotation to bar from central axes
     _bar_phy->set_dir( _bar_phy->_dir + _delta_time_physic * _torsor._r.cross( _bar_phy->_dir ));
     // Move origine : its speed it the torsor applied at the point
-    _bar_phy->set_position( _bar_phy->_ori + _delta_time_physic * _torsor.apply( _bar_phy->_ori ));
+    // deplacement
+    // @todo should reduce torsor at given point of bar, then move it along this point. It would be cleaner.
+    // @todo attach the torsor to a given point of the bar? (or this will be the case when the bar is "fixed" at one extremity ?
+    TVec3 delta_p = _delta_time_physic * _torsor.apply( _bar_phy->_ori );
+    _bar_phy->set_position( _bar_phy->_ori + delta_p);
+    // And then, move the torsor to the new point
+    _torsor._p += delta_p;
     //std::cout << "   dt=" << dt << " " << _bar_phy->dump_string() << "\n";
   }
 
@@ -130,11 +136,18 @@ void update_physics_step( float delta_t )
     _v_pt_logged[i]->clear();
   }
   
+  Torsor tor = _torsor;
+
   for( float dt=0.0; dt < delta_t; dt += _delta_step) {
     // apply rotation to bar from central axes
-    _bar_phy_next->set_dir( _bar_phy_next->_dir + _delta_step * _torsor._r.cross( _bar_phy_next->_dir ));
+    _bar_phy_next->set_dir( _bar_phy_next->_dir + _delta_step * tor._r.cross( _bar_phy_next->_dir ));
     // Move origine : its speed it the torsor applied at the point
-    _bar_phy_next->set_position( _bar_phy_next->_ori + _delta_step * _torsor.apply( _bar_phy_next->_ori ));
+    // @todo should reduce torsor at given point of bar, then move it along this point. It would be cleaner.
+    // @todo attach the torsor to a given point of the bar? (or this will be the case when the bar is "fixed" at one extremity ?
+    TVec3 delta_p = _delta_step * tor.apply( _bar_phy_next->_ori );
+    _bar_phy_next->set_position( _bar_phy_next->_ori + delta_p );
+    // And then move torsor point according to bar deplacement.
+    tor._p += delta_p;
     // log result
     for( unsigned int i = 0; i < _nb_pt_logged; ++i) {
       TVec3 point;
@@ -195,6 +208,7 @@ void update_interface()
     
     _bar_phy->set_position( TVec3( _bar_pos.x, _bar_pos.y, _bar_pos.z) );
     _bar_phy->set_dir( Eigen::Map<TVec3>(_bar_dir) );
+    _torsor._p = TVec3( _torsor_pos.x, _torsor_pos.y, _torsor_pos.z );
   }
   // ! fg_physic = simu is stopped
   if( !_fg_physic and !_fg_physic_step ) {
@@ -203,7 +217,7 @@ void update_interface()
   
   _torsor._r = Eigen::Map<TVec3>(_torsor_res);
   _torsor._m = Eigen::Map<TVec3>(_torsor_mom);
-  _torsor._p = TVec3( _torsor_pos.x, _torsor_pos.y, _torsor_pos.z );
+  
 
   if( _fg_show_logged ) {
     update_physics_step( _time_step_next );
@@ -372,6 +386,10 @@ void update_textbox()
   ss << "Disp. " << SETPREC(3) << _time_frame_min << " / " << SETPREC(3) << _time_frame_avg << " / " << SETPREC(3) <<_time_frame_max << " ";
   ss << "  ";
   ss << "Phy. " << SETPREC(3) << _time_physic_min << " / " << SETPREC(3) << _time_physic_avg << " / " << SETPREC(3) << _time_physic_max << " ";
+
+  ss << "\n";
+  ss << _bar_phy->dump_string() << "\n";
+  ss << _torsor.display_str();
   _textbox->set_buffer( ss.str() );
 }
 /**
