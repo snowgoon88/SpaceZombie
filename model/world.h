@@ -11,11 +11,9 @@
 #include "point.h"
 
 // Smart pointer
-#ifdef HAVE_BOOST
-    typedef boost::shared_ptr<class World> WorldPtr;
-#else
-    typedef class World * WorldPtr;
-#endif
+#include <boost/shared_ptr.hpp>
+typedef boost::shared_ptr<class World> WorldPtr;
+
 
 /**
  *

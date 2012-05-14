@@ -22,20 +22,20 @@
 #include <cstdlib>
 #include "scene.h"
 #include "ref_frame_scigl.h"
-#include "world.h"
-#include "world_scigl.h"
 #include "textbox.h" 
 // AntTweakBar
 #include <AntTweakBar.h>
 
+// Game
+#include "game_model.h"
+#include "game_observer.h"
+GameModelPtr _game_model;
+GameObserverPtr _game_observer;
+
 // Graphic
 ScenePtr _scene = ScenePtr (new Scene);
-WorldSCIGLPtr _world_scigl;
 TextBoxPtr _textbox;
 TwBar *_bar;         // Pointer to a tweak bar
-
-// Global
-WorldPtr _world;
 
 // FPS
 Timer _timer_fps;
@@ -61,360 +61,360 @@ float _gravity = 9.81;
  * Update the physic of the World
  */
 // Apply gravity when slope non-nul and stick to cell (no vertical rebound)
-void update_physic_gravity()
-{
-  double time_current = _timer_fps.getElapsedTimeInMilliSec();
+// void update_physic_gravity()
+// {
+//   double time_current = _timer_fps.getElapsedTimeInMilliSec();
 
 
-  // APPLICATION OF EXTERNAL FORCES : Gravity.
-  if( _fg_physics or _fg_step_physics ) {
-    float next_x, next_y, next_z;
-    PhyPointPtr pl = _world->_player;
-    if( pl->_player_state == PhyPoint::s_CONTACT ) {
-      // Apply gravity + ground reaction
-      // gravity : toward negative Z
-      // Projection de G sur repère sol Sxz. alpha = -PI/2 - angX
-      // Gsx = G cos(alpha), Gsz = G sin(alpha)
-      // Projection sur Oxz
-      // Fx = Gsx cos( angX ) = G cos(alpha)cos(angX)
-      // Fz = Gsz sin( angX ) = G cos(alpha)sin(angX)
-      // Only one of grav_sx or grav_sy shall be non-null
-      float grav_sx = _gravity * cosf( -M_PI / 2.0 - pl->_curr_cell->_ang_y );
-      float grav_sy = _gravity * cosf( -M_PI / 2.0 - pl->_curr_cell->_ang_x );
-      pl->apply_force( time_current - _time_physic, 
-		       grav_sx * cosf( pl->_curr_cell->_ang_y ),
-		       grav_sy * cosf( pl->_curr_cell->_ang_x ),
-		       grav_sx * sinf( pl->_curr_cell->_ang_y ) + grav_sy * sinf( pl->_curr_cell->_ang_x ) );
-    }
-    else {
-      // Apply gravity
-      pl->apply_force( time_current - _time_physic, 
-		       0.0, 0.0, -_gravity );
-    }
+//   // APPLICATION OF EXTERNAL FORCES : Gravity.
+//   if( _fg_physics or _fg_step_physics ) {
+//     float next_x, next_y, next_z;
+//     PhyPointPtr pl = _world->_player;
+//     if( pl->_player_state == PhyPoint::s_CONTACT ) {
+//       // Apply gravity + ground reaction
+//       // gravity : toward negative Z
+//       // Projection de G sur repère sol Sxz. alpha = -PI/2 - angX
+//       // Gsx = G cos(alpha), Gsz = G sin(alpha)
+//       // Projection sur Oxz
+//       // Fx = Gsx cos( angX ) = G cos(alpha)cos(angX)
+//       // Fz = Gsz sin( angX ) = G cos(alpha)sin(angX)
+//       // Only one of grav_sx or grav_sy shall be non-null
+//       float grav_sx = _gravity * cosf( -M_PI / 2.0 - pl->_curr_cell->_ang_y );
+//       float grav_sy = _gravity * cosf( -M_PI / 2.0 - pl->_curr_cell->_ang_x );
+//       pl->apply_force( time_current - _time_physic, 
+// 		       grav_sx * cosf( pl->_curr_cell->_ang_y ),
+// 		       grav_sy * cosf( pl->_curr_cell->_ang_x ),
+// 		       grav_sx * sinf( pl->_curr_cell->_ang_y ) + grav_sy * sinf( pl->_curr_cell->_ang_x ) );
+//     }
+//     else {
+//       // Apply gravity
+//       pl->apply_force( time_current - _time_physic, 
+// 		       0.0, 0.0, -_gravity );
+//     }
 
-    pl->get_future_pos(  time_current - _time_physic,
-			 next_x, next_y, next_z );
-    std::cout << " next_p => (" << next_x << ", " << next_y << ", " << next_z << "\n";
-    CellPtr next_cell = _world->get_cell_at( next_x, next_y, next_z );
-    std::cout << pl->repr_dump() << "\n";
-    std::cout << "@@@ cur=" << (pl->_curr_cell ? pl->_curr_cell->repr_dump() : "NULL") << "\n";
-    std::cout << "@@@ next=" << (next_cell ? next_cell->repr_dump() : "NULL") << "\n";
+//     pl->get_future_pos(  time_current - _time_physic,
+// 			 next_x, next_y, next_z );
+//     std::cout << " next_p => (" << next_x << ", " << next_y << ", " << next_z << "\n";
+//     CellPtr next_cell = _world->get_cell_at( next_x, next_y, next_z );
+//     std::cout << pl->repr_dump() << "\n";
+//     std::cout << "@@@ cur=" << (pl->_curr_cell ? pl->_curr_cell->repr_dump() : "NULL") << "\n";
+//     std::cout << "@@@ next=" << (next_cell ? next_cell->repr_dump() : "NULL") << "\n";
 
 
-    // REALISATION OF MOVEMENT
-    float cur_z = pl->_z; // needed to correct speed
-    if( pl->_player_state == PhyPoint::s_CONTACT ) {
-      // Check if leaving cell
-      unsigned int dir;
-      if( pl->_curr_cell->is_leaving_cell( next_x, next_y, dir ) ) {
-	// Check if neigbor cell in the dir of mouvement
-	CellPtr neighbor_cell = pl->_curr_cell->_neighbors[dir];
-	std::cout << "@@@ neighbor=" << (neighbor_cell ? neighbor_cell->repr_dump() : "NULL") << "\n";
-	if( neighbor_cell ) {
-	  // s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT
-	  std::cout << "s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT\n";
-	  // _player_state is the same
-	  pl->_x = next_x;
-	  pl->_y = next_y;
-	  pl->_z = neighbor_cell->get_z_at( next_x, next_y );
-	  next_cell = neighbor_cell;
-	}
-	else if( !next_cell ) {
-	  // s_CONTACT [AND cell] -> null : REBOUND
-	  std::cout << "s_CONTACT [AND cell] -> null : REBOUND\n";
-	  // _player_state is the same
-	  // Compute rebond
-	  switch( dir ) {
-	  case 0: // North
-	    // update position : rebound toward South
-	    pl->_y = pl->_curr_cell->_y + pl->_curr_cell->size -
-	      (next_y - (pl->_curr_cell->_y + pl->_curr_cell->size));
-	    // Invert vy
-	    pl->_vy = -(pl->_vy );
-	    break;
-	  case 2: // South
-	    // update position : rebound toward North
-	    pl->_y = pl->_curr_cell->_y - pl->_curr_cell->size +
-	      ((pl->_curr_cell->_y - pl->_curr_cell->size) - next_y);
-	    // Invert vy
-	    pl->_vy = -(pl->_vy );
-	    break;
-	  case 1: // East
-	    // update position : rebound toward West
-	    pl->_x = pl->_curr_cell->_x + pl->_curr_cell->size -
-	      (next_x - (pl->_curr_cell->_x + pl->_curr_cell->size));
-	    // Invert vx
-	    pl->_vx = -(pl->_vx);
-	    break;
-	  case 3: // West
-	    // update position : rebound toward East
-	    pl->_x = pl->_curr_cell->_x - pl->_curr_cell->size +
-	      ((pl->_curr_cell->_x - pl->_curr_cell->size) - next_x);
-	    // Invert vx
-	    pl->_vx = -(pl->_vx);
-	    break;
-	  }
-	  next_cell = pl->_curr_cell;
-	}
-	else {
-	  // s_CONTACT [AND cell] -> cell : stick & s_CONTACT
-	  std::cout << "s_CONTACT [AND cell] -> cell : stick & s_CONTACT\n";
-	  // _player_state is the same
-	  pl->_x = next_x;
-	  pl->_y = next_y;
-	  pl->_z = next_cell->get_z_at( next_x, next_y );	
-	}
-	pl->_curr_cell = next_cell;
-      }
-      else {
-	// s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT
-	std::cout << "s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT\n";
-	// _player_state is the same
-	pl->_x = next_x;
-	pl->_y = next_y;
-	pl->_z = pl->_curr_cell->get_z_at( next_x, next_y );
-      }
-    }
-    else {
-      if( !next_cell ) {
-	// s_VOID -> null : s_VOID
-	std::cout << "s_VOID -> null : s_VOID\n";
-	// _player_state is the same
-	pl->_x = next_x;
-	pl->_y = next_y;
-	pl->_z = next_z;
-      }
-      else {
-	// s_VOID -> cell : stick & s_CONTACT
-	std::cout << "s_VOID -> cell : stick & s_CONTACT\n";
-	pl->_player_state = PhyPoint::s_CONTACT;
-	pl->_x = next_x;
-	pl->_y = next_y;
-	pl->_z = next_cell->get_z_at( next_x, next_y );	
-      }
-      pl->_curr_cell = next_cell;
-    }
-    // Correction of vz
-    pl->_vz = (pl->_z - cur_z)/(time_current - _time_physic);
-  }
-  _fg_step_physics = false;
-  _time_physic = time_current;
-}
+//     // REALISATION OF MOVEMENT
+//     float cur_z = pl->_z; // needed to correct speed
+//     if( pl->_player_state == PhyPoint::s_CONTACT ) {
+//       // Check if leaving cell
+//       unsigned int dir;
+//       if( pl->_curr_cell->is_leaving_cell( next_x, next_y, dir ) ) {
+// 	// Check if neigbor cell in the dir of mouvement
+// 	CellPtr neighbor_cell = pl->_curr_cell->_neighbors[dir];
+// 	std::cout << "@@@ neighbor=" << (neighbor_cell ? neighbor_cell->repr_dump() : "NULL") << "\n";
+// 	if( neighbor_cell ) {
+// 	  // s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT
+// 	  std::cout << "s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT\n";
+// 	  // _player_state is the same
+// 	  pl->_x = next_x;
+// 	  pl->_y = next_y;
+// 	  pl->_z = neighbor_cell->get_z_at( next_x, next_y );
+// 	  next_cell = neighbor_cell;
+// 	}
+// 	else if( !next_cell ) {
+// 	  // s_CONTACT [AND cell] -> null : REBOUND
+// 	  std::cout << "s_CONTACT [AND cell] -> null : REBOUND\n";
+// 	  // _player_state is the same
+// 	  // Compute rebond
+// 	  switch( dir ) {
+// 	  case 0: // North
+// 	    // update position : rebound toward South
+// 	    pl->_y = pl->_curr_cell->_y + pl->_curr_cell->size -
+// 	      (next_y - (pl->_curr_cell->_y + pl->_curr_cell->size));
+// 	    // Invert vy
+// 	    pl->_vy = -(pl->_vy );
+// 	    break;
+// 	  case 2: // South
+// 	    // update position : rebound toward North
+// 	    pl->_y = pl->_curr_cell->_y - pl->_curr_cell->size +
+// 	      ((pl->_curr_cell->_y - pl->_curr_cell->size) - next_y);
+// 	    // Invert vy
+// 	    pl->_vy = -(pl->_vy );
+// 	    break;
+// 	  case 1: // East
+// 	    // update position : rebound toward West
+// 	    pl->_x = pl->_curr_cell->_x + pl->_curr_cell->size -
+// 	      (next_x - (pl->_curr_cell->_x + pl->_curr_cell->size));
+// 	    // Invert vx
+// 	    pl->_vx = -(pl->_vx);
+// 	    break;
+// 	  case 3: // West
+// 	    // update position : rebound toward East
+// 	    pl->_x = pl->_curr_cell->_x - pl->_curr_cell->size +
+// 	      ((pl->_curr_cell->_x - pl->_curr_cell->size) - next_x);
+// 	    // Invert vx
+// 	    pl->_vx = -(pl->_vx);
+// 	    break;
+// 	  }
+// 	  next_cell = pl->_curr_cell;
+// 	}
+// 	else {
+// 	  // s_CONTACT [AND cell] -> cell : stick & s_CONTACT
+// 	  std::cout << "s_CONTACT [AND cell] -> cell : stick & s_CONTACT\n";
+// 	  // _player_state is the same
+// 	  pl->_x = next_x;
+// 	  pl->_y = next_y;
+// 	  pl->_z = next_cell->get_z_at( next_x, next_y );	
+// 	}
+// 	pl->_curr_cell = next_cell;
+//       }
+//       else {
+// 	// s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT
+// 	std::cout << "s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT\n";
+// 	// _player_state is the same
+// 	pl->_x = next_x;
+// 	pl->_y = next_y;
+// 	pl->_z = pl->_curr_cell->get_z_at( next_x, next_y );
+//       }
+//     }
+//     else {
+//       if( !next_cell ) {
+// 	// s_VOID -> null : s_VOID
+// 	std::cout << "s_VOID -> null : s_VOID\n";
+// 	// _player_state is the same
+// 	pl->_x = next_x;
+// 	pl->_y = next_y;
+// 	pl->_z = next_z;
+//       }
+//       else {
+// 	// s_VOID -> cell : stick & s_CONTACT
+// 	std::cout << "s_VOID -> cell : stick & s_CONTACT\n";
+// 	pl->_player_state = PhyPoint::s_CONTACT;
+// 	pl->_x = next_x;
+// 	pl->_y = next_y;
+// 	pl->_z = next_cell->get_z_at( next_x, next_y );	
+//       }
+//       pl->_curr_cell = next_cell;
+//     }
+//     // Correction of vz
+//     pl->_vz = (pl->_z - cur_z)/(time_current - _time_physic);
+//   }
+//   _fg_step_physics = false;
+//   _time_physic = time_current;
+// }
 
-// Rebond on side of cells without neigbors and without cell below
-void update_physic_rebound()
-{
-  double time_current = _timer_fps.getElapsedTimeInMilliSec();
+// // Rebond on side of cells without neigbors and without cell below
+// void update_physic_rebound()
+// {
+//   double time_current = _timer_fps.getElapsedTimeInMilliSec();
   
-  if( _fg_physics ) {
-    float next_x, next_y, next_z;
-    PhyPointPtr pl = _world->_player;
-    pl->get_future_pos(  time_current - _time_physic,
-			 next_x, next_y, next_z );
-    CellPtr next_cell = _world->get_cell_at( next_x, next_y, next_z );
-    std::cout << pl->repr_dump() << "\n";
-    std::cout << "@@@ cur=" << (pl->_curr_cell ? pl->_curr_cell->repr_dump() : "NULL") << "\n";
-    std::cout << "@@@ next=" << (next_cell ? next_cell->repr_dump() : "NULL") << "\n";
+//   if( _fg_physics ) {
+//     float next_x, next_y, next_z;
+//     PhyPointPtr pl = _world->_player;
+//     pl->get_future_pos(  time_current - _time_physic,
+// 			 next_x, next_y, next_z );
+//     CellPtr next_cell = _world->get_cell_at( next_x, next_y, next_z );
+//     std::cout << pl->repr_dump() << "\n";
+//     std::cout << "@@@ cur=" << (pl->_curr_cell ? pl->_curr_cell->repr_dump() : "NULL") << "\n";
+//     std::cout << "@@@ next=" << (next_cell ? next_cell->repr_dump() : "NULL") << "\n";
 
-    if( pl->_player_state == PhyPoint::s_CONTACT ) {
-      // Check if leaving cell
-      unsigned int dir;
-      if( pl->_curr_cell->is_leaving_cell( next_x, next_y, dir ) ) {
-	// Check if neigbor cell in the dir of mouvement
-	CellPtr neighbor_cell = pl->_curr_cell->_neighbors[dir];
-	std::cout << "@@@ neighbor=" << (neighbor_cell ? neighbor_cell->repr_dump() : "NULL") << "\n";
-	if( neighbor_cell ) {
-	  // s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT
-	  std::cout << "s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT\n";
-	  // _player_state is the same
-	  pl->_x = next_x;
-	  pl->_y = next_y;
-	  pl->_z = neighbor_cell->get_z_at( next_x, next_y );
-	  next_cell = neighbor_cell;
-	}
-	else if( !next_cell ) {
-	  // s_CONTACT [AND cell] -> null : REBOUND
-	  std::cout << "s_CONTACT [AND cell] -> null : REBOUND\n";
-	  // _player_state is the same
-	  // Compute rebond
-	  switch( dir ) {
-	  case 0: // North
-	  case 2: // South
-	    pl->_vy = -(pl->_vy );
-	    break;
-	  case 1: // East
-	  case 3: // West
-	    pl->_vx = -(pl->_vx);
-	    break;
-	  }
-	  // TODO : Apply gravity
-	  pl->_x = next_x;
-	  pl->_y = next_y;
-	  pl->_z = next_z;
-	  next_cell = pl->_curr_cell;
-	}
-	else {
-	  // s_CONTACT [AND cell] -> cell : stick & s_CONTACT
-	  std::cout << "s_CONTACT [AND cell] -> cell : stick & s_CONTACT\n";
-	  // _player_state is the same
-	  pl->_x = next_x;
-	  pl->_y = next_y;
-	  pl->_z = next_cell->get_z_at( next_x, next_y );	
-	}
-	pl->_curr_cell = next_cell;
-      }
-      else {
-	// s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT
-	std::cout << "s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT\n";
-	// _player_state is the same
-	pl->_x = next_x;
-	pl->_y = next_y;
-	pl->_z = pl->_curr_cell->get_z_at( next_x, next_y );
-      }
-    }
-    else {
-      if( !next_cell ) {
-	// s_VOID -> null : s_VOID
-	std::cout << "s_VOID -> null : s_VOID\n";
-	// _player_state is the same
-	pl->_x = next_x;
-	pl->_y = next_y;
-	pl->_z = next_z;
-      }
-      else {
-	// s_VOID -> cell : stick & s_CONTACT
-	std::cout << "s_VOID -> cell : stick & s_CONTACT\n";
-	pl->_player_state = PhyPoint::s_CONTACT;
-	pl->_x = next_x;
-	pl->_y = next_y;
-	pl->_z = next_cell->get_z_at( next_x, next_y );	
-      }
-      pl->_curr_cell = next_cell;
-    }
-  }
-  _time_physic = time_current;
-}
-// La physique particulière de l'instant
-// suit les cases ou reste de niveau
-// s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT
-// s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT
-// s_CONTACT [AND cell] OR s_VOID -> cell : stick & s_CONTACT
-// s_CONTACT [AND cell] OR s_VOID -> null : s_VOID
-void update_physic_slope()
-{
-  double time_current = _timer_fps.getElapsedTimeInMilliSec();
+//     if( pl->_player_state == PhyPoint::s_CONTACT ) {
+//       // Check if leaving cell
+//       unsigned int dir;
+//       if( pl->_curr_cell->is_leaving_cell( next_x, next_y, dir ) ) {
+// 	// Check if neigbor cell in the dir of mouvement
+// 	CellPtr neighbor_cell = pl->_curr_cell->_neighbors[dir];
+// 	std::cout << "@@@ neighbor=" << (neighbor_cell ? neighbor_cell->repr_dump() : "NULL") << "\n";
+// 	if( neighbor_cell ) {
+// 	  // s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT
+// 	  std::cout << "s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT\n";
+// 	  // _player_state is the same
+// 	  pl->_x = next_x;
+// 	  pl->_y = next_y;
+// 	  pl->_z = neighbor_cell->get_z_at( next_x, next_y );
+// 	  next_cell = neighbor_cell;
+// 	}
+// 	else if( !next_cell ) {
+// 	  // s_CONTACT [AND cell] -> null : REBOUND
+// 	  std::cout << "s_CONTACT [AND cell] -> null : REBOUND\n";
+// 	  // _player_state is the same
+// 	  // Compute rebond
+// 	  switch( dir ) {
+// 	  case 0: // North
+// 	  case 2: // South
+// 	    pl->_vy = -(pl->_vy );
+// 	    break;
+// 	  case 1: // East
+// 	  case 3: // West
+// 	    pl->_vx = -(pl->_vx);
+// 	    break;
+// 	  }
+// 	  // TODO : Apply gravity
+// 	  pl->_x = next_x;
+// 	  pl->_y = next_y;
+// 	  pl->_z = next_z;
+// 	  next_cell = pl->_curr_cell;
+// 	}
+// 	else {
+// 	  // s_CONTACT [AND cell] -> cell : stick & s_CONTACT
+// 	  std::cout << "s_CONTACT [AND cell] -> cell : stick & s_CONTACT\n";
+// 	  // _player_state is the same
+// 	  pl->_x = next_x;
+// 	  pl->_y = next_y;
+// 	  pl->_z = next_cell->get_z_at( next_x, next_y );	
+// 	}
+// 	pl->_curr_cell = next_cell;
+//       }
+//       else {
+// 	// s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT
+// 	std::cout << "s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT\n";
+// 	// _player_state is the same
+// 	pl->_x = next_x;
+// 	pl->_y = next_y;
+// 	pl->_z = pl->_curr_cell->get_z_at( next_x, next_y );
+//       }
+//     }
+//     else {
+//       if( !next_cell ) {
+// 	// s_VOID -> null : s_VOID
+// 	std::cout << "s_VOID -> null : s_VOID\n";
+// 	// _player_state is the same
+// 	pl->_x = next_x;
+// 	pl->_y = next_y;
+// 	pl->_z = next_z;
+//       }
+//       else {
+// 	// s_VOID -> cell : stick & s_CONTACT
+// 	std::cout << "s_VOID -> cell : stick & s_CONTACT\n";
+// 	pl->_player_state = PhyPoint::s_CONTACT;
+// 	pl->_x = next_x;
+// 	pl->_y = next_y;
+// 	pl->_z = next_cell->get_z_at( next_x, next_y );	
+//       }
+//       pl->_curr_cell = next_cell;
+//     }
+//   }
+//   _time_physic = time_current;
+// }
+// // La physique particulière de l'instant
+// // suit les cases ou reste de niveau
+// // s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT
+// // s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT
+// // s_CONTACT [AND cell] OR s_VOID -> cell : stick & s_CONTACT
+// // s_CONTACT [AND cell] OR s_VOID -> null : s_VOID
+// void update_physic_slope()
+// {
+//   double time_current = _timer_fps.getElapsedTimeInMilliSec();
   
-  if( _fg_physics ) {
-    float next_x, next_y, next_z;
-    PhyPointPtr pl = _world->_player;
-    pl->get_future_pos(  time_current - _time_physic,
-			 next_x, next_y, next_z );
-    CellPtr next_cell = _world->get_cell_at( next_x, next_y, next_z );
-    std::cout << "@@@ next=" << (next_cell ? next_cell->repr_dump() : "NULL") << "\n";
+//   if( _fg_physics ) {
+//     float next_x, next_y, next_z;
+//     PhyPointPtr pl = _world->_player;
+//     pl->get_future_pos(  time_current - _time_physic,
+// 			 next_x, next_y, next_z );
+//     CellPtr next_cell = _world->get_cell_at( next_x, next_y, next_z );
+//     std::cout << "@@@ next=" << (next_cell ? next_cell->repr_dump() : "NULL") << "\n";
 
-    if( pl->_player_state == PhyPoint::s_CONTACT ) {
-      // Check if leaving cell
-      unsigned int dir;
-      if( pl->_curr_cell->is_leaving_cell( next_x, next_y, dir ) ) {
-	// Check if neigbor cell in the dir of mouvement
-	CellPtr neighbor_cell = pl->_curr_cell->_neighbors[dir];
-	std::cout << "@@@ neighbor=" << (neighbor_cell ? neighbor_cell->repr_dump() : "NULL") << "\n";
-	if( neighbor_cell ) {
-	  // s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT
-	  std::cout << "s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT\n";
-	  // _player_state is the same
-	  pl->_x = next_x;
-	  pl->_y = next_y;
-	  pl->_z = neighbor_cell->get_z_at( next_x, next_y );
-	  next_cell = neighbor_cell;
-	}
-	else if( !next_cell ) {
-	  // s_CONTACT [AND cell] -> null : s_VOID
-	  std::cout << "s_CONTACT [AND cell] -> null : s_VOID\n";
-	  pl->_player_state = PhyPoint::s_VOID;
-	  pl->_x = next_x;
-	  pl->_y = next_y;
-	  pl->_z = next_z;
-	}
-	else {
-	  // s_CONTACT [AND cell] -> cell : stick & s_CONTACT
-	  std::cout << "s_CONTACT [AND cell] -> cell : stick & s_CONTACT\n";
-	  // _player_state is the same
-	  pl->_x = next_x;
-	  pl->_y = next_y;
-	  pl->_z = next_cell->get_z_at( next_x, next_y );	
-	}
-	pl->_curr_cell = next_cell;
-      }
-      else {
-	// s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT
-	std::cout << "s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT\n";
-	// _player_state is the same
-	pl->_x = next_x;
-	pl->_y = next_y;
-	pl->_z = pl->_curr_cell->get_z_at( next_x, next_y );
-      }
-    }
-    else {
-      if( !next_cell ) {
-	// s_VOID -> null : s_VOID
-	std::cout << "s_VOID -> null : s_VOID\n";
-	// _player_state is the same
-	pl->_x = next_x;
-	pl->_y = next_y;
-	pl->_z = next_z;
-      }
-      else {
-	// s_VOID -> cell : stick & s_CONTACT
-	std::cout << "s_VOID -> cell : stick & s_CONTACT\n";
-	pl->_player_state = PhyPoint::s_CONTACT;
-	pl->_x = next_x;
-	pl->_y = next_y;
-	pl->_z = next_cell->get_z_at( next_x, next_y );	
-      }
-      pl->_curr_cell = next_cell;
-    }
-  }
-  _time_physic = time_current;
-}
-// Stick to cells in going down.
-// WARN::Would not be able to 'climb' a cell.
-void update_physic_follow()
-{
-  double time_current = _timer_fps.getElapsedTimeInMilliSec();
+//     if( pl->_player_state == PhyPoint::s_CONTACT ) {
+//       // Check if leaving cell
+//       unsigned int dir;
+//       if( pl->_curr_cell->is_leaving_cell( next_x, next_y, dir ) ) {
+// 	// Check if neigbor cell in the dir of mouvement
+// 	CellPtr neighbor_cell = pl->_curr_cell->_neighbors[dir];
+// 	std::cout << "@@@ neighbor=" << (neighbor_cell ? neighbor_cell->repr_dump() : "NULL") << "\n";
+// 	if( neighbor_cell ) {
+// 	  // s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT
+// 	  std::cout << "s_CONTACT [AND cell] -> cell_voisine : stick & s_CONTACT\n";
+// 	  // _player_state is the same
+// 	  pl->_x = next_x;
+// 	  pl->_y = next_y;
+// 	  pl->_z = neighbor_cell->get_z_at( next_x, next_y );
+// 	  next_cell = neighbor_cell;
+// 	}
+// 	else if( !next_cell ) {
+// 	  // s_CONTACT [AND cell] -> null : s_VOID
+// 	  std::cout << "s_CONTACT [AND cell] -> null : s_VOID\n";
+// 	  pl->_player_state = PhyPoint::s_VOID;
+// 	  pl->_x = next_x;
+// 	  pl->_y = next_y;
+// 	  pl->_z = next_z;
+// 	}
+// 	else {
+// 	  // s_CONTACT [AND cell] -> cell : stick & s_CONTACT
+// 	  std::cout << "s_CONTACT [AND cell] -> cell : stick & s_CONTACT\n";
+// 	  // _player_state is the same
+// 	  pl->_x = next_x;
+// 	  pl->_y = next_y;
+// 	  pl->_z = next_cell->get_z_at( next_x, next_y );	
+// 	}
+// 	pl->_curr_cell = next_cell;
+//       }
+//       else {
+// 	// s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT
+// 	std::cout << "s_CONTACT [AND cell] -> cell_same : stick & s_CONTACT\n";
+// 	// _player_state is the same
+// 	pl->_x = next_x;
+// 	pl->_y = next_y;
+// 	pl->_z = pl->_curr_cell->get_z_at( next_x, next_y );
+//       }
+//     }
+//     else {
+//       if( !next_cell ) {
+// 	// s_VOID -> null : s_VOID
+// 	std::cout << "s_VOID -> null : s_VOID\n";
+// 	// _player_state is the same
+// 	pl->_x = next_x;
+// 	pl->_y = next_y;
+// 	pl->_z = next_z;
+//       }
+//       else {
+// 	// s_VOID -> cell : stick & s_CONTACT
+// 	std::cout << "s_VOID -> cell : stick & s_CONTACT\n";
+// 	pl->_player_state = PhyPoint::s_CONTACT;
+// 	pl->_x = next_x;
+// 	pl->_y = next_y;
+// 	pl->_z = next_cell->get_z_at( next_x, next_y );	
+//       }
+//       pl->_curr_cell = next_cell;
+//     }
+//   }
+//   _time_physic = time_current;
+// }
+// // Stick to cells in going down.
+// // WARN::Would not be able to 'climb' a cell.
+// void update_physic_follow()
+// {
+//   double time_current = _timer_fps.getElapsedTimeInMilliSec();
   
-  if( _fg_physics ) {
-    // Move player
-    _world->_player->get_future_pos(  time_current - _time_physic,
-				      _world->_player->_x,
-				      _world->_player->_y,
-				      _world->_player->_z );
+//   if( _fg_physics ) {
+//     // Move player
+//     _world->_player->get_future_pos(  time_current - _time_physic,
+// 				      _world->_player->_x,
+// 				      _world->_player->_y,
+// 				      _world->_player->_z );
     
-    CellPtr cell_cur = _world->get_cell_at( _world->_player->_x,
-					    _world->_player->_y,
-					    _world->_player->_z, true);
-    // Above a cell ?
-    if( cell_cur ) {
-      // stick to it
-      _world->_player->_z = cell_cur->get_z_at( _world->_player->_x, _world->_player->_y );
-      _world->_player->_fg_contact = true;
-    }
-    else {
-      _world->_player->_fg_contact = false;
-    }
-  }
-  _time_physic = time_current;
-}
-// straight line, no collision -------------------------------------------
-void update_physic()
-{
-  double time_current = _timer_fps.getElapsedTimeInMilliSec();
-  _world->_player->get_future_pos(  time_current - _time_physic,
-				   _world->_player->_x,
-				   _world->_player->_y,
-				   _world->_player->_z );
-  _time_physic = time_current;
-}
+//     CellPtr cell_cur = _world->get_cell_at( _world->_player->_x,
+// 					    _world->_player->_y,
+// 					    _world->_player->_z, true);
+//     // Above a cell ?
+//     if( cell_cur ) {
+//       // stick to it
+//       _world->_player->_z = cell_cur->get_z_at( _world->_player->_x, _world->_player->_y );
+//       _world->_player->_fg_contact = true;
+//     }
+//     else {
+//       _world->_player->_fg_contact = false;
+//     }
+//   }
+//   _time_physic = time_current;
+// }
+// // straight line, no collision -------------------------------------------
+// void update_physic()
+// {
+//   double time_current = _timer_fps.getElapsedTimeInMilliSec();
+//   _world->_player->get_future_pos(  time_current - _time_physic,
+// 				   _world->_player->_x,
+// 				   _world->_player->_y,
+// 				   _world->_player->_z );
+//   _time_physic = time_current;
+// }
 
 /**
  * Called after every mouse button pressed.
@@ -486,10 +486,10 @@ void on_key_pressed( int key, int action)
       else if( ((key == 112) || (key == 80))  && (action == GLFW_PRESS)) {
 	_scene->set_orientation( 0, 0);
       }
-      // d or D : dump world
-      else if( ((key == 100) || (key == 68))  && (action == GLFW_PRESS)) {
-	std::cout << _world->repr_dump();
-      }
+      // // d or D : dump world
+      // else if( ((key == 100) || (key == 68))  && (action == GLFW_PRESS)) {
+      // 	std::cout << _world->repr_dump();
+      // }
       
       // else {
       //     std::cout << "key=" << key << " act=" << action << "(" << GLFW_KEY_TAB << ", " << GLFW_PRESS << ")" << std::endl;
@@ -505,7 +505,7 @@ void update_textbox()
   ss << _fps_5s << " : " << _fps_1s << " ";
   ss << "Disp. " << _time_frame_min << " / " << _time_frame_avg << " / " << _time_frame_max << " ";
   ss << "Phy. " << _time_physic_min << " / " << _time_physic_avg << " / " << _time_physic_max << " ";
-  ss << "\n" << _world->_player->repr_dump();
+  //ss << "\n" << _world->_player->repr_dump();
   _textbox->set_buffer( ss.str() );
 }
 /**
@@ -526,6 +526,10 @@ void display (void) {
 
 int main (int argc, char **argv)
 {
+  // World
+  _game_model = GameModelPtr( new GameModel() );
+  _game_observer = GameObserverPtr( new GameObserver( _game_model ));
+  
   // Some graphic parameters
   int width, height;
 
@@ -594,34 +598,8 @@ int main (int argc, char **argv)
   Range rg_y( -5, 5, 4, 4*5);
   Range rg_z( -5, 5, 4, 4*5);
 
-  // World
-  _world = WorldPtr( new World );
-  _world->add_new_room( 0.0, 0.0, 0.0, 1, 4);
-  _world->add_new_room( 2.0, 0.0, 0.0, 1, 2);
-  _world->add_new_room( 3.0, 2.0, 1.0, 1, 2);
-  std::vector< CellPtr > start, end;
-  start.push_back( _world->_ground->_cells[0] );
-  end.push_back( _world->_ground->_cells[4] );
-  _world->connect_cells( start, end );  
-  start.clear();
-  start.push_back( _world->_ground->_cells[2] );
-  start.push_back( _world->_ground->_cells[3] );
-  end.clear();
-  end.push_back( _world->_ground->_cells[6] );
-  end.push_back( _world->_ground->_cells[7] );
-  _world->connect_cells( start, end );  
-  // Player
-  _world->_player->_x = 3.0;
-  _world->_player->_y = 2.0;
-  _world->_player->_z = 2.0;
-  _world->_player->_vx = ( -0.2 );
-  _world->_player->_vy = (  0.0 );
-  _world->notify_observers();
-
   // Observer
-  _world_scigl = WorldSCIGLPtr( new WorldSCIGL( _world ));
-  _world->attach_observer( _world_scigl );
-  _scene->add( _world_scigl );
+  _game_observer->init( _scene );
 
   // Some Ref_Frame
   RefFramePtr _ref = RefFramePtr( new RefFrame());
@@ -679,7 +657,7 @@ int main (int argc, char **argv)
     
     // PHYSICS
     double time_physic_before = _timer_fps.getElapsedTimeInMilliSec();
-    update_physic_gravity();
+    //update_physic_gravity();
     double delta_time_physic = _timer_fps.getElapsedTimeInMilliSec() - time_physic_before;
     if( delta_time_physic < _time_physic_min ) _time_physic_min = delta_time_physic;
     if( delta_time_physic > _time_physic_max ) _time_physic_max = delta_time_physic;
