@@ -598,9 +598,6 @@ int main (int argc, char **argv)
   Range rg_y( -5, 5, 4, 4*5);
   Range rg_z( -5, 5, 4, 4*5);
 
-  // Observer
-  _game_observer->init( _scene );
-
   // Some Ref_Frame
   RefFramePtr _ref = RefFramePtr( new RefFrame());
   _ref->set_position( 0, 0, 0.0 );
@@ -609,6 +606,10 @@ int main (int argc, char **argv)
   _ref->_ang_Ox1 =  0.0;
   _ref->_ang_Oz2 =  0.0;
   _scene->add( _ref );
+
+  // Observer
+  _game_observer->init( _scene );
+
   
 //   coord = BasisCubePtr (new BasisCube());
 //   coord->set_range_coord_x( rg_x );

@@ -30,9 +30,9 @@ WorldSCIGL::WorldSCIGL( WorldPtr model) : Object(), Observer()
   set_visible (true);
   set_size (1,1,1);
   set_position (0,0,0);
-  set_fg_color (0.95, 0.95, 0.8, 1.0);  // face up : blue 
+  set_fg_color (0.95, 0.95, 0.8, 0.5);  // face up : blue 
   set_br_color (0.0, 0.0, 0.0, 1.0);  // border : black
-  set_bg_color (0.6, 0.6, 0.6, 1.0);  // face down : light_grey
+  set_bg_color (0.6, 0.6, 0.6, 0.5);  // face down : light_grey
   alpha_ = 1.0f;
   fade_in_delay_ = 0;
   fade_out_delay_ = 0;
@@ -55,8 +55,7 @@ void WorldSCIGL::render (void)
   glPushAttrib (GL_ENABLE_BIT);
   glDisable (GL_TEXTURE_2D);
   glDisable (GL_LIGHTING);
-  //glEnable (GL_BLEND);
-  glEnable (GL_CULL_FACE);
+  glEnable (GL_BLEND);     // for transparency.
   glEnable (GL_DEPTH_TEST);
   glDepthMask (GL_TRUE);
   glEnable (GL_LINE_SMOOTH);
@@ -65,32 +64,9 @@ void WorldSCIGL::render (void)
   glPushMatrix();
   glScalef (get_size().x, get_size().y, get_size().z);
   glTranslatef (get_position().x, get_position().y, get_position().z);
-  
-  // Color of face
-  glColor4fv (get_fg_color().data);
-  glPolygonMode (GL_FRONT, GL_FILL);
-  glPolygonOffset (1, 1);
-  glEnable (GL_POLYGON_OFFSET_FILL);
-  glBegin( GL_QUADS ); {
-    for( unsigned int ind_c = 0; ind_c < _model->_ground->_cells.size(); ++ind_c ) {
-      CellPtr cell = _model->_ground->_cells[ind_c];
-      // Compute normals
-      glNormal3f( -sinf(cell->_ang_y), -sinf(cell->_ang_x), 
-		  cosf(cell->_ang_y) + cosf(cell->_ang_x) );
-      // Compute positions using angles
-      glVertex3f( cell->_x - 0.5, cell->_y - 0.5,
-		  cell->_z - 0.5*tanf(cell->_ang_y) - 0.5*tanf(cell->_ang_x) );
-      glVertex3f( cell->_x + 0.5, cell->_y - 0.5,
-		  cell->_z + 0.5*tanf(cell->_ang_y) - 0.5*tanf(cell->_ang_x) );
-      glVertex3f( cell->_x + 0.5, cell->_y + 0.5, 
-		  cell->_z + 0.5*tanf(cell->_ang_y) + 0.5*tanf(cell->_ang_x) );
-      glVertex3f( cell->_x - 0.5, cell->_y + 0.5, 
-		  cell->_z - 0.5*tanf(cell->_ang_y) + 0.5*tanf(cell->_ang_x) );
-    }
-  }
-  glEnd();
 
   // Wire Faces...
+  glDisable( GL_CULL_FACE ); // draw front and back
   glColor4fv (get_br_color().data);
   glDisable (GL_POLYGON_OFFSET_FILL);
   glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
@@ -113,6 +89,57 @@ void WorldSCIGL::render (void)
     }
   }
   glEnd();
+
+  glEnable (GL_CULL_FACE); // enable drawing front and/or back of polygons
+  glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);  
+  // Color of front face
+  glColor4fv (get_fg_color().data);
+  glCullFace( GL_BACK );
+  glPolygonOffset (1, 1);
+  glEnable (GL_POLYGON_OFFSET_FILL);
+  glBegin( GL_QUADS ); {
+    for( unsigned int ind_c = 0; ind_c < _model->_ground->_cells.size(); ++ind_c ) {
+      CellPtr cell = _model->_ground->_cells[ind_c];
+      // Compute normals
+      glNormal3f( -sinf(cell->_ang_y), -sinf(cell->_ang_x), 
+		  cosf(cell->_ang_y) + cosf(cell->_ang_x) );
+      // Compute positions using angles
+      glVertex3f( cell->_x - 0.5, cell->_y - 0.5,
+		  cell->_z - 0.5*tanf(cell->_ang_y) - 0.5*tanf(cell->_ang_x) );
+      glVertex3f( cell->_x + 0.5, cell->_y - 0.5,
+		  cell->_z + 0.5*tanf(cell->_ang_y) - 0.5*tanf(cell->_ang_x) );
+      glVertex3f( cell->_x + 0.5, cell->_y + 0.5, 
+		  cell->_z + 0.5*tanf(cell->_ang_y) + 0.5*tanf(cell->_ang_x) );
+      glVertex3f( cell->_x - 0.5, cell->_y + 0.5, 
+		  cell->_z - 0.5*tanf(cell->_ang_y) + 0.5*tanf(cell->_ang_x) );
+    }
+  }
+  glEnd();
+  // Color of back face
+  glColor4fv (get_bg_color().data);
+  glCullFace( GL_FRONT );
+  glPolygonOffset (1, 1);
+  glEnable (GL_POLYGON_OFFSET_FILL);
+  glBegin( GL_QUADS ); {
+    for( unsigned int ind_c = 0; ind_c < _model->_ground->_cells.size(); ++ind_c ) {
+      CellPtr cell = _model->_ground->_cells[ind_c];
+      // Compute normals
+      glNormal3f( -sinf(cell->_ang_y), -sinf(cell->_ang_x), 
+		  cosf(cell->_ang_y) + cosf(cell->_ang_x) );
+      // Compute positions using angles
+      glVertex3f( cell->_x - 0.5, cell->_y - 0.5,
+		  cell->_z - 0.5*tanf(cell->_ang_y) - 0.5*tanf(cell->_ang_x) );
+      glVertex3f( cell->_x + 0.5, cell->_y - 0.5,
+		  cell->_z + 0.5*tanf(cell->_ang_y) - 0.5*tanf(cell->_ang_x) );
+      glVertex3f( cell->_x + 0.5, cell->_y + 0.5, 
+		  cell->_z + 0.5*tanf(cell->_ang_y) + 0.5*tanf(cell->_ang_x) );
+      glVertex3f( cell->_x - 0.5, cell->_y + 0.5, 
+		  cell->_z - 0.5*tanf(cell->_ang_y) + 0.5*tanf(cell->_ang_x) );
+    }
+  }
+  glEnd();
+
+  
 
   // Draw position of point
   glPointSize( 10.0 );
