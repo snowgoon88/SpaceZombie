@@ -26,6 +26,7 @@ CORE_SRC_$(d)	:= $(d)/cell.h $(d)/cell.cc \
                    $(d)/point.h $(d)/point.cc \
                    $(d)/bar.h $(d)/bar.cc \
                    $(d)/loggedT.h \
+                   $(d)/player.h $(d)/player.cc \
                    $(d)/game_model.h $(d)/game_model.cc \
 
 CORE_OBJS_$(d)	:= $(d)/cell.o \
@@ -33,6 +34,7 @@ CORE_OBJS_$(d)	:= $(d)/cell.o \
                    $(d)/world.o \
                    $(d)/point.o \
                    $(d)/bar.o \
+                   $(d)/player.o \
                    $(d)/game_model.o \
 
 
