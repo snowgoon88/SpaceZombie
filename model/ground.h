@@ -9,11 +9,8 @@
 #include "cell.h"
 
 // Smart pointer
-#ifdef HAVE_BOOST
-    typedef boost::shared_ptr<class Ground> GroundPtr;
-#else
-    typedef class Ground * GroundPtr;
-#endif
+#include <boost/shared_ptr.hpp>
+typedef boost::shared_ptr<class Ground> GroundPtr;
 
 /**
  *

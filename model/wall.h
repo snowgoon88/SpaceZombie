@@ -5,20 +5,15 @@
 
 #include <string>
 
+#include <boost/shared_ptr.hpp>
 class Cell;
-#ifdef HAVE_BOOST
-    typedef boost::shared_ptr<class Cell> CellPtr;
-#else
-    typedef class Cell * CellPtr;
-#endif
+typedef boost::shared_ptr<class Cell> CellPtr;
+
 #include "cell.h"
 
 // Smart pointer
-#ifdef HAVE_BOOST
-    typedef boost::shared_ptr<class Wall> WallPtr;
-#else
-    typedef class Wall * WallPtr;
-#endif
+typedef boost::shared_ptr<class Wall> WallPtr;
+
 
 /**
  *

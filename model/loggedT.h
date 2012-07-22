@@ -9,19 +9,12 @@
 
 template<class T> class LoggedT;
 // Smart pointer : using as LoggedTPtr<int>::Type;
-#ifdef HAVE_BOOST
-  template<class T>
-  struct LoggedTPtr
-  {
-    typedef boost::shared_ptr<LoggedT<T>> Type;
-  };
-#else
-  template<class T>
-  struct LoggedTPtr
-  {
-    typedef LoggedT<T> * Type;
-  };
-#endif
+#include <boost/shared_ptr.hpp>
+template<class T>
+struct LoggedTPtr
+{
+  typedef boost::shared_ptr< LoggedT<T> > Type;
+};
 
 /** 
  * Memorize a time-stamped collection of items.

@@ -491,9 +491,9 @@ void on_key_pressed( int key, int action)
       // 	std::cout << _world->repr_dump();
       // }
       
-      // else {
-      //     std::cout << "key=" << key << " act=" << action << "(" << GLFW_KEY_TAB << ", " << GLFW_PRESS << ")" << std::endl;
-      //   }
+      else {
+	std::cout << "key=" << key << " act=" << action << "(" << GLFW_KEY_TAB << ", " << GLFW_PRESS << ")" << std::endl;
+        }
     }
 }
 /**

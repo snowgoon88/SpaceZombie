@@ -8,6 +8,7 @@
 #include "observer.h"
 
 #ifdef HAVE_BOOST
+    #include <boost/shared_ptr.hpp>
     typedef boost::shared_ptr<class TorsorScigl> TorsorSciglPtr;
 #else
     typedef class TorsorScigl * TorsorSciglPtr;

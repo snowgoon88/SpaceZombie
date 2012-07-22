@@ -8,11 +8,8 @@
 #include "state.h"
 
 // Smart pointer
-#ifdef HAVE_BOOST
+#include <boost/shared_ptr.hpp>
     typedef boost::shared_ptr<class PhyPoint> PhyPointPtr;
-#else
-    typedef class PhyPoint * PhyPointPtr;
-#endif
 
 #define POINT_MAX_SPEED 10.0
 /**

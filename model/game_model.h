@@ -6,6 +6,7 @@
 #include <string>
 
 #include "world.h"
+#include "player.h"
 
 // Smart pointer
 #include <boost/shared_ptr.hpp>
@@ -31,5 +32,7 @@ public:
 public: // Variables
   /** The Environment */
   WorldPtr _world;
+  /** The player */
+  PlayerPtr _player;
 };
 #endif // __GAME_MODEL_H_

@@ -45,7 +45,10 @@ void GameModel::init()
   end.push_back( _world->_ground->_cells[7] );
   _world->connect_cells( start, end ); // 2 to 2 connection
 
-  // No player ??
+  // A player
+  _player = PlayerPtr( new Player(TVec3( 0, 1, 0), M_PI/2.0 ));
+
+  // OLD No player ??
   // _world->_player->_x = 3.0;
   // _world->_player->_y = 2.0;
   // _world->_player->_z = 2.0;

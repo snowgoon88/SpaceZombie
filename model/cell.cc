@@ -27,7 +27,7 @@ Cell::Cell( float x, float y, float z, float ang_x, float ang_y )
   _x = x; _y = y; _z = z;
   _ang_x = ang_x; _ang_y = ang_y;
   for( unsigned int ind_n = 0; ind_n < NB_DIR; ++ind_n ) {
-    _neighbors[ind_n] = NULL;
+    _neighbors[ind_n] = CellPtr();
     //_sep[ind_n] = NULL;
   }
 }

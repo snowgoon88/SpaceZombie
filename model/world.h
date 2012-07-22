@@ -8,7 +8,6 @@
 // MVC
 #include "model.h"
 #include "ground.h"
-#include "point.h"
 
 // Smart pointer
 #include <boost/shared_ptr.hpp>
@@ -45,8 +44,6 @@ class World : public Model
 
   /** Where to set foot */
   GroundPtr _ground;
-  /** One Character */
-  PhyPointPtr _player;
 };
 
 #endif // __WORLD_H__

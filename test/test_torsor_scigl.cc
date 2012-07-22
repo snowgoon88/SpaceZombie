@@ -264,6 +264,7 @@ void update_observers()
 void init_observers() 
 {
   _bar_scigl = BarSciglPtr( new BarScigl( _bar_phy ));
+  _bar_phy->attach_observer( _bar_scigl ); 
   _scene->add( _bar_scigl );
   
   _torsor_scigl = TorsorSciglPtr( new TorsorScigl( TorsorPtr(&_torsor) ));
@@ -272,6 +273,7 @@ void init_observers()
   _scene->add( _torsor_scigl );
 
   _bar_phy_next_scigl = BarSciglPtr( new BarScigl( _bar_phy_next ));
+  _bar_phy_next->attach_observer( _bar_phy_next_scigl );
   _bar_phy_next_scigl->set_fg_color( 0.6, 0.6, 0.6, 1.0 );
   _scene->add( _bar_phy_next_scigl );
 

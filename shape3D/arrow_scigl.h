@@ -20,11 +20,8 @@
 #include "object.h"
 #include "utils.h"
 
-#ifdef HAVE_BOOST
-    typedef boost::shared_ptr<class Arrow> ArrowPtr;
-#else
-    typedef class Arrow * ArrowPtr;
-#endif
+#include <boost/shared_ptr.hpp>
+typedef boost::shared_ptr<class Arrow> ArrowPtr;
 
 /**
  * 3D arrow as a ligne and a head (4 triangles + quad ).

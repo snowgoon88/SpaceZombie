@@ -29,8 +29,12 @@ void GameObserver::init( ScenePtr scene )
   // Graphic elmement
   _world_scigl = WorldSCIGLPtr( new WorldSCIGL( _game->_world ));
   _game->_world->attach_observer( _world_scigl );
+  
+  _player_scigl = PlayerSciglPtr( new PlayerScigl( _game->_player ));
+  _game->_player->attach_observer( _player_scigl );
 
   // Add to scene
   scene->add( _world_scigl );
+  scene->add( _player_scigl );
 }
 //******************************************************************************

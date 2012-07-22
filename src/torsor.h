@@ -5,6 +5,7 @@
 #include "utils.h"
 
 #ifdef HAVE_BOOST
+    #include <boost/shared_ptr.hpp>
     typedef boost::shared_ptr<class Torsor> TorsorPtr;
 #else
     typedef class Torsor * TorsorPtr;

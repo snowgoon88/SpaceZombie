@@ -7,11 +7,7 @@
 #include "model.h"
 
 // Smart pointer
-#ifdef HAVE_BOOST
-    typedef boost::shared_ptr<class Bar> BarPtr;
-#else
-    typedef class Bar * BarPtr;
-#endif
+#include <boost/shared_ptr.hpp>
 
 /** 
  * A bar has an origin, a direction vector, @todo a thickness,

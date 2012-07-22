@@ -22,6 +22,7 @@
 #include "arrow_scigl.h"
 
 #ifdef HAVE_BOOST
+    #include <boost/shared_ptr.hpp>
     typedef boost::shared_ptr<class RefFrame> RefFramePtr;
 #else
     typedef class RefFrame * RefFramePtr;

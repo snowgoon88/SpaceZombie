@@ -21,7 +21,10 @@ BarScigl::BarScigl() : Observer(), Object()
 BarScigl::BarScigl(BarPtr model) : Observer(), Object()
 {
   _model = model;
-  _model->attach_observer( this );
+  // TODO : don't know how to do that with smart pointer !!
+  // BarSciglPtr this_ptr = BarSciglPtr( this );
+  //_model->attach_observer( this_ptr );
+  
   // SCIGL
   set_fg_color( 0.0f, 0.0f, 0.0f, 1.0f );
   set_bg_color( 0.0f, 0.0f, 0.0f, 1.0f );

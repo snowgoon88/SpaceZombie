@@ -7,6 +7,7 @@
 
 #include "scene.h"
 #include "world_scigl.h"
+#include "player_scigl.h"
 
 // Smart pointer
 #include <boost/shared_ptr.hpp>
@@ -36,5 +37,7 @@ public: // Variables
   /** World, graphic */
   WorldSCIGLPtr _world_scigl;
   /** World, text */
+  /** Player graphic */
+  PlayerSciglPtr _player_scigl;
 };
 #endif // __GAME_OBSERVER_H_

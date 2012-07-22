@@ -8,18 +8,11 @@
 
 // Smart pointer
 class Bar;
-#ifdef HAVE_BOOST
-    typedef boost::shared_ptr<class Bar> BarPtr;
-#else
-    typedef class Bar * BarPtr;
-#endif
-#include "bar.h"
+#include <boost/shared_ptr.hpp>
+typedef boost::shared_ptr<class Bar> BarPtr;
 
-#ifdef HAVE_BOOST
+#include "bar.h"
 typedef boost::shared_ptr<class BarScigl> BarSciglPtr;
-#else
-typedef class BarScigl * BarSciglPtr;
-#endif
 
 /**
  * A Bar is represented as a line.

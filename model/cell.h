@@ -6,11 +6,8 @@
 #include <string>
 
 // Smart pointer
-#ifdef HAVE_BOOST
-    typedef boost::shared_ptr<class Cell> CellPtr;
-#else
-    typedef class Cell * CellPtr;
-#endif
+#include <boost/shared_ptr.hpp>
+typedef boost::shared_ptr<class Cell> CellPtr;
 
 /** 0=nord, 1=est, 2=sud, 3=ouest */
 #define NB_DIR 4

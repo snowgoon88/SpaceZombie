@@ -24,7 +24,7 @@ ANTTW_HOME	:= ../Inertia/AntTweakBar
 
 ### Build flags for all targets
 #
-CF_ALL          = -g -Wall \
+CF_ALL          = -DHAVE_BOOST -g -Wall \
                   -I$(EIGEN_ROOT) -I$(ANTTW_HOME)/include
 #CF_ALL          = -O3
 LF_ALL          = 

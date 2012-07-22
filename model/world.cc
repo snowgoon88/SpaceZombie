@@ -11,18 +11,14 @@
 World::World(void) : Model()
 {
   _ground = GroundPtr( new Ground );
-  _player = PhyPointPtr( new PhyPoint );
 }
 World::World( World& other_w ) : Model(other_w)
 {
   std::cerr << "@@@ World::World( World& other_w )\n";
   _ground = other_w._ground;
-  _player = other_w._player;
 }
 World::~World(void)
 {
-  delete _ground;
-  delete _player;
 }
 // *****************************************************************************
 std::string World::repr_dump()
@@ -30,8 +26,6 @@ std::string World::repr_dump()
   std::stringstream ss;
   ss << "== The World ==\n";
   ss << _ground->repr_dump();
-  ss << "\n---------------\n";
-  ss << _player->repr_dump();
   ss << "\n---------------\n";
 
   return ss.str();
@@ -321,7 +315,7 @@ void World::connect_cells( std::vector< CellPtr > src_cells,
 }
 // *****************************************************************************
 /**
- * Return the cell under the player or null if above void.
+ * Return the cell under the chosen point or null if above void.
  */
 CellPtr World::get_cell_at( float x, float y, float z , bool verb)
 {

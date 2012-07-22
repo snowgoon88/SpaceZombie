@@ -11,13 +11,9 @@
 #include "loggedT.h" 
 
 // Smart pointer
-#ifdef HAVE_BOOST
+#include <boost/shared_ptr.hpp>
 //typedef boost::shared_ptr<class LoggedT<TVec3>> LoggedTVec3Ptr; 
 typedef boost::shared_ptr<class LoggedTVec3Scigl> LoggedTVec3SciglPtr;
-#else
-//typedef class LoggedT<TVec3> * LoggedTVec3Ptr; 
-typedef class LoggedTVec3Scigl * LoggedTVec3SciglPtr;
-#endif
 
 /**
  * As a lines between TVec3.

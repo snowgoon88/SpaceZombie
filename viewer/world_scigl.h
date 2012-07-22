@@ -10,13 +10,9 @@
 #include "object.h"
 
 
-
-#ifdef HAVE_BOOST
-    typedef boost::shared_ptr<class WorldSCIGL> WorldSCIGLPtr;
-#else
-    typedef class WorldSCIGL * WorldSCIGLPtr;
-#endif
-
+// Smart pointer
+#include <boost/shared_ptr.hpp>
+typedef boost::shared_ptr<class WorldSCIGL> WorldSCIGLPtr;
 
 /**
  * A simple 3D vizualisation of the world.

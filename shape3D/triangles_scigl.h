@@ -23,6 +23,7 @@
 #include <vector>
 
 #ifdef HAVE_BOOST
+    #include <boost/shared_ptr.hpp>
     typedef boost::shared_ptr<class Triangles> TrianglesPtr;
 #else
     typedef class Triangles * TrianglesPtr;

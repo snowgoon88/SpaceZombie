@@ -1,7 +1,7 @@
 // -*- coding: utf-8 -*-
 
 #include "world_scigl.h"
-#include "shapes.h"
+//#include "shapes.h" => used when there was a player inside world
 
 // *****************************************************************************
 // WorldSCIGL::WorldSCIGL() : Observer(), Object()
@@ -141,20 +141,20 @@ void WorldSCIGL::render (void)
 
   
 
-  // Draw position of point
-  glPointSize( 10.0 );
-  if( _model->_player->_player_state == PhyPoint::s_CONTACT ) { // in contact -> green
-    glColor4f( 0.0, 1.0, 0.0, 1.0 );
-  }
-  else {
-    glColor4f( 1.0, 0.0, 0.0, 1.0 );   // else -> red
-  }
-  glEnable (GL_BLEND);
-  glEnable (GL_POINT_SMOOTH);
-  glBegin( GL_POINTS ); {
-    glVertex3f( _model->_player->_x, _model->_player->_y, _model->_player->_z );
-  }
-  glEnd();
+  // // Draw position of point
+  // glPointSize( 10.0 );
+  // if( _model->_player->_player_state == PhyPoint::s_CONTACT ) { // in contact -> green
+  //   glColor4f( 0.0, 1.0, 0.0, 1.0 );
+  // }
+  // else {
+  //   glColor4f( 1.0, 0.0, 0.0, 1.0 );   // else -> red
+  // }
+  // glEnable (GL_BLEND);
+  // glEnable (GL_POINT_SMOOTH);
+  // glBegin( GL_POINTS ); {
+  //   glVertex3f( _model->_player->_x, _model->_player->_y, _model->_player->_z );
+  // }
+  // glEnd();
 //   glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 //   glColor4f( 1.0, 0.0, 0.0, 1.0 );
 //   sphere( _model->_player->_x, _model->_player->_y, _model->_player->_z+0.05 , 0.05 );

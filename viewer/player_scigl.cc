@@ -44,12 +44,12 @@ void PlayerScigl::render()
   };
   int nb_player_faces = 6;
   face player_faces[6] = {
-    {{ 0.0,  0.0,  0.8,     0.4,  0.2, 0.8,    -0.8,  0.0,  0.8,   0.4, -0.2,  0.8}},
-    {{ 0.0,  0.0,  0.0,     0.4, -0.2, 0.0,    -0.8,  0.0,  0.0,   0.4,  0.2,  0.0}},
-    {{ 0.0,  0.0,  0.0,     0.4, -0.2, 0.0,     0.4, -0.2,  0.8,   0.0,  0.0,  0.8}},
-    {{ 0.4, -0.2,  0.0,    -0.8,  0.0, 0.0,    -0.8,  0.0,  0.8,   0.4, -0.2,  0.8}},
-    {{-0.8,  0.0,  0.0,     0.4, -0.2, 0.0,     0.4, -0.2,  0.8,  -0.8,  0.0,  0.8}},
-    {{ 0.4, -0.2,  0.0,     0.0,  0.0, 0.0,     0.0,  0.0,  0.8,   0.4, -0.2,  0.8}}
+    {{ 0.0,  0.0,  0.5,    -0.2, -0.1, 0.5,     0.3,  0.0,  0.5,  -0.2,  0.1,  0.5}},
+    {{ 0.0,  0.0,  0.0,    -0.2,  0.1, 0.0,     0.3,  0.0,  0.0,  -0.2, -0.1,  0.0}},
+    {{ 0.0,  0.0,  0.0,    -0.2, -0.1, 0.0,    -0.2, -0.1,  0.5,   0.0,  0.0,  0.5}},
+    {{-0.2, -0.1,  0.0,     0.3,  0.0, 0.0,     0.3,  0.0,  0.5,  -0.2, -0.1,  0.5}},
+    {{ 0.3,  0.0,  0.0,    -0.2,  0.1, 0.0,    -0.2,  0.1,  0.5,   0.3,  0.0,  0.5}},
+    {{-0.2,  0.1,  0.0,     0.0,  0.0, 0.0,     0.0,  0.0,  0.5,  -0.2,  0.1,  0.5}}
   };
 
   // set pose
@@ -62,7 +62,7 @@ void PlayerScigl::render()
   // Color of front face
   glColor4fv (get_fg_color().data);
   glBegin( GL_QUADS ); {
-    for( int i = 0; i < nb_player_faces; ++i) {
+    for( int i = 0; i <nb_player_faces; ++i) {
       glVertex3f(player_faces[i].vertices[0], player_faces[i].vertices[1], player_faces[i].vertices[2]);
       glVertex3f(player_faces[i].vertices[3], player_faces[i].vertices[4], player_faces[i].vertices[5]);
       glVertex3f(player_faces[i].vertices[6], player_faces[i].vertices[7], player_faces[i].vertices[8]);

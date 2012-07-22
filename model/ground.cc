@@ -12,9 +12,6 @@ Ground::Ground( Ground& other_g )
 }
 Ground::~Ground(void)
 {
-  for( unsigned int ind_c = 0; ind_c < _cells.size(); ++ind_c ) {
-    delete _cells[ind_c];
-  }
 }
 // *****************************************************************************
 std::string Ground::repr_dump()
