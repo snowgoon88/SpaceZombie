@@ -33,8 +33,11 @@ void GameObserver::init( ScenePtr scene )
   _player_scigl = PlayerSciglPtr( new PlayerScigl( _game->_player ));
   _game->_player->attach_observer( _player_scigl );
 
+  _player_tag = TagSciglPtr( new TagScigl( std::string("Player"), &(_game->_player->_pos), 1.0f ));
+
   // Add to scene
   scene->add( _world_scigl );
   scene->add( _player_scigl );
+  scene->add( _player_tag );
 }
 //******************************************************************************

@@ -25,12 +25,14 @@ CORE_SRC_$(d)	:= $(d)/arrow_scigl.h $(d)/arrow_scigl.cc \
                    $(d)/triangles_scigl.h $(d)/triangles_scigl.cc \
                    $(d)/ref_frame_scigl.h $(d)/ref_frame_scigl.cc \
                    $(d)/torsor_scigl.h $(d)/torsor_scigl.cc \
+                   $(d)/tag_scigl.h $(d)/tag_scigl.cc \
 
 CORE_OBJS_$(d)	:= $(d)/arrow_scigl.o \
                    $(d)/basic_shapes.o \
                    $(d)/triangles_scigl.o \
                    $(d)/ref_frame_scigl.o \
                    $(d)/torsor_scigl.o \
+                   $(d)/tag_scigl.o \
 
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 

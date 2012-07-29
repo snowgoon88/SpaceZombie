@@ -514,7 +514,7 @@ void update_textbox()
 void display (void) {
     glClearColor (1,1,1,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _scene->render ();
+    _scene->render_with_view_orientation();
     _textbox->render();
 
     // Draw tweak bars
