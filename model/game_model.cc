@@ -47,6 +47,7 @@ void GameModel::init()
 
   // A player
   _player = PlayerPtr( new Player(TVec3( 0, 1, 0), M_PI/2.0 ));
+  std::cout << _player->dump_str() << "\n";
 
   // OLD No player ??
   // _world->_player->_x = 3.0;

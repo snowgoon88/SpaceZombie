@@ -5,34 +5,43 @@
 
 #include "utils.h"
 #include "model.h"
+#include "point.h"
 
 // Smart pointer
 #include <boost/shared_ptr.hpp>
 typedef boost::shared_ptr<class Player> PlayerPtr;
 
 /**
- * Player has a position and an angle of rotation around Oz.
+ * Player has a phystate and an angle of rotation around Oz.
+ * Its interna state also has a position and a speed.
  */
 class Player : public Model
 {
 public:
   /** Creation */
   Player();
-  Player( TVec3 pos, float ang_Oz_rad );
+  Player( TVec3 pos, float ang_Oz_rad, float forward_speed=0.0f);
   /** Destruction */
   virtual ~Player();
   
   /** display string */
-  std::string dump_string();
+  std::string dump_str();
 
   /** set position */
   void set_position( TVec3 pos );
   /** set direction */
   void set_dir( float ang_Oz_rad );
+  /** set_speed */
+  void set_speed( float ang_Oz_rad, float norm );
+  void set_speed( TVec3 speed );
+  
+public: // Intern
+  /** Align to speed vector : update _ang_0z */
+  void align_to_speed();
   
 public: // Variables
-  /** position */
-  TVec3 _pos;
+  /** physical state*/
+  PhyPointPtr _phystate;
   /** Dir */
   float _ang_Oz;
 };

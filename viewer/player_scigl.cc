@@ -54,7 +54,7 @@ void PlayerScigl::render()
 
   // set pose
   glPushMatrix();
-  glTranslatef( _model->_pos(0), _model->_pos(1), _model->_pos(2) );
+  glTranslatef( _model->_phystate->_pos(0), _model->_phystate->_pos(1), _model->_phystate->_pos(2) );
   glRotatef( to_deg( _model->_ang_Oz), 0.0f, 0.0f, 1.0f);
   
   // draw player

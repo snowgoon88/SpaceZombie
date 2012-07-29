@@ -56,7 +56,7 @@ void TagScigl::render( float view_rotation[4][4] )
   else {
     glColor4fv( get_br_color().data );
   }
-  glLineWidth( 1.0 );
+  glLineWidth( 0.5 );
   glBegin( GL_LINES ); {
     glVertex3f( 0, 0, 0 );
     glVertex3f( 0, _height, 0 );
