@@ -344,5 +344,9 @@ CellPtr World::get_cell_at( float x, float y, float z , bool verb)
   }
   return res_cell;
 }
+CellPtr World::get_cell_at( TVec3 pos, bool verb )
+{
+  return get_cell_at( pos(0), pos(1), pos(2), verb);
+}
 // *****************************************************************************
 

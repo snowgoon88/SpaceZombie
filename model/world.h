@@ -40,7 +40,11 @@ class World : public Model
   void connect_cells( std::vector< CellPtr > src_cells,
 		      std::vector< CellPtr > des_cells );
 
-  CellPtr get_cell_at( float x, float y, float z, bool verb=false );
+  /**
+   * Return the cell under the chosen point or null if above void.
+   */
+  CellPtr get_cell_at( float x, float y, float z , bool verb=false);
+  CellPtr get_cell_at( TVec3 pos, bool verb=false );
 
   /** Where to set foot */
   GroundPtr _ground;

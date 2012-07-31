@@ -51,7 +51,7 @@ PhyPoint::~PhyPoint(void)
 std::string PhyPoint::dump_str()
 {
   std::stringstream ss;
-  ss << "PhyPoint_" << _id << " ( " << line_repr(_pos)[0] << ")";
+  ss << "PhyPoint_" << _id << " ( " << line_repr(_pos) << ")";
   ss << " ( " << line_repr(_speed) << ") c=" << _fg_contact << " s=" << _state._name;
 
   return ss.str();

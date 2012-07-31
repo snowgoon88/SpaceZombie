@@ -93,8 +93,13 @@ void test_product()
   std::cout << "n=" << line_repr( (x-y).cross(z-y)) << "\n";
 
 }
-
-
+void test_proj()
+{
+  TVec3 pos3(1,2,3);
+  TVec2 pos2 = pos3.start(2);
+  std::cout << "pos3=" << line_repr( pos3 ) << "\n";
+  std::cout << "pos2=" << line_repr( pos2 ) << "\n";
+}
 int main(int argc, char *argv[] )
 {
   // vec_to_angle(1, 1, 1);
@@ -103,5 +108,6 @@ int main(int argc, char *argv[] )
   // vec_to_angle(0.5, 0.5, 0.707);
   // vec_to_angle(0, 0, 2);
   // test_product();
-  test_ang_from_vec( 1.41, -1.41, 0.00 );
+  // test_ang_from_vec( 1.41, -1.41, 0.00 );
+  test_proj();
 }

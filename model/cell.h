@@ -3,6 +3,7 @@
 #ifndef __CELL_H__
 #define __CELL_H__
 
+#include "utils.h"
 #include <string>
 
 // Smart pointer
@@ -27,7 +28,10 @@ class Cell {
 
   float get_z_at( float x, float y );
   bool is_leaving_cell( float x, float y, unsigned int& dir );
+  bool is_leaving_cell( TVec3 pos, unsigned int& dir );
   unsigned int get_dir_to( float x, float y );
+  /** Compute point on the border when going from src to dest in dir */
+  TVec3 clamp_to_cell( TVec3 src, TVec3 dest, unsigned int dir );
   //bool has_neigbour( CellPtr other_c );
 
   /** id */

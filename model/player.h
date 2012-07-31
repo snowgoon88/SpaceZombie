@@ -13,7 +13,7 @@ typedef boost::shared_ptr<class Player> PlayerPtr;
 
 /**
  * Player has a phystate and an angle of rotation around Oz.
- * Its interna state also has a position and a speed.
+ * Its internal state also has a position and a speed.
  */
 class Player : public Model
 {

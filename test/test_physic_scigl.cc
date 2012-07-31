@@ -49,6 +49,8 @@ int _frame_nb_1s = 0;
 int _frame_nb_5s = 0;
 
 // PHYSIC
+#include "physic_engine.h"
+PhysicEnginePtr _phys_engine;
 double _time_physic;
 double _time_physic_min = DBL_MAX;
 double _time_physic_max = DBL_MIN;
@@ -529,6 +531,9 @@ int main (int argc, char **argv)
   // World
   _game_model = GameModelPtr( new GameModel() );
   _game_observer = GameObserverPtr( new GameObserver( _game_model ));
+
+  // Physic Engine
+  _phys_engine = PhysicEnginePtr( new PhysicEngine( _game_model ));
   
   // Some graphic parameters
   int width, height;
@@ -646,6 +651,7 @@ int main (int argc, char **argv)
   _time_frame_fps5s = time;
   // Physics
   _time_physic = time;
+  _phys_engine->start( _time_physic );
   // Main loop of GLFW
   do {
     // Get window size (may be different than the requested size)
@@ -658,8 +664,13 @@ int main (int argc, char **argv)
     
     // PHYSICS
     double time_physic_before = _timer_fps.getElapsedTimeInMilliSec();
-    //update_physic_gravity();
-    double delta_time_physic = _timer_fps.getElapsedTimeInMilliSec() - time_physic_before;
+    if( _fg_physics or _fg_step_physics ) {
+      _phys_engine->update( time_physic_before - _time_physic );
+      _fg_step_physics = false;
+    }
+    _time_physic = time_physic_before;
+
+    double delta_time_physic = _timer_fps.getElapsedTimeInMilliSec() - _time_physic;
     if( delta_time_physic < _time_physic_min ) _time_physic_min = delta_time_physic;
     if( delta_time_physic > _time_physic_max ) _time_physic_max = delta_time_physic;
     _time_physic_avg = 0.9 * _time_physic_avg + 0.1 * delta_time_physic;

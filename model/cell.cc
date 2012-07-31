@@ -88,6 +88,10 @@ bool Cell::is_leaving_cell( float x, float y, unsigned int& dir )
   }
   return false;
 }
+bool Cell::is_leaving_cell( TVec3 pos, unsigned int& dir )
+{
+  return is_leaving_cell( pos(0), pos(1), dir );
+}
 unsigned int Cell::get_dir_to( float x, float y )
 {
   if( y > _y and ((y-_y) > -(x-_x) and (y-_y) >= (x-_x)) ) {
@@ -104,7 +108,31 @@ unsigned int Cell::get_dir_to( float x, float y )
   }
   return 0;
 }
-
+// *****************************************************************************
+TVec3 Cell::clamp_to_cell( TVec3 src, TVec3 dest, unsigned int dir )
+{
+  TVec3 res(src);
+  // compute point on border
+  switch( dir ) {
+  case 0: // nord
+    res(0) += (_y+size - src(1)) / (dest(1)-src(1)) * (dest(0) - src(0));
+    res(1) = _y+size;
+    break;
+  case 1: // est
+    res(0) = _x+size;
+    res(1) += (_x+size - src(0)) / (dest(0)-src(0)) * (dest(1) - src(1));
+    break;
+  case 2: // sud
+    res(0) += (_y-size - src(1)) / (dest(1)-src(1)) * (dest(0) - src(0));
+    res(1) = _y-size;
+    break;
+  case 3: // ouest
+    res(0) = _x-size;
+    res(1) += (_x-size - src(0)) / (dest(0)-src(0)) * (dest(1) - src(1));
+  }
+  std::cout << "@@@ b=" << line_repr( res ) << "\n";
+  return res;
+}
 // bool Cell::has_neigbour( CellPtr other_c )
 // {
 //   for( unsigned int ind_n = 0; ind_n < NB_DIR; ++ind_n ) {

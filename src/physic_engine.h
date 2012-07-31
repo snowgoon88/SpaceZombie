@@ -28,8 +28,10 @@ public:
   /** display string */
   std::string dump_string();
 
+  /** start and set current time */
+  virtual void start( double time_current );
   /** update according to time */
-  virtual void update();
+  virtual void update( double time_current );
 
 public: // Variables
   /** Every object of the game */

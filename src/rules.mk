@@ -23,12 +23,14 @@ d		:= $(dir)
 CORE_SRC_$(d)	:= $(d)/utils.h $(d)/utils.cc \
                    $(d)/timer.h $(d)/timer.cc \
                    $(d)/state.h $(d)/state.cc \
-                   $(d)/torsor/h $(d)/torsor.cc \
+                   $(d)/torsor.h $(d)/torsor.cc \
+                   $(d)/physic_engine.h $(d)/physic_engine.cc \
 
 CORE_OBJS_$(d)	:= $(d)/utils.o \
                    $(d)/timer.o \
                    $(d)/state.o \
                    $(d)/torsor.o \
+                   $(d)/physic_engine.o \
 
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 
@@ -62,7 +64,7 @@ TAG_FILES	:= $(TAG_FILES) $(CORE_SRC_$(d))
 # Force remake if rules are changed
 $(CORE_OBJS_$(d)):	$(d)/rules.mk
 
-$(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) \
+$(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) -Imodel -Imvc\
                                   -Wno-deprecated \
 
 # Local libs

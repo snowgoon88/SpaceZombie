@@ -46,7 +46,8 @@ void GameModel::init()
   _world->connect_cells( start, end ); // 2 to 2 connection
 
   // A player
-  _player = PlayerPtr( new Player(TVec3( 0, 1, 0), M_PI/2.0 ));
+  _player = PlayerPtr( new Player(TVec3( 0, 1, 0), M_PI/2.0, 0.1 ));
+  _player->_phystate->_curr_cell = _world->get_cell_at( TVec3( 0, 1, 0) );
   std::cout << _player->dump_str() << "\n";
 
   // OLD No player ??
