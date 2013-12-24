@@ -64,7 +64,7 @@ void on_mouse_button( int button, int action )
     // ...
 
     if( action == GLFW_PRESS ) {
-      if( button == GLFW_MOUSE_BUTTON_LEFT ) {
+      if( button == GLFW_MOUSE_BUTTON_MIDDLE ) {
 	// With SHIFT ??
 	if( glfwGetKey( GLFW_KEY_LSHIFT ) || glfwGetKey( GLFW_KEY_RSHIFT)) {
 	  _scene->mouse_action_start ("move-resize",x,y);
@@ -245,8 +245,8 @@ int main (int argc, char **argv)
   _scene->add( _ref );
 
   // Some Triangles
-  _triangles->attach_vertex( &(_vec_vertex) );
-  _scene->add( _triangles );
+   _triangles->attach_vertex( &(_vec_vertex) );
+   _scene->add( _triangles );
 
   _scene->set_zoom(0.5);
   _scene->set_orientation( 70.0, 80.0 );
@@ -263,7 +263,7 @@ int main (int argc, char **argv)
 
   _scene->setup();
   _scene->update();
-
+  sleep(1);
 
   // Init FPS
   _timer_fps.start();

@@ -20,7 +20,7 @@ else
 GLFW_HOME       := /usr
 EIGEN_ROOT      := /usr/include/eigen2
 endif
-ANTTW_HOME	:= ../Inertia/AntTweakBar
+ANTTW_HOME	:= ../AntTweakBar
 
 ### Build flags for all targets
 #

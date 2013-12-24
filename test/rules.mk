@@ -127,16 +127,16 @@ $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 # 	                  $(VID_LIBS) $(GST_LIBS) $(OPENCV_LIBS) \
 # 	                  -lgthread-2.0 -lboost_thread
 
-$(TGTS_$(d)):	LL_TGT := $(SZ_ROOT)/model/libmodel.a \
-                          $(SZ_ROOT)/viewer/libviewer.a \
-                          $(SZ_ROOT)/shape3D/libshape.a \
-                          $(SZ_ROOT)/mvc/libmvc.a \
+$(TGTS_$(d)):	LL_TGT := $(SZ_ROOT)/shape3D/libshape.a \
                           $(SZ_ROOT)/src/libsrc.a \
                           $(SCIGL_ROOT)/scigl/libscigl.a \
                           $(ANTTW_HOME)/lib/libAntTweakBar.so \
                           -lglfw \
                           -lGL -lGLU -lGLEW \
-                          -lboost_thread-mt
+                          -lboost_thread
+#                          $(SZ_ROOT)/model/libmodel.a \
+#                          $(SZ_ROOT)/viewer/libviewer.a \
+#                          $(SZ_ROOT)/mvc/libmvc.a \
 
 endif
 
@@ -174,7 +174,8 @@ $(d)/test_physic_scigl:	$(d)/test_physic_scigl.cc src/libsrc.a model/libmodel.a 
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
-$(d)/test_arrow_scigl:	$(d)/test_arrow_scigl.cc src/libsrc.a model/libmodel.a viewer/libviewer.a shape3D/libshape.a mvc/libmvc.a $(SCIGL_ROOT)/scigl/libscigl.a
+$(d)/test_arrow_scigl:	$(d)/test_arrow_scigl.cc src/libsrc.a shape3D/libshape.a $(SCIGL_ROOT)/scigl/libscigl.a 
+#model/libmodel.a viewer/libviewer.a mvc/libmvc.a  
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
