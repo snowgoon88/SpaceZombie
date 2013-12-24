@@ -35,7 +35,7 @@ Triangles::Triangles( void ) : Object()
   orient_from_vec( TVec3( 1, 0, 0) );
 
   std::ostringstream oss;
-  oss << "Arrow_" << id_;
+  oss << "Triangles_" << id_;
   set_name (oss.str());
 }
 Triangles::~Triangles( void )

@@ -175,7 +175,7 @@ int main (int argc, char **argv)
     glfwTerminate();
     exit( EXIT_FAILURE );
   }
-  glfwSetWindowTitle( "World" );
+  glfwSetWindowTitle( "test_triangles_scigl" );
   
   //glutReshapeFunc (reshape);
   //glutDisplayFunc (display);
@@ -283,7 +283,8 @@ int main (int argc, char **argv)
     
     // display
     double time_frame_before = _timer_fps.getElapsedTimeInMilliSec();
-    
+
+    // Values set in AntTWeakBar => orientation of the _triangles.
     _triangles->orient_from_vec( TVec3( tw_tri_dir[0], tw_tri_dir[1], tw_tri_dir[2] ));
     display();
 

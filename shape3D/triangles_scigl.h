@@ -31,7 +31,21 @@
 
 
 /**
- * A set of triangles, with normal computed automatically.
+ * A set of triangles, with normals computed automatically.
+ *
+ * The reference_frame of the triangle(s) is set using Triangles::set_position()
+ * 1. The whole set is translater to that position.
+ * 2. It is rotated of _ang_z1 around Oz
+ * 3. It is rotated of _ang_y2 around Oy
+ *
+ * + Every set of 3 TVec3 define a triangle.
+ * + Normals are computed if needed at each point of each triangle.
+ *
+ * + _fg_light dictate if GL_LIGHTING is enabled or not.
+ * + _fg_normal dictates if glNormal(0,0,0) or "true" normales are set
+ * with each point.
+ * 
+ * @todo switch between draw/not draw normals.
  */
 class Triangles : public Object {
 

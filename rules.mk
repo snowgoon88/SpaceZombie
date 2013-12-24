@@ -37,6 +37,9 @@ include		$(dir)/rules.mk
 %:		%.c
 		$(COMPLINK)
 
+TGT_DOC 	:= doc/config.doxygen
+CLEAN_DOC 	:= doc/html
+CLEAN		:= doc/config.doxygen~
 
 # The variables TGT_*, CLEAN and CMD_INST* may be added to by the Makefile
 # fragments in the various subdirectories.
@@ -65,7 +68,8 @@ tag:
 		$(ETAGS) $(TAG_FILES)
 
 .PHONY:		doc
-doc:		$(TGT_DOC)
+doc:		
+		$(GENERATE_DOC) $(TGT_DOC)
 
 .PHONY:		clean_doc
 clean_doc:
