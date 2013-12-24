@@ -1,10 +1,22 @@
 // -*- coding: utf-8 -*-
-/*
- * Alain - Jan 2012
- */
-/**
+/** @file test_triangles_scigl.cc
  * Drawing a simple world and triangles
+ *
+ * + a textbox above
+ * + the_scene : made of a RefFrame and a Triangles. 
+ * + some menu with AntTweakBar
+ *
+ * Commands are
+ * + o/O : print the orientation of the _scene
+ * + p/P : set the orientation to (0,0)
+ * + M_MOUSE : rotate
+ * + Shift+M_MOUSE : translate
+ * + R_MOUSE or Wheel : zoom
+ * + ESC : exit
+ *
  * Derived from test_arrow_scigl.cc
+ * @author Alain
+ * @date 12/2013
  */
 #include "utils.h"
 #include "object.h" 
