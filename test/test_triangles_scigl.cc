@@ -36,6 +36,9 @@ TwBar *_bar;         // Pointer to a tweak bar
 TrianglesPtr _triangles = TrianglesPtr( new Triangles );
 std::vector<TVec3> _vec_vertex;
 
+// Mouse Wheel
+int _old_pos = 100;
+
 // FPS
 Timer _timer_fps;
 //double _time_frame_t1;
@@ -125,6 +128,15 @@ void on_key_pressed( int key, int action)
     }
 }
 /**
+ * Called when the mousewheel is used.
+ */
+void on_mousewheel( int pos )
+{
+  float zoom = _scene->get_zoom() * (1.0f + (float) (pos - _old_pos)/10.0f);
+  _scene->set_zoom(zoom);
+  _old_pos = pos;
+}
+/**
  * Udate textbox string
  */
 void update_textbox()
@@ -183,7 +195,9 @@ int main (int argc, char **argv)
   glfwSetMousePosCallback( on_mouse_move );
   glfwSetKeyCallback( on_key_pressed );
   glfwSetCharCallback( (GLFWcharfun)TwEventCharGLFW );
-  glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
+  //glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
+  glfwSetMouseWheel( _old_pos );
+  glfwSetMouseWheelCallback( on_mousewheel );
   //glutReshapeWindow (400,400);
 
   // Initialize AntTweakBar
