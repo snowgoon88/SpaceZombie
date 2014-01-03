@@ -127,7 +127,12 @@ $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 # 	                  $(VID_LIBS) $(GST_LIBS) $(OPENCV_LIBS) \
 # 	                  -lgthread-2.0 -lboost_thread
 
-$(TGTS_$(d)):	LL_TGT := $(SZ_ROOT)/shape3D/libshape.a \
+# il faut inclures les .a dans le bon ordre !!!!
+$(TGTS_$(d)):	LL_TGT := \
+                          $(SZ_ROOT)/viewer/libviewer.a \
+                          $(SZ_ROOT)/model/libmodel.a \
+                          $(SZ_ROOT)/mvc/libmvc.a \
+                          $(SZ_ROOT)/shape3D/libshape.a \
                           $(SZ_ROOT)/src/libsrc.a \
                           $(SCIGL_ROOT)/scigl/libscigl.a \
                           $(ANTTW_HOME)/lib/libAntTweakBar.so \
@@ -152,7 +157,7 @@ $(d)/test_vect: 	$(d)/test_vect.cc
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
-$(d)/test_cell: 	$(d)/test_cell.cc model/libmodel.a
+$(d)/test_cell: 	$(d)/test_cell.cc src/libsrc.a model/libmodel.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
