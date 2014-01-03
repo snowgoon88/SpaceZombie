@@ -68,7 +68,7 @@ public:
      */
     /** Render as 3 arrows and wiresphere */
     virtual void render (void);
-    /** Render as 3 arrows, wireshpere and X,Y,Z facing the view_rotation */
+    /** Render as 3 arrows, wireshpere and X,Y,Z facing viewer */
     virtual void render( float view_rotation[4][4] );
     //@}
 

@@ -1,11 +1,25 @@
 // -*- coding: utf-8 -*-
-/*
- * Alain - Jan 2012
- */
-/**
- * Drawing a simple world and an arrow.
+/** @file test_arrow_scigl.cc
+ * Drawing a simple world and arrows. The label of the arrows face the viewer
+ * as the Scene object is rendered using "with_orientation".
+ *
+ * + a textbox above
+ * + the_scene : made of a RefFrame and Arrow
+ * + some menu with AntTweakBar
+ *
+ * Commands are
+ * + o/O : print the orientation of the _scene
+ * + p/P : set the orientation to (0,0)
+ * + M_MOUSE : rotate
+ * + Shift+M_MOUSE : translate
+ * + R_MOUSE or Wheel : zoom
+ * + ESC : exit
+ *
  * Derived from test_physics_scigl.cc
+ * @author Alain
+ * @date 01/2014
  */
+
 #include "utils.h"
 #include "object.h" 
 //#if defined(__APPLE__)
@@ -42,6 +56,9 @@ ArrowPtr _arrow_x = ArrowPtr( new Arrow );
 ArrowPtr _arrow_xy = ArrowPtr( new Arrow );
 ArrowPtr _arrow_xyz = ArrowPtr( new Arrow );
 
+// Mouse Wheel
+int _old_pos = 100;
+
 // FPS
 Timer _timer_fps;
 //double _time_frame_t1;
@@ -70,7 +87,7 @@ void on_mouse_button( int button, int action )
     // ...
 
     if( action == GLFW_PRESS ) {
-      if( button == GLFW_MOUSE_BUTTON_LEFT ) {
+      if( button == GLFW_MOUSE_BUTTON_MIDDLE ) {
 	// With SHIFT ??
 	if( glfwGetKey( GLFW_KEY_LSHIFT ) || glfwGetKey( GLFW_KEY_RSHIFT)) {
 	  _scene->mouse_action_start ("move-resize",x,y);
@@ -131,6 +148,15 @@ void on_key_pressed( int key, int action)
     }
 }
 /**
+ * Called when the mousewheel is used.
+ */
+void on_mousewheel( int pos )
+{
+  float zoom = _scene->get_zoom() * (1.0f + (float) (pos - _old_pos)/10.0f);
+  _scene->set_zoom(zoom);
+  _old_pos = pos;
+}
+/**
  * Udate textbox string
  */
 void update_textbox()
@@ -143,6 +169,9 @@ void update_textbox()
 }
 /**
  * Display the Scene, and thus every object in it.
+ *
+ * Scene object is rendered using 'with_orientation' so as to allow "text labels" to
+ * face the viewer.
  */
 void display (void) {
     glClearColor (1,1,1,1);
@@ -176,7 +205,7 @@ int main (int argc, char **argv)
     glfwTerminate();
     exit( EXIT_FAILURE );
   }
-  glfwSetWindowTitle( "World" );
+  glfwSetWindowTitle( "test_arrow_scigl" );
   
   //glutReshapeFunc (reshape);
   //glutDisplayFunc (display);
@@ -184,7 +213,9 @@ int main (int argc, char **argv)
   glfwSetMousePosCallback( on_mouse_move );
   glfwSetKeyCallback( on_key_pressed );
   glfwSetCharCallback( (GLFWcharfun)TwEventCharGLFW );
-  glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
+  //glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
+  glfwSetMouseWheel( _old_pos );
+  glfwSetMouseWheelCallback( on_mousewheel );
   //glutReshapeWindow (400,400);
 
   // Initialize AntTweakBar
@@ -275,7 +306,7 @@ int main (int argc, char **argv)
 
   _scene->setup();
   _scene->update();
-
+  sleep(1);
 
   // Init FPS
   _timer_fps.start();

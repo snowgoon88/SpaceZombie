@@ -191,7 +191,7 @@ void Arrow::render( float view_rotation[4][4] )
   // front face have vertex in couter-clockwise order
   face head_faces[6] = {
     // 4 triangles make the head tip
-    {{1,0,0,  lh,0,wh,  lh,-wh,0}, { 0, 0, 0}, 0, "1"},
+    {{0,0,0,  lh,0,wh,  lh,-wh,0}, { 0, 0, 0}, 0, "1"},
     {{0,0,0,  lh,-wh,0,  lh,0,-wh}, { 0, 0, 0}, 0, "2"},
     {{0,0,0,  lh,0,-wh,  lh,wh,0}, { 0, 0, 0}, 0, "3"},
     {{0,0,0,  lh,wh,0,  lh,0,wh}, { 0, 0, 0}, 0, "4"}

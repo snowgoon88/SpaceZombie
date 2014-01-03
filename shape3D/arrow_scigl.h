@@ -25,8 +25,19 @@ typedef boost::shared_ptr<class Arrow> ArrowPtr;
 
 /**
  * 3D arrow as a ligne and a head (4 triangles + quad ).
- * br_color : color of the line
- * fg_color : color of head and text.
+ *
+ * + br_color : color of the line
+ * + fg_color : color of head and text.
+ * 
+ * Has a position (x,y,z) and rotation (euler angles _z1,x1,z2)
+ * 
+ * Two different rendering mode are possible :
+ * + arrow label is aligned to arrow
+ * + arrow label is displayed face to the viewer (need to pass the
+ * correct view_rotation to Arrow::render(float view_rotation[4][4])
+ *
+ * @author Alain
+ * @date 01/2014
  */
 class Arrow : public Object {
 
