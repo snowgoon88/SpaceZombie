@@ -18,7 +18,7 @@ GLFW_HOME       := /Users/dutech/Work/SVN_loriakhep/glfw-2.7
 EIGEN_ROOT	:= /Users/dutech/Work/SVN_loriakhep/NeuralNetwork/eigen-eigen-65ee2328342f
 else
 GLFW_HOME       := /usr
-EIGEN_ROOT      := /usr/include/eigen2
+EIGEN_ROOT      := /usr/include/eigen3
 endif
 ANTTW_HOME	:= ../Inertia/AntTweakBar
 
