@@ -31,8 +31,18 @@
 
 /**
  * A reference frame depicted by 3 axes (X,Y,Z) and a 1/8 of a wiresphere.
+ *
  * Main color given by 'fg', sphere color by 'br'.
  *
+ * Has a position (x,y,z) and rotation (euler angles _z1,x1,z2)
+ * 
+ * Two different rendering mode are possible :
+ * + axes names are aligned to axes
+ * + axes names are displayed face to the viewer (need to pass the
+ * correct view_rotation to RefFrame::render(float view_rotation[4][4])
+ *
+ * @author Alain
+ * @date 12/2013
  */
 class RefFrame : public Object {
 
@@ -56,17 +66,17 @@ public:
     /**
      *  @name Rendering
      */
-    /** Render as 3 arrows and grid */
+    /** Render as 3 arrows and wiresphere */
     virtual void render (void);
-    /** Render as 3 arrows, grid and X,Y,Z */
+    /** Render as 3 arrows, wireshpere and X,Y,Z facing viewer */
     virtual void render( float view_rotation[4][4] );
     //@}
 
-    /** Angle around Oz */
+    /** Angle around Oz1 */
     float _ang_Oz1;
-    /** Angle around Ox */
+    /** Angle around Ox1 */
     float _ang_Ox1;
-    /** Angle around Oz */
+    /** Angle around Oz2 */
     float _ang_Oz2;
     /** Nb of points in a quarter circle */
     int _nb_points;

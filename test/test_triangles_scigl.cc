@@ -1,10 +1,22 @@
 // -*- coding: utf-8 -*-
-/*
- * Alain - Jan 2012
- */
-/**
+/** @file test_triangles_scigl.cc
  * Drawing a simple world and triangles
+ *
+ * + a textbox above
+ * + the_scene : made of a RefFrame and a Triangles. 
+ * + some menu with AntTweakBar
+ *
+ * Commands are
+ * + o/O : print the orientation of the _scene
+ * + p/P : set the orientation to (0,0)
+ * + M_MOUSE : rotate
+ * + Shift+M_MOUSE : translate
+ * + R_MOUSE or Wheel : zoom
+ * + ESC : exit
+ *
  * Derived from test_arrow_scigl.cc
+ * @author Alain
+ * @date 12/2013
  */
 #include "utils.h"
 #include "object.h" 
@@ -36,6 +48,9 @@ TwBar *_bar;         // Pointer to a tweak bar
 TrianglesPtr _triangles = TrianglesPtr( new Triangles );
 std::vector<TVec3> _vec_vertex;
 
+// Mouse Wheel
+int _old_pos = 100;
+
 // FPS
 Timer _timer_fps;
 //double _time_frame_t1;
@@ -64,7 +79,7 @@ void on_mouse_button( int button, int action )
     // ...
 
     if( action == GLFW_PRESS ) {
-      if( button == GLFW_MOUSE_BUTTON_LEFT ) {
+      if( button == GLFW_MOUSE_BUTTON_MIDDLE ) {
 	// With SHIFT ??
 	if( glfwGetKey( GLFW_KEY_LSHIFT ) || glfwGetKey( GLFW_KEY_RSHIFT)) {
 	  _scene->mouse_action_start ("move-resize",x,y);
@@ -125,6 +140,15 @@ void on_key_pressed( int key, int action)
     }
 }
 /**
+ * Called when the mousewheel is used.
+ */
+void on_mousewheel( int pos )
+{
+  float zoom = _scene->get_zoom() * (1.0f + (float) (pos - _old_pos)/10.0f);
+  _scene->set_zoom(zoom);
+  _old_pos = pos;
+}
+/**
  * Udate textbox string
  */
 void update_textbox()
@@ -175,7 +199,7 @@ int main (int argc, char **argv)
     glfwTerminate();
     exit( EXIT_FAILURE );
   }
-  glfwSetWindowTitle( "World" );
+  glfwSetWindowTitle( "test_triangles_scigl" );
   
   //glutReshapeFunc (reshape);
   //glutDisplayFunc (display);
@@ -183,7 +207,9 @@ int main (int argc, char **argv)
   glfwSetMousePosCallback( on_mouse_move );
   glfwSetKeyCallback( on_key_pressed );
   glfwSetCharCallback( (GLFWcharfun)TwEventCharGLFW );
-  glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
+  //glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
+  glfwSetMouseWheel( _old_pos );
+  glfwSetMouseWheelCallback( on_mousewheel );
   //glutReshapeWindow (400,400);
 
   // Initialize AntTweakBar
@@ -245,8 +271,8 @@ int main (int argc, char **argv)
   _scene->add( _ref );
 
   // Some Triangles
-  _triangles->attach_vertex( &(_vec_vertex) );
-  _scene->add( _triangles );
+   _triangles->attach_vertex( &(_vec_vertex) );
+   _scene->add( _triangles );
 
   _scene->set_zoom(0.5);
   _scene->set_orientation( 70.0, 80.0 );
@@ -263,7 +289,7 @@ int main (int argc, char **argv)
 
   _scene->setup();
   _scene->update();
-
+  sleep(1);
 
   // Init FPS
   _timer_fps.start();
@@ -283,7 +309,8 @@ int main (int argc, char **argv)
     
     // display
     double time_frame_before = _timer_fps.getElapsedTimeInMilliSec();
-    
+
+    // Values set in AntTWeakBar => orientation of the _triangles.
     _triangles->orient_from_vec( TVec3( tw_tri_dir[0], tw_tri_dir[1], tw_tri_dir[2] ));
     display();
 
