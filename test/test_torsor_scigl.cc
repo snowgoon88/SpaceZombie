@@ -1,10 +1,42 @@
 // -*- coding: utf-8 -*-
-/*
- * Alain - Jan 2012
- */
-/**
- * Drawing a simple world and triangles
+/** @file test_torsor_scigl.cc
+ * Drawing a Torsor applied to a bar (segment).
+ *
+ * + a textbox above
+ * + the_scene : made of a RefFrame and a Bar. 
+ * + A Torsor is applied to the bar at various points
+ *   + Torsor (in brown) application (_v_applied) at '_nb_applied' pts (_vpos) along the bar.
+ *   + Torsor (in pink) reduction (_v_tor) at '_nb_tor' ots along the bar.
+ *   + Trace (in doted blue) of futur for '_nb_pt_logged' pts (_v_pt_loggend) of the bar
+ * + some menu with AntTweakBar
+ *
+ * At each time step, the current torsor is applied to the Bar at its center in order
+ * to compute the next position of the bar. A time step of '_time_step_next' s (1s) is 
+ * made of several substeps of '_delta_step' s (10ms).
+ *
+ * Main program is a follow :
+ * + init_physic(), update_interface(), init AntTweakBar
+ * + set up graphics (_scene, _ref, _textbox)
+ * + init_observers(), update_observers()
+ * + Main loop
+ *   + update_interface()
+ *   + update_physics()
+ *   + update_observers()
+ *   + display()
+ *   + update_textbox()
+ *
+ * Commands are
+ * + o/O : print the orientation of the _scene
+ * + p/P : set the orientation to (0,0)
+ * + M_MOUSE : rotate
+ * + Shift+M_MOUSE : translate
+ * + R_MOUSE or Wheel : zoom
+ * + ESC : exit
+ * + t : increase the nb of time step ahead for logging points (in AntTweakBar)
+ *
  * Derived from test_arrow_scigl.cc
+ * @author Alain
+ * @date 01/2014
  */
 #include "utils.h"
 #include "object.h" 
@@ -40,8 +72,11 @@ ScenePtr _scene = ScenePtr (new Scene);
 TextBoxPtr _textbox;
 TwBar *_bar;         // Pointer to a tweak bar
 
+// Mouse Wheel
+int _old_pos = 100;
+
 // FPS timer
-Timer _timer_fps;
+Timer _timer_fps; 
 //double _time_frame_t1;
 double _time_frame_min = DBL_MAX;
 double _time_frame_max = DBL_MIN;
@@ -74,11 +109,12 @@ TorsorSciglPtr _torsor_scigl;
 SVec3 _torsor_pos = {0.0, 0.0, 0.0};
 float _torsor_res[3] = {0.0, 0.0, 1.0};
 float _torsor_mom[3] = {0.0, 0.0, 0.0};
-// Application of torsor at various position along the bar
+// Application of torsor at various position along the bar : in brown ??
 const unsigned int _nb_applied = 9;
 TVec3    _v_pos[_nb_applied];
 TVec3    _v_applied[_nb_applied];
 ArrowPtr _v_applied_scigl[_nb_applied];
+// Torsor reduced at various positions along the bar : in pink
 const unsigned int _nb_tor = 3;
 Torsor _v_tor[_nb_tor];
 TorsorSciglPtr _v_tor_scigl[_nb_tor];
@@ -89,10 +125,10 @@ float _delta_step = 0.01;    // 10ms for integration
 float _time_step_next = 1.0;          // when is next bar, 1s
 BarPtr _bar_phy_next;            // bar at next time step 
 BarSciglPtr _bar_phy_next_scigl;
-bool _fg_show_logged = false;
-const unsigned int _nb_pt_logged = 3;
-LoggedTPtr<TVec3>::Type _v_pt_logged[_nb_pt_logged];
-LoggedTVec3SciglPtr _v_pt_logged_scigl[_nb_pt_logged];
+bool _fg_show_logged = false;                          // show futur pos of bar
+const unsigned int _nb_pt_logged = 3;                  // nb of points logged in future
+LoggedTPtr<TVec3>::Type _v_pt_logged[_nb_pt_logged];   // futur pos of logged points
+LoggedTVec3SciglPtr _v_pt_logged_scigl[_nb_pt_logged]; // observer for logged points
 
 
 //*********************************************************************** PHYSIC
@@ -126,9 +162,12 @@ void update_physics( float accel )
 
   _time_physic = _timer_fps.getElapsedTimeInMilliSec();
 }
+/**
+ * @todo Pb with translation, and rotation axe computation.
+ */
 void update_physics_step( float delta_t )
 {
-  // init next bar
+  // init next bar as clone of current
   _bar_phy_next->set_position( _bar_phy->_ori );
   _bar_phy_next->set_dir( _bar_phy->_dir );
   // clear logged
@@ -318,7 +357,7 @@ void on_mouse_button( int button, int action )
     // ...
 
     if( action == GLFW_PRESS ) {
-      if( button == GLFW_MOUSE_BUTTON_LEFT ) {
+      if( button == GLFW_MOUSE_BUTTON_MIDDLE ) {
 	// With SHIFT ??
 	if( glfwGetKey( GLFW_KEY_LSHIFT ) || glfwGetKey( GLFW_KEY_RSHIFT)) {
 	  _scene->mouse_action_start ("move-resize",x,y);
@@ -379,7 +418,16 @@ void on_key_pressed( int key, int action)
     }
 }
 /**
- * Udate textbox string
+ * Called when the mousewheel is used.
+ */
+void on_mousewheel( int pos )
+{
+  float zoom = _scene->get_zoom() * (1.0f + (float) (pos - _old_pos)/10.0f);
+  _scene->set_zoom(zoom);
+  _old_pos = pos;
+}
+/**
+ * Udate textbox string, using precision for floats.
  */
 void update_textbox()
 {
@@ -433,7 +481,7 @@ int main (int argc, char **argv)
     glfwTerminate();
     exit( EXIT_FAILURE );
   }
-  glfwSetWindowTitle( "World" );
+  glfwSetWindowTitle( "test_torsor_scigl" );
   
   //glutReshapeFunc (reshape);
   //glutDisplayFunc (display);
@@ -441,7 +489,9 @@ int main (int argc, char **argv)
   glfwSetMousePosCallback( on_mouse_move );
   glfwSetKeyCallback( on_key_pressed );
   glfwSetCharCallback( (GLFWcharfun)TwEventCharGLFW );
-  glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
+  //glfwSetMouseWheelCallback((GLFWmousewheelfun)TwEventMouseWheelGLFW);
+  glfwSetMouseWheel( _old_pos );
+  glfwSetMouseWheelCallback( on_mousewheel );
   //glutReshapeWindow (400,400);
 
   // Initialize AntTweakBar
@@ -471,8 +521,7 @@ int main (int argc, char **argv)
   }
   if (glewIsSupported("GL_EXT_framebuffer_object"))
     std::cout<<"Old EXT FBO available"<<std::endl;
-  else
-    std::cout<<"Old EXT FBO NOT available"<<std::endl;
+  else    std::cout<<"Old EXT FBO NOT available"<<std::endl;
   if (glewIsSupported("GL_ARB_framebuffer_object"))
     std::cout<<"Newer ARB FBO available"<<std::endl;
   else
@@ -518,7 +567,7 @@ int main (int argc, char **argv)
   
   _scene->setup();
   _scene->update();
-
+  sleep(1);
 
   // Init FPS
   _timer_fps.start();

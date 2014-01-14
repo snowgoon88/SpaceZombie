@@ -735,6 +735,7 @@ WARN_LOGFILE           =
 
 INPUT                  = shape3D \
  test/test_triangles_scigl.cc test/test_arrow_scigl.cc \
+ test/test_torsor_scigl.cc \
  src/utils.h
 
 # This tag can be used to specify the character encoding of the source files
