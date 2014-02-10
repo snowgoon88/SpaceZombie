@@ -1,4 +1,7 @@
 # ignore build object and library and depency
 *.[oad]
 *~
+# ignore local Makefile
+Makefile
+# ignore files created by doc
 doc/html
