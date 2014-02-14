@@ -1,0 +1,6 @@
+Mesh example
+
+// Some useless code lines
+pt1 = {1.234, 2.542, 0.145};
+pt2 = {2.008, -1.725, 0.764};
+tr1 = {pt1, pt2};
