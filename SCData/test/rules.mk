@@ -95,6 +95,11 @@ $(d)/zscpipe: 	$(d)/zscpipe.c
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
+$(d)/w_float: 	$(d)/w_float.cc 
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK)
+
+
 .PHONY : verbose_$(d)
 verbose_$(d): $(TGTS_$(d))
 	@echo "**** Generating $^"
