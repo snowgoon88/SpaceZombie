@@ -1,0 +1,24 @@
+material ship_hull
+{
+	DiffuseSampler "models\ships\race_2\s\race2_s_t4_d"
+	Diffuse2Sampler "models\ships\race_2\s\race2_s_t4_glow"
+	SpecularColorSampler "models\ships\race_2\s\race2_s_t4_msk_sc"
+	LightmapSampler "models\ships\race_2\s\race2_s_t4_pdo"
+	NormalSampler "models\ships\race_2\s\race2_s_t4_nm"
+	ColormapSampler "models\ships\race_2\s\race2_s_t4_s1_d"
+	pins
+	{
+		User1 1
+		User2 1
+	}
+}
+material ship_decals
+{
+	NormalSampler "models\ships\race_2\s\race2_s_t4_nm"
+	LightmapSampler "models\ships\race_2\s\race2_s_t4_pdo"
+	UserParam0_Float4 ( 0.022013 0.022013 0.022013 )
+	pins
+	{
+		User7 1
+	}
+}

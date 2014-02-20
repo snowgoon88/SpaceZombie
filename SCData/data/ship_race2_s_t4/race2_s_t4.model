@@ -1,0 +1,33 @@
+mesh			race2_s_t4
+//skin default	race2_s_t4
+physics			race2_s_t4
+#include 		"race2_s_t4.skins"
+
+/////////////////////// layers ////////////////////////////
+
+/////////////////////// pitch ////////////////////////////
+
+anim race1_m_pitch
+{
+	files
+	{
+		race2_s_t4_x_d.anim
+		race2_s_t4_x_up.anim
+	}
+	poseParameter		MovePitch -90 90
+}
+
+
+anim aim
+{
+	activity			IDLE
+	
+	files
+	{
+		race2_s_t4_z_l.anim
+		race2_s_t4_z_r.anim
+	}
+	poseParameter		MoveYaw -90 90
+	
+	addLayer			race1_m_pitch
+}

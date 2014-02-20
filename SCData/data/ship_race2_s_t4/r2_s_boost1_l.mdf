@@ -1,0 +1,14 @@
+material dyn_object_norm
+{
+	DiffuseSampler "models\ships\race_2\s\r2_s_eng1_d"
+	Diffuse2Sampler "models\ships\race_2\s\r2_s_eng1_glow"
+	AmbOcclSampler "models\ships\race_2\s\r2_s_eng1_msk"
+	NormalSampler "models\ships\race_2\s\r2_s_eng1_nm"
+	UserParam0_Float4 ( 0.038362 0.042633 0.065159 )
+	UserParam2_Float4 ( 1.000000 1.000000 0.000000 0.000000 )
+	pins
+	{
+		User1 1
+		User4 1
+	}
+}
