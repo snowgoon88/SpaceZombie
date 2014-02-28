@@ -1,0 +1,4 @@
+material "blank_object"
+{
+	DiffuseSampler "models\misc\car_point_diffuse"
+}

@@ -1,0 +1,4 @@
+material dyn_blank_object
+{
+	DiffuseSampler "models\misc\fighter_point_s1_d"
+}

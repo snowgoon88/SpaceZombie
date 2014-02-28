@@ -1,0 +1,54 @@
+typedef char byte;
+typedef __int16 ushort;
+
+// simple vertex with UV (ex. models/misc/cube1m.mdl_msh000)
+struct vertex_UV {
+	// 3D coordinate
+	float x;
+	float y;
+	float z;
+	// Color
+	byte red;
+	byte green;
+	byte blue;
+	byte alpha;
+	// U,V coordinate
+	float u;
+	float v;
+};
+struct v_vertex {
+	vertex _v_vertex[];
+};
+struct triangle
+{
+  ushort idx_pt1;
+  ushort idx_pt2;
+  ushort idx_pt3;
+};
+
+// maybe vertex with UV + norm ?
+struct vertex_UNK_UV {
+	// 3D coordinate
+	float x;
+	float y;
+	float z;
+	// Color
+	byte red;
+	byte green;
+	byte blue;
+	byte alpha;
+	// Unknown
+	byte unk1;
+	byte unk2;
+	byte unk3;
+	byte unk4;
+	// U,V coordinate
+	float u;
+	float v;
+	// Unknown
+	byte unk5;
+	byte unk6;
+	byte unk7;
+	byte unk8;
+};
+

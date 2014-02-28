@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Shil</author>
+      <authoring_tool>Maya2008 Extension 2 | ColladaMaya v3.05B</authoring_tool>
+      <comments>ColladaMaya export options: bakeTransforms=1;exportPolygonMeshes=1;bakeLighting=0;isSampling=1;
+curveConstrainSampling=0;removeStaticCurves=1;exportCameraAsLookat=0;
+exportLights=0;exportCameras=0;exportJointsAndSkin=1;
+exportAnimations=1;exportTriangles=1;exportInvisibleNodes=0;
+exportNormals=1;exportTexCoords=1;
+exportVertexColors=1;exportVertexColorsAnimation=0;exportTangents=0;
+exportTexTangents=0;exportConstraints=1;exportPhysics=1;exportXRefs=1;
+dereferenceXRefs=1;cameraXFov=0;cameraYFov=1</comments>
+      <source_data>file:///Y:/art/source/models/misc/no_model.ma</source_data>
+    </contributor>
+    <created>2011-01-14T11:14:45Z</created>
+    <modified>2011-01-14T11:14:45Z</modified>
+    <unit meter="0.01" name="centimeter"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_physics_scenes>
+    <physics_scene id="MayaNativePhysicsScene">
+      <technique_common>
+        <gravity>0 -980 0</gravity>
+        <time_step>0.083</time_step>
+      </technique_common>
+    </physics_scene>
+  </library_physics_scenes>
+  <library_images>
+    <image id="file1" name="file1">
+      <init_from>./textures/misc/no_model.dds</init_from>
+      <extra>
+        <technique profile="MAYA">
+          <dgnode_type>kFile</dgnode_type>
+          <image_sequence>0</image_sequence>
+        </technique>
+      </extra>
+    </image>
+  </library_images>
+  <library_materials>
+    <material id="colladafxShader2" name="colladafxShader2">
+      <instance_effect url="#colladafxShader2-fx">
+        <technique_hint platform="PC-OGL" ref="SpecularTech"/>
+        <setparam ref="colladafxShader2TotalMatrix">
+          <float4x4>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
+        </setparam>
+        <setparam ref="colladafxShader2WorldMatrix">
+          <float4x4>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
+        </setparam>
+        <setparam ref="colladafxShader2ViewMatrixInv">
+          <float4x4>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
+        </setparam>
+        <setparam ref="colladafxShader2DiffuseSampler">
+          <sampler2D>
+            <source>file1Surface</source>
+            <wrap_s>WRAP</wrap_s>
+            <wrap_t>WRAP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </setparam>
+        <setparam ref="file1Surface">
+          <surface type="2D">
+            <init_from mip="0" slice="0">file1</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </setparam>
+        <setparam ref="colladafxShader2LightDir">
+          <float3>0 0 0</float3>
+        </setparam>
+        <setparam ref="colladafxShader2AmbientColor">
+          <float3>0 0 0</float3>
+        </setparam>
+        <setparam ref="colladafxShader2DiffuseColor">
+          <float3>0 0 0</float3>
+        </setparam>
+        <setparam ref="colladafxShader2Invisible">
+          <bool>0</bool>
+        </setparam>
+        <setparam ref="colladafxShader2User0">
+          <bool>0</bool>
+        </setparam>
+      </instance_effect>
+      <extra>
+        <technique profile="MAYA">
+          <dynamic_attributes>
+            <texDiffuse short_name="texDiffuse" type="string"/>
+            <texDiffuse2 short_name="texDiffuse2" type="string"/>
+            <texLightmap short_name="texLightmap" type="string"/>
+            <texNormal short_name="texNormal" type="string"/>
+            <texDetail short_name="texDetail" type="string"/>
+            <envMap short_name="envMap" type="string"/>
+            <texAmbOcclusion short_name="texAmbOcclusion" type="string"/>
+            <texSpecular short_name="texSpecular" type="string"/>
+            <TotalMatrix short_name="TotalMatrix" type="float4x4">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</TotalMatrix>
+            <WorldMatrix short_name="WorldMatrix" type="float4x4">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</WorldMatrix>
+            <ViewMatrixInv short_name="ViewMatrixInv" type="float4x4">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</ViewMatrixInv>
+            <DiffuseSampler short_name="DiffuseSampler" type="string">file1</DiffuseSampler>
+            <Diffuse2Sampler short_name="Diffuse2Sampler" type="color3">0 0 0</Diffuse2Sampler>
+            <LightDir short_name="LightDir" type="color3">0 1 0</LightDir>
+            <AmbientColor short_name="AmbientColor" type="color3">0.2 0.2 0.2</AmbientColor>
+            <DiffuseColor short_name="DiffuseColor" type="color3">1 1 1</DiffuseColor>
+            <Invisible short_name="Invisible" type="bool">0</Invisible>
+            <User0 short_name="User0" type="bool">0</User0>
+            <AmbientColor_Table short_name="AmbientColor_Table" type="string"/>
+            <DiffuseColor_Table short_name="DiffuseColor_Table" type="string"/>
+            <LightDir_Table short_name="LightDir_Table" type="string"/>
+          </dynamic_attributes>
+        </technique>
+      </extra>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="colladafxShader2-fx">
+      <profile_CG platform="PC-OGL">
+        <include sid="include" url="file:///Y:/evil-shaders/blank_object.cgfx"/>
+        <include sid="include2" url="file:///Y:/evil-shaders/blank_object.cgfx"/>
+        <newparam sid="colladafxShader2TotalMatrix">
+          <semantic>WorldViewProjection</semantic>
+          <float4x4>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
+        </newparam>
+        <newparam sid="colladafxShader2WorldMatrix">
+          <semantic>World</semantic>
+          <float4x4>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
+        </newparam>
+        <newparam sid="colladafxShader2ViewMatrixInv">
+          <semantic>ViewInverseTranspose</semantic>
+          <float4x4>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
+        </newparam>
+        <newparam sid="colladafxShader2DiffuseSampler">
+          <annotate name="UIName">
+            <string>DiffuseSampler</string>
+          </annotate>
+          <sampler2D>
+            <source>file1Surface</source>
+            <wrap_s>WRAP</wrap_s>
+            <wrap_t>WRAP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <newparam sid="file1Surface">
+          <annotate name="UIName">
+            <string>file1</string>
+          </annotate>
+          <surface type="2D">
+            <init_from mip="0" slice="0">file1</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="colladafxShader2LightDir">
+          <annotate name="UIName">
+            <string>LightDir</string>
+          </annotate>
+          <annotate name="UIType">
+            <string>Color</string>
+          </annotate>
+          <float3>0 0 0</float3>
+        </newparam>
+        <newparam sid="colladafxShader2AmbientColor">
+          <annotate name="UIName">
+            <string>AmbientColor</string>
+          </annotate>
+          <annotate name="UIType">
+            <string>Color</string>
+          </annotate>
+          <float3>0 0 0</float3>
+        </newparam>
+        <newparam sid="colladafxShader2DiffuseColor">
+          <annotate name="UIName">
+            <string>DiffuseColor</string>
+          </annotate>
+          <annotate name="UIType">
+            <string>Color</string>
+          </annotate>
+          <float3>0 0 0</float3>
+        </newparam>
+        <newparam sid="colladafxShader2Invisible">
+          <annotate name="UIName">
+            <string>Invisible</string>
+          </annotate>
+          <bool>0</bool>
+        </newparam>
+        <newparam sid="colladafxShader2User0">
+          <annotate name="UIName">
+            <string>User0</string>
+          </annotate>
+          <bool>0</bool>
+        </newparam>
+        <technique sid="SpecularTech">
+          <pass sid="colladafxShader2">
+            <shader stage="VERTEX">
+              <compiler_target>arbvp1</compiler_target>
+              <name source="include">vs_main</name>
+              <bind symbol="TotalMatrix">
+                <param ref="colladafxShader2TotalMatrix"/>
+              </bind>
+              <bind symbol="WorldMatrix">
+                <param ref="colladafxShader2WorldMatrix"/>
+              </bind>
+              <bind symbol="ViewMatrixInv">
+                <param ref="colladafxShader2ViewMatrixInv"/>
+              </bind>
+              <bind symbol="LightDir">
+                <param ref="colladafxShader2LightDir"/>
+              </bind>
+            </shader>
+            <shader stage="FRAGMENT">
+              <compiler_target>arbfp1</compiler_target>
+              <name source="include2">ps_main</name>
+              <bind symbol="DiffuseSampler">
+                <param ref="colladafxShader2DiffuseSampler"/>
+              </bind>
+              <bind symbol="Diffuse2Sampler">
+                <param ref="colladafxShader2Diffuse2Sampler"/>
+              </bind>
+              <bind symbol="AmbientColor">
+                <param ref="colladafxShader2AmbientColor"/>
+              </bind>
+              <bind symbol="DiffuseColor">
+                <param ref="colladafxShader2DiffuseColor"/>
+              </bind>
+              <bind symbol="Invisible">
+                <param ref="colladafxShader2Invisible"/>
+              </bind>
+              <bind symbol="User0">
+                <param ref="colladafxShader2User0"/>
+              </bind>
+            </shader>
+          </pass>
+        </technique>
+      </profile_CG>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="pCubeShape1-lib" name="pCubeShape1">
+      <mesh>
+        <source id="pCubeShape1-lib-positions" name="position">
+          <float_array id="pCubeShape1-lib-positions-array" count="24">-1 -1 1 1 -1 1 -1 1 1 1 1 1 -1 1 -1 1 1 -1 -1 -1 -1 1 -1 -1</float_array>
+          <technique_common>
+            <accessor source="#pCubeShape1-lib-positions-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCubeShape1-lib-normals" name="normal">
+          <float_array id="pCubeShape1-lib-normals-array" count="72">0 0 1 0 0 1 0 0 1 0 0 1 0 1 0 0 1 0 0 1 0 0 1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0</float_array>
+          <technique_common>
+            <accessor source="#pCubeShape1-lib-normals-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCubeShape1-lib-map1" name="map1">
+          <float_array id="pCubeShape1-lib-map1-array" count="28">0 0 1 0 0 1 1 1 0 2 1 2 0 3 1 3 0 4 1 4 2 0 2 1 -1 0 -1 1</float_array>
+          <technique_common>
+            <accessor source="#pCubeShape1-lib-map1-array" count="14" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pCubeShape1-lib-vertices">
+          <input semantic="POSITION" source="#pCubeShape1-lib-positions"/>
+        </vertices>
+        <triangles material="colladafxShader2SG" count="12">
+          <input semantic="VERTEX" source="#pCubeShape1-lib-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#pCubeShape1-lib-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#pCubeShape1-lib-map1" offset="2" set="0"/>
+          <p>0 0 0 1 1 1 2 2 2 1 1 1 3 3 3 2 2 2 2 4 2 3 5 3 4 6 4 3 5 3 5 7 5 4 6 4 4 8 4 5 9 5 6 10 6 5 9 5 7 11 7 6 10 6 6 12 6 7 13 7 0 14 8 7 13 7 1 15 9 0 14 8 1 16 1 7 17 10 3 18 3 7 17 10 5 19 11 3 18 3 6 20 12 0 21 0 4 22 13 0 21 0 2 23 2 4 22 13</p>
+        </triangles>
+      </mesh>
+      <extra>
+        <technique profile="MAYA">
+          <double_sided>1</double_sided>
+        </technique>
+      </extra>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="VisualSceneNode" name="no_model">
+      <node id="pCube1" name="pCube1" type="NODE">
+        <matrix sid="transform">0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 1</matrix>
+        <instance_geometry url="#pCubeShape1-lib">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="colladafxShader2SG" target="#colladafxShader2">
+                <bind_vertex_input semantic="TEXCOORD0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+      <node id="collision1" name="collision1" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <extra>
+          <technique profile="MAYA">
+            <dynamic_attributes>
+              <shapeType short_name="shapeType" type="int">1</shapeType>
+              <boxScale short_name="boxScale" type="float3">1 1 1</boxScale>
+              <point1 short_name="point1" type="float3">-1 0 0</point1>
+              <point2 short_name="point2" type="float3">1 0 0</point2>
+              <radius short_name="radius" type="float">1</radius>
+            </dynamic_attributes>
+          </technique>
+        </extra>
+      </node>
+      <node id="Model_Attribute" name="Model_Attribute" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <extra>
+          <technique profile="MAYA">
+            <dynamic_attributes>
+              <Mesh short_name="Mesh" type="bool">1</Mesh>
+              <Physics short_name="PD" type="bool">1</Physics>
+              <Scale short_name="SV" type="float3">1 1 1</Scale>
+              <InfluenceBonesNumber short_name="BN" type="int">0</InfluenceBonesNumber>
+              <OutputPath short_name="OP" type="string">models/misc/no_model</OutputPath>
+              <DaeOutputPath short_name="DOP" type="string"/>
+              <DlcOutputPath short_name="DlcOP" type="string"/>
+              <ReferenceModel short_name="REM" type="string"/>
+              <BonesToRemove short_name="BTOR" type="string"/>
+              <ExtendingBones short_name="EXTBNS" type="string"/>
+              <NumAnimations short_name="NA" type="int">0</NumAnimations>
+              <AbsoluteAnimations short_name="AA" type="bool">0</AbsoluteAnimations>
+              <DefaultAnimation short_name="DA" type="int">0</DefaultAnimation>
+              <NotTriangulate short_name="NOTT" type="bool">0</NotTriangulate>
+              <GrassModel short_name="GM" type="bool">0</GrassModel>
+              <ParticleMesh short_name="PM" type="bool">0</ParticleMesh>
+              <BloodParticleMesh short_name="PBM" type="bool">0</BloodParticleMesh>
+            </dynamic_attributes>
+          </technique>
+        </extra>
+      </node>
+      <node id="Sets_Info" type="NODE">
+        <node id="Default" type="NODE">
+          <extra>
+            <technique profile="MAYA">
+              <dynamic_attributes>
+                <ExportPath short_name="ExportPath" type="string">models/misc/no_model_Default</ExportPath>
+                <DaeOutputPath short_name="DaeOutputPath" type="string">_Default</DaeOutputPath>
+                <Visible short_name="Visible" type="int">1</Visible>
+                <Texturing short_name="Texturing" type="int">1</Texturing>
+                <Shading short_name="Shading" type="int">1</Shading>
+                <Bounding_box short_name="Bounding_box" type="int">0</Bounding_box>
+                <Color short_name="Color" type="int">7</Color>
+                <Display_Type short_name="Display_Type" type="int">1</Display_Type>
+                <Exporting short_name="Exporting" type="int">1</Exporting>
+                <ExportingPhysics short_name="ExportingPhysics" type="int">0</ExportingPhysics>
+                <PutToRenderLayer short_name="PutToRenderLayer" type="int">0</PutToRenderLayer>
+                <UVSetName short_name="UVSetName" type="string">uvSet</UVSetName>
+                <TextureWidth short_name="TextureWidth" type="int">1024</TextureWidth>
+                <TextureHeight short_name="TextureHeight" type="int">1024</TextureHeight>
+                <MinShellSize short_name="MinShellSize" type="float">1</MinShellSize>
+                <PixelBetweenShells short_name="PixelBetweenShells" type="float">2</PixelBetweenShells>
+                <PositionEpsilon short_name="PositionEpsilon" type="float2">1 100</PositionEpsilon>
+                <NormalsEpsilon short_name="NormalsEpsilon" type="float2">1 100</NormalsEpsilon>
+                <UVEpsilon short_name="UVEpsilon" type="float2">1 100000</UVEpsilon>
+                <PreProductConnectShels short_name="PreProductConnectShels" type="int">1</PreProductConnectShels>
+                <PreProductCheckNormals short_name="PreProductCheckNormals" type="int">1</PreProductCheckNormals>
+                <PostProductScaleShels short_name="PostProductScaleShels" type="int">1</PostProductScaleShels>
+                <LightmapFilePath short_name="LightmapFilePath" type="string">lightmaps/Default</LightmapFilePath>
+                <GrayLightmap short_name="GrayLightmap" type="int">1</GrayLightmap>
+                <RenderType short_name="RenderType" type="int">1</RenderType>
+                <RenderImageFormat short_name="RenderImageFormat" type="int">1</RenderImageFormat>
+                <FullShading short_name="FullShading" type="int">0</FullShading>
+                <Illumination short_name="Illumination" type="int">1</Illumination>
+                <IndirectIllumination short_name="IndirectIllumination" type="int">0</IndirectIllumination>
+                <RNM short_name="RNM" type="int">0</RNM>
+                <RenderCustom short_name="RenderCustom" type="int">0</RenderCustom>
+                <RenderCustomShader short_name="RenderCustomShader" type="string"/>
+                <EnableColorFilter short_name="EnableColorFilter" type="int">0</EnableColorFilter>
+                <FilterSize short_name="FilterSize" type="float">0.05</FilterSize>
+                <FilterShape short_name="FilterShape" type="float">1.1</FilterShape>
+                <FilterNormalDeviation short_name="FilterNormalDeviation" type="float">6.2</FilterNormalDeviation>
+                <ReferenceMappingType short_name="ReferenceMappingType" type="int">1</ReferenceMappingType>
+                <VisibleStartDistance short_name="VisibleStartDistance" type="float">0</VisibleStartDistance>
+                <makePartitions short_name="makePartitions" type="int">1</makePartitions>
+                <UseAspectGeneration short_name="UseAspectGeneration" type="int">0</UseAspectGeneration>
+                <CurrentAspectType short_name="CurrentAspectType" type="int">1</CurrentAspectType>
+                <ModelInfluenceBonesNumber short_name="ModelInfluenceBonesNumber" type="int">0</ModelInfluenceBonesNumber>
+                <ModelNumAnimations short_name="ModelNumAnimations" type="int">0</ModelNumAnimations>
+                <members type="string">collision1</members>
+              </dynamic_attributes>
+            </technique>
+          </extra>
+        </node>
+        <node id="Default_set" type="NODE">
+          <extra>
+            <technique profile="MAYA">
+              <dynamic_attributes>
+                <ExportPath short_name="ExportPath" type="string">models/misc/no_model_Default_set</ExportPath>
+                <DaeOutputPath short_name="DaeOutputPath" type="string">_Default_set</DaeOutputPath>
+                <Visible short_name="Visible" type="int">1</Visible>
+                <Texturing short_name="Texturing" type="int">1</Texturing>
+                <Shading short_name="Shading" type="int">1</Shading>
+                <Bounding_box short_name="Bounding_box" type="int">0</Bounding_box>
+                <Color short_name="Color" type="int">7</Color>
+                <Display_Type short_name="Display_Type" type="int">1</Display_Type>
+                <Exporting short_name="Exporting" type="int">1</Exporting>
+                <ExportingPhysics short_name="ExportingPhysics" type="int">0</ExportingPhysics>
+                <PutToRenderLayer short_name="PutToRenderLayer" type="int">1</PutToRenderLayer>
+                <UVSetName short_name="UVSetName" type="string">uvSet</UVSetName>
+                <TextureWidth short_name="TextureWidth" type="int">1024</TextureWidth>
+                <TextureHeight short_name="TextureHeight" type="int">1024</TextureHeight>
+                <MinShellSize short_name="MinShellSize" type="float">1</MinShellSize>
+                <PixelBetweenShells short_name="PixelBetweenShells" type="float">2</PixelBetweenShells>
+                <PositionEpsilon short_name="PositionEpsilon" type="float2">1 100</PositionEpsilon>
+                <NormalsEpsilon short_name="NormalsEpsilon" type="float2">1 100</NormalsEpsilon>
+                <UVEpsilon short_name="UVEpsilon" type="float2">1 100000</UVEpsilon>
+                <PreProductConnectShels short_name="PreProductConnectShels" type="int">1</PreProductConnectShels>
+                <PreProductCheckNormals short_name="PreProductCheckNormals" type="int">1</PreProductCheckNormals>
+                <PostProductScaleShels short_name="PostProductScaleShels" type="int">1</PostProductScaleShels>
+                <LightmapFilePath short_name="LightmapFilePath" type="string">lightmaps/Default_set</LightmapFilePath>
+                <GrayLightmap short_name="GrayLightmap" type="int">1</GrayLightmap>
+                <RenderType short_name="RenderType" type="int">1</RenderType>
+                <RenderImageFormat short_name="RenderImageFormat" type="int">1</RenderImageFormat>
+                <FullShading short_name="FullShading" type="int">0</FullShading>
+                <Illumination short_name="Illumination" type="int">1</Illumination>
+                <IndirectIllumination short_name="IndirectIllumination" type="int">0</IndirectIllumination>
+                <RNM short_name="RNM" type="int">0</RNM>
+                <RenderCustom short_name="RenderCustom" type="int">0</RenderCustom>
+                <RenderCustomShader short_name="RenderCustomShader" type="string"/>
+                <EnableColorFilter short_name="EnableColorFilter" type="int">0</EnableColorFilter>
+                <FilterSize short_name="FilterSize" type="float">0.05</FilterSize>
+                <FilterShape short_name="FilterShape" type="float">1.1</FilterShape>
+                <FilterNormalDeviation short_name="FilterNormalDeviation" type="float">6.2</FilterNormalDeviation>
+                <ReferenceMappingType short_name="ReferenceMappingType" type="int">1</ReferenceMappingType>
+                <VisibleStartDistance short_name="VisibleStartDistance" type="float">0</VisibleStartDistance>
+                <makePartitions short_name="makePartitions" type="int">0</makePartitions>
+                <UseAspectGeneration short_name="UseAspectGeneration" type="int">0</UseAspectGeneration>
+                <CurrentAspectType short_name="CurrentAspectType" type="int">1</CurrentAspectType>
+                <ModelInfluenceBonesNumber short_name="ModelInfluenceBonesNumber" type="int">0</ModelInfluenceBonesNumber>
+                <ModelNumAnimations short_name="ModelNumAnimations" type="int">0</ModelNumAnimations>
+                <members type="string"/>
+              </dynamic_attributes>
+            </technique>
+          </extra>
+        </node>
+        <node id="PhysicsScene" type="NODE">
+          <extra>
+            <technique profile="MAYA">
+              <dynamic_attributes>
+                <GlobalColor short_name="GlobalColor" type="int">1</GlobalColor>
+                <CurrentSet short_name="CurrentSet" type="string"/>
+                <members type="string"/>
+                <childs type="string">Default</childs>
+              </dynamic_attributes>
+            </technique>
+          </extra>
+        </node>
+        <node id="VisualScene" type="NODE">
+          <extra>
+            <technique profile="MAYA">
+              <dynamic_attributes>
+                <GlobalColor short_name="GlobalColor" type="int">17</GlobalColor>
+                <CurrentSet short_name="CurrentSet" type="string">no_model</CurrentSet>
+                <members type="string"/>
+                <childs type="string">Default_set no_model</childs>
+              </dynamic_attributes>
+            </technique>
+          </extra>
+        </node>
+        <node id="defaultLightSet" type="NODE">
+          <extra>
+            <technique profile="MAYA">
+              <dynamic_attributes>
+                <members type="string"/>
+              </dynamic_attributes>
+            </technique>
+          </extra>
+        </node>
+        <node id="defaultObjectSet" type="NODE">
+          <extra>
+            <technique profile="MAYA">
+              <dynamic_attributes>
+                <members type="string"/>
+              </dynamic_attributes>
+            </technique>
+          </extra>
+        </node>
+        <node id="no_model" type="NODE">
+          <extra>
+            <technique profile="MAYA">
+              <dynamic_attributes>
+                <ExportPath short_name="ExportPath" type="string">models/misc/no_model</ExportPath>
+                <DaeOutputPath short_name="DaeOutputPath" type="string"/>
+                <Visible short_name="Visible" type="int">1</Visible>
+                <Texturing short_name="Texturing" type="int">1</Texturing>
+                <Shading short_name="Shading" type="int">1</Shading>
+                <Bounding_box short_name="Bounding_box" type="int">0</Bounding_box>
+                <Color short_name="Color" type="int">7</Color>
+                <Display_Type short_name="Display_Type" type="int">1</Display_Type>
+                <Exporting short_name="Exporting" type="int">1</Exporting>
+                <ExportingPhysics short_name="ExportingPhysics" type="int">1</ExportingPhysics>
+                <PutToRenderLayer short_name="PutToRenderLayer" type="int">1</PutToRenderLayer>
+                <UVSetName short_name="UVSetName" type="string">uvSet</UVSetName>
+                <TextureWidth short_name="TextureWidth" type="int">1024</TextureWidth>
+                <TextureHeight short_name="TextureHeight" type="int">1024</TextureHeight>
+                <MinShellSize short_name="MinShellSize" type="float">1</MinShellSize>
+                <PixelBetweenShells short_name="PixelBetweenShells" type="float">2</PixelBetweenShells>
+                <PositionEpsilon short_name="PositionEpsilon" type="float2">1 100</PositionEpsilon>
+                <NormalsEpsilon short_name="NormalsEpsilon" type="float2">1 100</NormalsEpsilon>
+                <UVEpsilon short_name="UVEpsilon" type="float2">1 100000</UVEpsilon>
+                <PreProductConnectShels short_name="PreProductConnectShels" type="int">1</PreProductConnectShels>
+                <PreProductCheckNormals short_name="PreProductCheckNormals" type="int">1</PreProductCheckNormals>
+                <PostProductScaleShels short_name="PostProductScaleShels" type="int">1</PostProductScaleShels>
+                <LightmapFilePath short_name="LightmapFilePath" type="string">lightmaps/no_model</LightmapFilePath>
+                <GrayLightmap short_name="GrayLightmap" type="int">1</GrayLightmap>
+                <RenderType short_name="RenderType" type="int">1</RenderType>
+                <RenderImageFormat short_name="RenderImageFormat" type="int">1</RenderImageFormat>
+                <FullShading short_name="FullShading" type="int">0</FullShading>
+                <Illumination short_name="Illumination" type="int">1</Illumination>
+                <IndirectIllumination short_name="IndirectIllumination" type="int">0</IndirectIllumination>
+                <RNM short_name="RNM" type="int">0</RNM>
+                <RenderCustom short_name="RenderCustom" type="int">0</RenderCustom>
+                <RenderCustomShader short_name="RenderCustomShader" type="string"/>
+                <EnableColorFilter short_name="EnableColorFilter" type="int">0</EnableColorFilter>
+                <FilterSize short_name="FilterSize" type="float">0.05</FilterSize>
+                <FilterShape short_name="FilterShape" type="float">1.1</FilterShape>
+                <FilterNormalDeviation short_name="FilterNormalDeviation" type="float">6.2</FilterNormalDeviation>
+                <ReferenceMappingType short_name="ReferenceMappingType" type="int">1</ReferenceMappingType>
+                <VisibleStartDistance short_name="VisibleStartDistance" type="float">0</VisibleStartDistance>
+                <makePartitions short_name="makePartitions" type="int">1</makePartitions>
+                <UseAspectGeneration short_name="UseAspectGeneration" type="int">0</UseAspectGeneration>
+                <CurrentAspectType short_name="CurrentAspectType" type="int">1</CurrentAspectType>
+                <ModelInfluenceBonesNumber short_name="ModelInfluenceBonesNumber" type="int">0</ModelInfluenceBonesNumber>
+                <ModelNumAnimations short_name="ModelNumAnimations" type="int">0</ModelNumAnimations>
+                <members type="string">pCube1 collision1</members>
+              </dynamic_attributes>
+            </technique>
+          </extra>
+        </node>
+      </node>
+      <extra>
+        <technique profile="FCOLLADA">
+          <start_time>0.041666</start_time>
+          <end_time>2</end_time>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_physics_scene url="#MayaNativePhysicsScene"/>
+    <instance_visual_scene url="#VisualSceneNode"/>
+  </scene>
+</COLLADA>

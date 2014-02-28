@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>alexander</author>
+      <authoring_tool>Maya2008 Extension 2 | ColladaMaya v3.05B</authoring_tool>
+      <comments>ColladaMaya export options: bakeTransforms=1;exportPolygonMeshes=1;bakeLighting=0;isSampling=0;
+curveConstrainSampling=0;removeStaticCurves=1;exportCameraAsLookat=0;
+exportLights=0;exportCameras=0;exportJointsAndSkin=1;
+exportAnimations=1;exportTriangles=1;exportInvisibleNodes=0;
+exportNormals=1;exportTexCoords=1;
+exportVertexColors=1;exportVertexColorsAnimation=0;exportTangents=0;
+exportTexTangents=0;exportConstraints=1;exportPhysics=1;exportXRefs=1;
+dereferenceXRefs=1;cameraXFov=0;cameraYFov=1</comments>
+      <source_data>file:///Y:/art/source/mapskit/zealand/groundcover/nz_grass.ma</source_data>
+    </contributor>
+    <created>2009-06-23T07:40:55Z</created>
+    <modified>2009-06-23T07:40:55Z</modified>
+    <unit meter="0.01" name="centimeter"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_physics_scenes>
+    <physics_scene id="MayaNativePhysicsScene">
+      <technique_common>
+        <gravity>0 -980 0</gravity>
+        <time_step>0.083</time_step>
+      </technique_common>
+    </physics_scene>
+  </library_physics_scenes>
+  <library_images>
+    <image id="nz_cover_1" name="nz_cover_1">
+      <init_from>./textures/grayLightmap.dds</init_from>
+      <extra>
+        <technique profile="MAYA">
+          <dgnode_type>kFile</dgnode_type>
+          <image_sequence>0</image_sequence>
+        </technique>
+      </extra>
+    </image>
+  </library_images>
+  <library_materials>
+    <material id="colladafxShader6" name="colladafxShader6">
+      <instance_effect url="#colladafxShader6-fx"/>
+      <extra>
+        <technique profile="MAYA">
+          <dynamic_attributes>
+            <vertexProgram short_name="vp" type="string">Y:/Evil-shaders/GrassBase.cgfx</vertexProgram>
+            <COLOR0 short_name="c0" type="string"/>
+            <TEXCOORD0 short_name="t0" type="string">map1</TEXCOORD0>
+            <TEXCOORD1 short_name="t1" type="string">tangent</TEXCOORD1>
+            <TEXCOORD2 short_name="t2" type="string">binormal</TEXCOORD2>
+            <TEXCOORD3 short_name="t3" type="string"/>
+            <TEXCOORD4 short_name="t4" type="string"/>
+            <TEXCOORD5 short_name="t5" type="string"/>
+            <TEXCOORD6 short_name="t6" type="string"/>
+            <TEXCOORD7 short_name="t7" type="string"/>
+            <ColladaShaderConected short_name="csc" type="stringArray">DiffuseSampler</ColladaShaderConected>
+            <DiffuseSampler short_name="DiffuseSampler" type="string">nz_cover_1</DiffuseSampler>
+          </dynamic_attributes>
+        </technique>
+      </extra>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="colladafxShader6-fx">
+      <profile_COMMON>
+        <newparam sid="nz_cover_1-surface">
+          <surface type="2D">
+            <init_from>nz_cover_1</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="nz_cover_1-sampler">
+          <sampler2D>
+            <source>nz_cover_1-surface</source>
+            <wrap_s>WRAP</wrap_s>
+            <wrap_t>WRAP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="nz_cover_1-sampler" texcoord="TEX0">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU>1</wrapU>
+                    <wrapV>1</wrapV>
+                    <mirrorU>0</mirrorU>
+                    <mirrorV>0</mirrorV>
+                    <coverageU>1</coverageU>
+                    <coverageV>1</coverageV>
+                    <translateFrameU>0</translateFrameU>
+                    <translateFrameV>0</translateFrameV>
+                    <rotateFrame>0</rotateFrame>
+                    <stagger>0</stagger>
+                    <fast>0</fast>
+                    <repeatU>1</repeatU>
+                    <repeatV>1</repeatV>
+                    <offsetU>0</offsetU>
+                    <offsetV>0</offsetV>
+                    <rotateUV>0</rotateUV>
+                    <noiseU>0</noiseU>
+                    <noiseV>0</noiseV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <transparent opaque="A_ONE">
+              <texture texture="nz_cover_1-sampler" texcoord="TEX1">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU>1</wrapU>
+                    <wrapV>1</wrapV>
+                    <mirrorU>0</mirrorU>
+                    <mirrorV>0</mirrorV>
+                    <coverageU>1</coverageU>
+                    <coverageV>1</coverageV>
+                    <translateFrameU>0</translateFrameU>
+                    <translateFrameV>0</translateFrameV>
+                    <rotateFrame>0</rotateFrame>
+                    <stagger>0</stagger>
+                    <fast>0</fast>
+                    <repeatU>1</repeatU>
+                    <repeatV>1</repeatV>
+                    <offsetU>0</offsetU>
+                    <offsetV>0</offsetV>
+                    <rotateUV>0</rotateUV>
+                    <noiseU>0</noiseU>
+                    <noiseV>0</noiseV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </lambert>
+          <extra>
+            <technique profile="FCOLLADA"/>
+          </extra>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="polySurfaceShape7628-lib" name="polySurfaceShape7628">
+      <mesh>
+        <source id="polySurfaceShape7628-lib-positions" name="position">
+          <float_array id="polySurfaceShape7628-lib-positions-array" count="81">269.566 19.941 -491.562 269.071 19.9433 -490.957 268.948 19.9408 -491.296 269.795 19.9431 -491.253 269.456 19.9447 -490.807 269.148 19.9397 -491.583 269.222 19.9422 -491.175 269.047 20.6916 -491.147 269.642 20.6916 -491.057 269.376 19.9422 -491.254 269.311 20.5997 -491.523 269.328 19.9418 -491.284 268.998 20.1904 -491.607 269.184 20.192 -491.182 269.317 20.1937 -490.691 269.062 20.441 -491.62 269.398 20.4427 -490.706 268.926 20.191 -491.383 269.334 20.1917 -491.401 269.867 20.1926 -491.399 268.881 20.4413 -491.382 269.85 20.4421 -491.374 269.104 20.1927 -490.872 269.513 20.192 -491.185 269.727 20.1912 -491.594 269.081 20.4422 -490.841 269.799 20.4414 -491.537</float_array>
+          <technique_common>
+            <accessor source="#polySurfaceShape7628-lib-positions-array" count="27" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="polySurfaceShape7628-lib-normals" name="normal">
+          <float_array id="polySurfaceShape7628-lib-normals-array" count="144">0.832768 -0.333219 0.44211 0.832768 -0.333219 0.44211 0.832768 -0.333219 0.44211 0.832768 -0.333219 0.44211 -0.005898 -0.378527 -0.925572 -0.005898 -0.378527 -0.925572 -0.005898 -0.378527 -0.925572 -0.005898 -0.378527 -0.925572 -0.971764 -0.100384 0.213534 -0.971764 -0.100384 0.213534 -0.971764 -0.100384 0.213534 -0.971764 -0.100384 0.213534 -0.893191 -0.078974 0.442687 -0.893191 -0.078974 0.442687 -0.893191 -0.078974 0.442687 -0.893191 -0.078974 0.442687 0.512827 -0.247342 0.822089 0.512827 -0.247342 0.822089 0.512827 -0.247342 0.822089 0.512827 -0.247342 0.822089 0.029967 -0.469004 -0.882687 0.029967 -0.469004 -0.882687 0.029967 -0.469004 -0.882687 0.029967 -0.469004 -0.882687 -0.903249 -0.322394 0.283201 -0.903249 -0.322394 0.283201 -0.903249 -0.322394 0.283201 -0.903249 -0.322394 0.283201 -0.849659 -0.380665 0.36493 -0.849659 -0.380665 0.36493 -0.849659 -0.380665 0.36493 -0.849659 -0.380665 0.36493 -0.147612 -0.192491 -0.970133 -0.147612 -0.192491 -0.970133 -0.147612 -0.192491 -0.970133 -0.147612 -0.192491 -0.970133 0.118853 -0.137224 -0.983384 0.118853 -0.137224 -0.983384 0.118853 -0.137224 -0.983384 0.118853 -0.137224 -0.983384 0.590518 -0.413821 0.69285 0.590518 -0.413821 0.69285 0.590518 -0.413821 0.69285 0.590518 -0.413821 0.69285 0.762283 -0.483072 0.430773 0.762283 -0.483072 0.430773 0.762283 -0.483072 0.430773 0.762283 -0.483072 0.430773</float_array>
+          <technique_common>
+            <accessor source="#polySurfaceShape7628-lib-normals-array" count="48" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="polySurfaceShape7628-lib-map1" name="map1">
+          <float_array id="polySurfaceShape7628-lib-map1-array" count="54">0.32332 0.25 0.625 0.25 0.625 0.25 0.32332 0.25 0.625 0.25 0.32332 0.25 0.483183 0.25 0.483183 0.488278 0.483183 0.488278 0.483183 0.25 0.483183 0.488278 0.483183 0.25 0.625 0.329426 0.483182 0.329426 0.32332 0.329426 0.625 0.408852 0.32332 0.408852 0.32332 0.329426 0.483182 0.329426 0.625 0.329426 0.32332 0.408852 0.625 0.408852 0.625 0.329426 0.483182 0.329426 0.32332 0.329426 0.625 0.408852 0.32332 0.408852</float_array>
+          <technique_common>
+            <accessor source="#polySurfaceShape7628-lib-map1-array" count="27" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="polySurfaceShape7628-lib-vertices">
+          <input semantic="POSITION" source="#polySurfaceShape7628-lib-positions"/>
+        </vertices>
+        <triangles material="lambert17SG" count="24">
+          <input semantic="VERTEX" source="#polySurfaceShape7628-lib-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#polySurfaceShape7628-lib-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#polySurfaceShape7628-lib-map1" offset="2" set="0"/>
+          <p>8 1 8 23 2 23 26 0 26 26 0 26 23 2 23 24 3 24 11 5 11 2 6 3 18 4 18 18 4 18 2 6 3 17 7 17 7 9 7 15 10 15 13 8 13 13 8 13 15 10 15 12 11 12 7 13 7 13 14 13 16 12 16 16 12 16 13 14 13 14 15 14 8 16 8 25 17 25 23 19 23 23 19 23 25 17 25 22 18 22 19 20 19 3 21 2 18 23 18 18 23 18 3 21 2 11 22 11 6 24 6 13 25 13 5 27 4 5 27 4 13 25 13 12 26 12 14 29 14 13 30 13 4 28 5 4 28 5 13 30 13 6 31 6 10 32 10 18 33 18 20 35 20 20 35 20 18 33 18 17 34 17 19 37 19 18 38 18 21 36 21 21 36 21 18 38 18 10 39 10 23 40 23 22 41 22 9 43 9 9 43 9 22 41 22 1 42 1 24 45 24 23 46 23 0 44 0 0 44 0 23 46 23 9 47 9</p>
+        </triangles>
+      </mesh>
+      <extra>
+        <technique profile="MAYA">
+          <double_sided>1</double_sided>
+        </technique>
+      </extra>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="VisualSceneNode" name="nz_grass">
+      <node id="polySurface7628" name="polySurface7628" type="NODE">
+        <matrix sid="transform">2.19621 0 0 -591.538 0 2.05172 0 -41.0467 0 0 2.45819 1207.54 0 0 0 1</matrix>
+        <instance_geometry url="#polySurfaceShape7628-lib">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="lambert17SG" target="#colladafxShader6">
+                <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
+                <bind_vertex_input semantic="TEX1" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+      <node id="Model_Attribute" name="Model_Attribute" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <extra>
+          <technique profile="MAYA">
+            <dynamic_attributes>
+              <Mesh short_name="Mesh" type="bool">1</Mesh>
+              <Physics short_name="PD" type="bool">0</Physics>
+              <Scale short_name="SV" type="float3">1 1 1</Scale>
+              <InfluenceBonesNumber short_name="BN" type="int">0</InfluenceBonesNumber>
+              <OutputPath short_name="OP" type="string">models/misc/default_grass</OutputPath>
+              <DaeOutputPath short_name="DOP" type="string"/>
+              <ReferenceModel short_name="REM" type="string"/>
+              <BonesToRemove short_name="BTOR" type="string"/>
+              <ExtendingBones short_name="EXTBNS" type="string"/>
+              <NumAnimations short_name="NA" type="int">0</NumAnimations>
+              <AbsoluteAnimations short_name="AA" type="bool">0</AbsoluteAnimations>
+              <DefaultAnimation short_name="DA" type="int">0</DefaultAnimation>
+              <NotTriangulate short_name="NOTT" type="bool">0</NotTriangulate>
+              <GrassModel short_name="GM" type="bool">1</GrassModel>
+              <ParticleMesh short_name="PM" type="bool">0</ParticleMesh>
+            </dynamic_attributes>
+          </technique>
+        </extra>
+      </node>
+	<extra>
+        <technique profile="FCOLLADA">
+          <start_time>0.041666</start_time>
+          <end_time>2</end_time>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_physics_scene url="#MayaNativePhysicsScene"/>
+    <instance_visual_scene url="#VisualSceneNode"/>
+  </scene>
+</COLLADA>

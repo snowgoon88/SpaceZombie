@@ -1,0 +1,4 @@
+material "blank_object"
+{
+	DiffuseSampler "textures\misc\no_model"
+}
