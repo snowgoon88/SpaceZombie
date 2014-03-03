@@ -29,6 +29,7 @@ d		:= $(dir)
 CORE_SRC_$(d)	:= $(DIR_PROJET)/$(d)/zpipe.c \
                    $(DIR_PROJET)/$(d)/zscpipe.c \
                    $(DIR_PROJET)/$(d)/test_read.cc \
+                   $(DIR_PROJET)/$(d)/display_mesh.cc \
 
 CORE_OBJS_$(d)	:= 
 
@@ -37,6 +38,7 @@ CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 TGTS_$(d)	:= $(d)/zpipe \
                    $(d)/zscpipe \
                    $(d)/test_read \
+                   $(d)/display_mesh \
 
 
 
@@ -72,7 +74,7 @@ TAG_FILES	:= $(TAG_FILES)
 # Force remake if rules are changed
 #$(TGTS_$(d)): $(d)/rules.mk
 
-$(TGTS_$(d)):	CF_TGT := -I$(d) -Isrc \
+$(TGTS_$(d)):	CF_TGT := -I$(d) \
 
 $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 
@@ -83,7 +85,14 @@ $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 
 # il faut inclures les .a dans le bon ordre !!!!
 $(TGTS_$(d)):	LL_TGT := \
-                          -lz
+                           $(SZ_ROOT)/shape3D/libshape.a \
+                           $(SZ_ROOT)/src/libsrc.a \
+                           $(SCIGL_ROOT)/scigl/libscigl.a \
+                           $(ANTTW_HOME)/lib/libAntTweakBar.so \
+                          -lz \
+                          -lglfw \
+                          -lGL -lGLU -lGLEW \
+                          -lboost_thread
 
 #$(CORE_OBJS_$(d)):	CF_TGT := -I. -I$(d) $(shell pkg-config --cflags gtkmm-2.4)
 #$(OBJS_$(d)):	LF_TGT := -lgsl -lgslcblas -lm 
@@ -102,6 +111,10 @@ $(d)/w_float: 	$(d)/w_float.cc
 			$(COMPLINK)
 
 $(d)/test_read:	$(d)/test_read.cc 
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK)
+
+$(d)/display_mesh:	$(d)/display_mesh.cc 
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 

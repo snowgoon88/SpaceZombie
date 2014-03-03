@@ -114,6 +114,7 @@ void Triangles::render( void )
 	unsigned int i0 = (*_indices_vertex)[i];
 	unsigned int i1 = (*_indices_vertex)[i+1];
 	unsigned int i2 = (*_indices_vertex)[i+2];
+	std::cerr << "Triangle " << i0 << " - " << i1 << " - " << i2  << "\n";
 	if( _fg_normal ) {
 	  _normals[i] = ((*_vertex)[i0] - (*_vertex)[i1]).cross( ((*_vertex)[i2] - (*_vertex)[i1]));
 	  _normals[i].normalize();
@@ -122,6 +123,9 @@ void Triangles::render( void )
 	else {
 	  glNormal3f( 0, 0, 0 );
 	}
+	std::cerr << "Pt0 = " << (*_vertex)[i0](0) << "; " << (*_vertex)[i0](1) << "; " << (*_vertex)[i0](2) << "\n";
+	std::cerr << "Pt1 = " << (*_vertex)[i1](0) << "; " << (*_vertex)[i1](1) << "; " << (*_vertex)[i1](2) << "\n";
+	std::cerr << "Pt2 = " << (*_vertex)[i2](0) << "; " << (*_vertex)[i2](1) << "; " << (*_vertex)[i2](2) << "\n";
 	glVertex3f( (*_vertex)[i0](0), (*_vertex)[i0](1), (*_vertex)[i0](2) ); 
 	glVertex3f( (*_vertex)[i1](0), (*_vertex)[i1](1), (*_vertex)[i1](2) ); 
 	glVertex3f( (*_vertex)[i2](0), (*_vertex)[i2](1), (*_vertex)[i2](2) );

@@ -1,0 +1,225 @@
+# -*- coding: utf-8 -*-
+#+STARTUP: hidestars
+
+* SCDAta
+** Couleur des triangles - faire un type spécial.
+   void glColor3ub(GLubyte  red,  GLubyte  green,  GLubyte  blue);
+   void glColor3us(GLushort  red,  GLushort  green,  GLushort  blue);
+** réorganiser SCData en une lib comme les autres. 
+** bcp de chose devraient être sous src
+* Courant :
+** TODO Game Model/Observer
+*** DONE Draw simple player : to be tested (player/player_scigl)
+Add a player to model/game_model ??
+*** TODO PhysicalEngine to move player.
+*** TODO Move player (see check special keys)
+    PhyPoint is now with TVec3. Stopped by end of cell, no falling.
+**** DONE Penser à mettre à jour _curr_cell dans _player->_phystate
+**** TODO Afficher et *modifier* la vitesse ?
+*** Transparency, => will force check order of cells.
+Pas facile si l'ensemble des objects graphiques à afficher est dispatché dans plusieurs classes, objets, etc...
+** Only the main frame is translated by mouse!
+
+* En cours
+** Torsor
+*** forces ou liaisons.
+*** TODO Apply cinematique torsor to bar
+**** TODO le torseur reste exprimé dans le vitesse de la barre, et pas dans le repère fixe => la barre tourne sur elle même au lieu d'avancer...
+=> voir les @todo dans test_torsor_scigl.cc:L113/145
+**** compute end point deplacement
+Court le risque que la barre s'allonge..
+**** DONE rotation + déplacement ??
+     En fait, le torseur cinématique peut s'appliquer un peu partout sur le solide. On pourrait faire d'abord le déplacement et la rotation. Le mieux étant d'essayer d'appliquer tout ça au centre de gravité/masse, non? 
+=> d'abord la rotation par rapport à un de l'axe central (rotation pure), puis le déplacement. Pas besoin que le point soit dans le solide.
+**** DONE step physics
+Faut pas que le step soit trop gros, sinon cela revient à intégrer un cercle le long de sa tangente, et ça marche pas trop. Faut faire plein de step successifs.
+**** DONE afficher la trajectoire des extrémités et du centre. 
+*** DONE 3D rep
+**** DONE tester torsor_scigl
+**** DONE Result, moment at point
+Réfléchir à ce qu'il faut afficher, moment selon des axes, des lignes, des plans, etc. => s'inspirer de wiki_torseurs.pdf
+Utiliser bar
+**** DONE how moment is transformed at other points.
+**** DONE Central axis
+*** Lua ??
+
+** Scene
+*** when SHIFT+mouseL, only the ref_frame is moving.
+** Model/Observer/Controler
+*** allow model to track change of themselve, so as to make update more efficient.
+*** compatible with threads?
+*** see test/test_torsor_scigl.cc::L116
+** TODO Bar
+*** DONE tester bar et bar_scigl
+*** TODO thickness
+
+** Eigen::Vector a la place des vecteurs de Nicolas ??
+** Vérifier input possible au clavier dans OpenGL+GLFW (linux)
+   283 UP, 284 DOWN, 285 LEFT, 286 RIGHT
+** TODO Display : améliorer (plus de détail) l'affichage de la première ligne
+** TODO [test_scigl] format double to string to stdout
+S'inspirer de test/test_torsor_scigl
+Voir test/test_format.cc
+** command : ./test/test_physic_scigl
+   g/G : FLAG_physics_engine
+   f/F : FLAG_step_physics
+** Physics : speed control (divide/accelerate in time_current - _time_physics)
+   [test/test_physic_scigl:68] => changed line
+** Physics : suivre la hauteur des cellules et rebondir sur le bord
+** [Wall]
+   On peut avoir des murX et murY avec des listes de cellsN/cellsS et cellsW/cellsE qui se partagent le mur. On peut aussi empiler les murs pour ne casser que des morceaux, mais cela rend la gestion du calcul de la hauteur effective plus difficile.
+Les problèmes se posent quand, de par et d'autre du mur, on a plusieurs cells qui ne sont pas à des mêmes hauteurs ou avec des angles différents.
+=> Pour l'instant, 1 mur par face de case!
+*** A qui appartient un mur ?
+*** murX et murY
+*** peut empiler les murs?
+** TODO ARROW [shape3D/arrow]
+*** DONE Vérifier dans src/utils les ang_from_vec
+En particulier quand z devient négatif, ou x.
+*** DONE afficher fleche de couleur
+*** DONE AntTweakBar pour des points 3D (TVec3) ?
+*** TODO specifier la taille relative de la pointe
+*** TODO spécialement quand la taille devient plus petite que la pointe !
+*** DONE init par Vec3f
+** TODO TorsorScigl
+*** DONE in ./test/test_torsor_scigl, torsor does not show a circle around head.
+*** could show string a tip of arrows
+* Concepts
+** Moving Zombi
+*** Bioloide vers un point "visible". Mouvement de "masse"...
+Mais comment on gère les "petits" obstacles (genre les meubles ou les trucs du genre).
+=> S'assurer par le A* que le point peut être atteint? 
+** Modèle du monde
+Un monde de grille en 2.5D (on peut changer de niveau). Une case est reperée par la position (x,y,z) de son centre, sa pente (angle/0x, angle/Oy), ses connexions avec d'autres cases. Il y a aussi, éventuellement, des séparateurs de case (mur avec hauteur milieu et angle, vide).
+** Running 3D "Ninja" with no sliding, inspired by "N"
+   http://gamedev.stackexchange.com/questions/10392/file-format-for-static-and-animated-3d-models
+   http://blenderartists.org/forum/archive/index.php/t-50425.html
+** TODO SpiderMan
+Physic pour savoir s'il est possible de naviguer avec une toile alors que les immeubles ne sont pas toujours en face ou assez haut.
+*** lancer
+*** coller
+*** couper
+*** physics
+** Force trajectory
+Afficher une trajectoire comme un ruban/ligne coloré où les forces sont indiquées??
+** Mécanique de barre et de jonction
+*** jonction : degré de liberté par rapport au repère de la barre?
+*** barre : longueur, masse.
+*** Entre les deux : différent de l'extrémité d'une barre sans autre barre?
+*** FIRST : une barre, fixé à un point, libre à l'autre.
+*** TODO PEUT-ETRE : calcul sur des torseur? (champ force, moment).
+http://fr.wikipedia.org/wiki/Torseur
+http://fr.wikipedia.org/wiki/Liaison_(mécanique)
+http://www.sciences.univ-nantes.fr/sites/claude_saintblanquet/synophys/13mesol/13mesol.htm
+http://chrishecker.com/Rigid_Body_Dynamics
+http://www.youscribe.com/catalogue/tous/education/cours/mecanique-du-solide-elements-de-mecanique-du-solide-375851#download
+* Technique
+** Interaction clavier en C++
+   int choice = 0;
+   while( choice >= 0 ) {
+      std::cout << "choix= ";
+      std::cin >> choice;
+      ...
+   }
+** TODO Choisir un objet avec la souris ????
+** Console reflexive à la JavaBean ??
+   http://www.codeproject.com/Articles/11508/Integrating-Lua-into-C
+   http://pgl.yoyo.org/luai/i/lua_call
+   tutorial Lua : http://lua-users.org/wiki/TutorialDirectory
+   tutoriel C++/Lua http://mdeverdelhan.developpez.com/tutoriel/lua/tutoriel1/
+   binding with Lunar http://lua-users.org/wiki/CppBindingWithLunar
+** [World::connect_cells] check that src cells grow in right direction
+Par exemple, corridor vers l'est, src grow vers le north.
+** [model/cell] x,y,z => position ou Vector3Xf
+** boost : NULL pointer  => return boost::shared_ptr<T>()
+   CLOSED: [2012-01-31 Tue 23:15]
+** boost dynamic cast
+*** pour caster un Wall2DPtr (_simu_mod->_v_wall[i]) vers TargetLozenge2DPtr
+    boost::dynamic_pointer_cast<TargetLozenge2D>(_simu_mod->_v_wall[i])
+** DBL_MIN, DBL_MAX => #include <float.h>
+   CLOSED: [2012-01-31 Tue 23:19]
+** enum and string
+enum TMOVE {
+  MOVE_OK             = -1,
+  MOVE_LOW_LEVEL_STOP = -2
+};
+std::map<int,std::string> formats = boost::assign::map_list_of
+  (MOVE_OK,                   "MOVE_OK"    )
+  (MOVE_LOW_LEVEL_STOP,       "MOVE_LOW_LEVEL_STOP"    );
+** Copy_creation ? Utile, quand, quelle forme, deep_copy, id_cell?
+** Ground = map<Cells>
+** attention, avec MVC, il pourrait y avoir 2 libmodel.
+** parameters : re-use ?
+** skeleton
+http://www.3dkingdoms.com/weekly/weekly.php?a=4
+** OpenGL
+*** Position et objets
+Il est préférable de ne pas recalculer la position et les normales et tout ce qui touche un à objet mais simplement d'utiliser des glRotate et glTranslate et glScale si possible. Attention, glScale change les normales, et du coup, pour les faire recalculer automatiquement, on peut utiliser glEnable( GL_NORMALIZE ). [Chap 2].
+*** Couleur
+=> Si glEnable( GL_LIGTHING ), il y a de la lumière (positionnée dans Scene::setup()) et les normal aux objets influencent la couleur. Si il n'y a pas de normale, pas de lumière : noir. 
+**** DONE Afficher un triangle avec ses normales pour comprendre ??
+**** DONE Vérifier que spécifier les vertex, ou l'orientation, ne change pas grand chose.
+Peut-êtr que la dernière normale donnée est toujours gardée en mémoire. Comment l'effacer?
+
+*** Polygone
+**** GlPolygoneMode spécifie comment sont affichées les faces (fill, point, line)
+**** glCullFace (et glEnable( GL_CULL_FACE) spécifie sir FRONT ou/et BACK sont dessinés.
+**** glEnable( GL_BLEND ) est important pour la transparence
+**** Affiche dans l'ordre des ordres, donc faut afficher du plus lointain au plus proche => Ce qui n'est pas facile si on affiche par différents object.h (séparer l'environnemnt du joueur par exemple...) DAMNED.
+*** DONE afficher le texte en face du viewer (cf shape3D/arrow et test_arrow)
+Il faut pour cela garder une trace de la matrice de rotation du viewer pour ensuite, au moment d'afficher la fonte de arrow, multiplier par l'inverse de cette matrice (qui est en fait sa transposée (ah?!)). La matrice de rotation du viewer pourrait être récupérée dans scene.cc:166 (matrix m). -> sauvegarder? stocker son inverse? glMultTransposeMatrix
+Faudrait passer cette matrice dans object->render( m ou scene )
+
+** FORMAT
+*** fixed precision
+#include <iomanip> // setw, setprecision
+ std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(2) << x;
+
+* Passé
+** World : enlever player. => sauf que plus aucun model physique va marcher!
+** DONE ref_frame
+*** afficher X,Y,Z
+*** couleur des axes (RVB)
+** Git : à mettre en place ?
+
+** start/stop physics.
+** FrameRate ? gettimeofday, see also Timer class in Spacezombie dir.
+#include <iostream>
+#include <sys/time.h>                // for gettimeofday()
+using namespace std;
+
+int main()
+{
+    timeval t1, t2;
+    double elapsedTime;
+
+    // start timer
+    gettimeofday(&t1, NULL);
+
+    // do something
+    ...
+
+    // stop timer
+    gettimeofday(&t2, NULL);
+
+    // compute and print the elapsed time in millisec
+    elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+    elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+    cout << elapsedTime << " ms.\n";
+
+    return 0;
+}
+
+** [test/test_pyhsics_scigl::update_physics_gravity()]
+   Annuler la vitesse vz quand plaque horizontale.
+   Quand rebond, attention à aussi corriger les vitesse et autre : TODO apply gravity
+** Rebond : change speed ou applique une force ???
+   Change la vitesse
+** Apply force (at each update ?, during time interval?)
+   During time interval
+
+* TAGS
+** v0.02 : bar with kinematic torsor, roll out forward in time
+   ./test/test_torsor_scigl
+   MAIS : le torseur reste exprimé dans le repère de la bar, ce qui n'est pas forcément ce que l'on voulait... ie: la vitesse de translation ne se conserve pas...
+
