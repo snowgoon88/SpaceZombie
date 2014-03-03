@@ -38,7 +38,14 @@
  * 2. It is rotated of _ang_z1 around Oz
  * 3. It is rotated of _ang_y2 around Oy
  *
+ * Several modes kind of data are accepted.
+ * If only vertex (and color) are given
  * + Every set of 3 TVec3 define a triangle.
+ * + Normals are computed if needed at each point of each triangle.
+ * If vertex (and colors) and also a set of indexes (which must be supplied
+ * AFTER the vertex):
+ * + Every TVec3 of the arrays can be used many time
+ * + Every set if 3 indexes (that references T3Vec) defines a triangle
  * + Normals are computed if needed at each point of each triangle.
  *
  * + _fg_light dictate if GL_LIGHTING is enabled or not.
@@ -68,6 +75,11 @@ public:
 
     /** Attach a set of points */
     virtual void attach_vertex( std::vector<TVec3> * v_vertex );
+    /** Attach a set of indexes */
+    virtual void attach_indices( std::vector<unsigned int> * v_indices );
+    /** Attach a set of colors */
+    //virtual void attach_vertex( std::vector<TVec3> * v_vertex );
+
 
     /** Position from TVec3 */
     void set_position( TVec3 p );
@@ -81,8 +93,16 @@ public:
     /** 2nd euler angle, around Oy (beware of sign ) */
     float _ang_y2;
 
+
+    /** nb of triangles */
+    unsigned int _nb_triangles;
     /** A set of vertex */
     std::vector<TVec3> * _vertex;
+    /** A set of indices */
+    std::vector<unsigned int> * _indices_vertex;
+    /** A set of colors */
+    // @todo set of colors
+
     /** A set of arrow to depict vectors */
     std::vector<ArrowPtr> _arrow_normal;
     /** A set of normal vectors */

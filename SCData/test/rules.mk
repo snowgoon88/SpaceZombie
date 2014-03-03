@@ -28,6 +28,7 @@ d		:= $(dir)
 # Local rules and target
 CORE_SRC_$(d)	:= $(DIR_PROJET)/$(d)/zpipe.c \
                    $(DIR_PROJET)/$(d)/zscpipe.c \
+                   $(DIR_PROJET)/$(d)/test_read.cc \
 
 CORE_OBJS_$(d)	:= 
 
@@ -35,6 +36,7 @@ CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 
 TGTS_$(d)	:= $(d)/zpipe \
                    $(d)/zscpipe \
+                   $(d)/test_read \
 
 
 
@@ -96,6 +98,10 @@ $(d)/zscpipe: 	$(d)/zscpipe.c
 			$(COMPLINK)
 
 $(d)/w_float: 	$(d)/w_float.cc 
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK)
+
+$(d)/test_read:	$(d)/test_read.cc 
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
