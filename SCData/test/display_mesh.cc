@@ -29,6 +29,7 @@ TrianglesPtr _triangles = TrianglesPtr( new Triangles );
 //******************************************************************************
 std::vector<TVec3> _v_vertex;
 std::vector<unsigned int> _v_indices;
+std::vector<unsigned char *> _v_ukn0, _v_ukn1;
 //******************************************************************** READ_MESH
 unsigned char read_uchar( FILE *file )
 {
@@ -55,7 +56,7 @@ float read_float( FILE *file )
   return var; 
 }
 //*******************************************************************************
-void read_mesh( FILE *file ) 
+void read_mesh_18h( FILE *file ) 
 {
   // Unknown 0x00 -> 0x07
   for( int i = 0; i < 0x08; ++i) {
@@ -102,7 +103,61 @@ void read_mesh( FILE *file )
     adr_file += 3 * sizeof(unsigned short);
   }
 }
-
+//*******************************************************************************
+void read_mesh_20h( FILE *file ) 
+{
+  
+  // Unknown 0x00 -> 0x07
+  for( int i = 0; i < 0x08; ++i) {
+    read_uchar( file );
+  }
+  // 0x08 : size vertex, 0x0C : nb vertex 
+  unsigned int size_vertex = read_uint( file );
+  unsigned int nb_vertex = read_uint( file );
+  printf( "%02Xh : %02Xh => %d (size_vertex)\n", 0x08, size_vertex, size_vertex );
+  printf( "%02Xh : %02Xh => %d (nb_vertex)\n", 0x0C, nb_vertex, nb_vertex );
+  // Unknown -> 0x44
+  for( int i = 0x10; i < 0x44; ++i) {
+    read_uchar( file );
+  }
+  // Read Vertex
+  for( unsigned int i = 0; i < nb_vertex; ++i) {
+    // x,y,z coordinate as float
+    float x = read_float( file );
+    float y = read_float( file );
+    float z = read_float( file );
+    _v_vertex.push_back( TVec3(x,y,z) );
+    //printf( "%02Xh : xyz = %2.3f; %2.3f; %2.3f\n", 0x44+i*size_vertex, x,y,z);
+    // 8 unknown char
+    unsigned char * ukn0 = new unsigned char[8];
+    for( unsigned int j=0; j<8; ++j) {
+      ukn0[j] = read_uchar( file );
+    }
+    _v_ukn0.push_back( ukn0 );
+    // u, v coordinate
+    float u = read_float( file );
+    float v = read_float( file );
+    //printf( "     : xv = %2.3f; %2.3f\n", u, v);
+    // 4 unknown char
+    unsigned char * ukn1 = new unsigned char[4];
+    for( unsigned int j=0; j<4; ++j) {
+      ukn1[j] = read_uchar( file );
+    }
+    _v_ukn1.push_back( ukn1 );
+  }
+  // read triangles to the end
+  unsigned int adr_file = 0x44 + nb_vertex * size_vertex;
+  while( feof( file ) == false ) {
+    unsigned short pt0 = read_ushort( file );
+    unsigned short pt1 = read_ushort( file );
+    unsigned short pt2 = read_ushort( file );
+    _v_indices.push_back( pt0 );
+    _v_indices.push_back( pt1 );
+    _v_indices.push_back( pt2 );
+    //printf ( "%2Xh : %2d - %2d - %2d\n", adr_file, pt0, pt1, pt2 ); 
+    adr_file += 3 * sizeof(unsigned short);
+  }
+}
 
 /**
  * Called after every mouse button pressed.
@@ -201,8 +256,10 @@ int main (int argc, char **argv)
   _v_vertex.clear();
   _v_indices.clear();
 
-  FILE *fp = fopen( "data/misc/cube1m.mdl-msh000", "r");
-  read_mesh( fp );
+  // FILE *fp = fopen( "data/misc/cube1m.mdl-msh000", "r");
+  // read_mesh_18h( fp );
+  FILE *fp = fopen( "data/ship_race2_s_t4/race2_s_t4.mdl-msh000", "r");
+  read_mesh_20h( fp );
   for( unsigned int i=0; i < _v_vertex.size(); ++i ) {
     std::cout << "v[" << i << "]= " << _v_vertex[i] << "\n";
   }
