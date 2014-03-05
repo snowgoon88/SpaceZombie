@@ -29,6 +29,9 @@ TrianglesPtr _triangles = TrianglesPtr( new Triangles );
 //******************************************************************************
 std::vector<TVec3> _v_vertex;
 std::vector<unsigned int> _v_indices;
+std::vector<TColorUC> _v_color_uc01;
+std::vector<TColorUC> _v_color_uc02;
+std::vector<TColorUC> _v_color_uc03;
 std::vector<unsigned char *> _v_ukn0, _v_ukn1;
 //******************************************************************** READ_MESH
 unsigned char read_uchar( FILE *file )
@@ -80,11 +83,13 @@ void read_mesh_18h( FILE *file )
     _v_vertex.push_back( TVec3(x,y,z) );
     printf( "%02Xh : xyz = %2.3f; %2.3f; %2.3f\n", 0x44+i*size_vertex, x,y,z);
     // r,g,b,a as unsigned char
-    unsigned char c_red = read_uchar( file );
-    unsigned char c_blue = read_uchar( file );
-    unsigned char c_green = read_uchar( file );
-    unsigned char c_alpha = read_uchar( file );
-    printf( "     : %3d %3d %3d %3d \n", c_red, c_blue, c_green, c_alpha);
+    TColorUC col_uc;
+    col_uc.r = read_uchar( file );
+    col_uc.g = read_uchar( file );
+    col_uc.b = read_uchar( file );
+    col_uc.a = read_uchar( file );
+    printf( "     : %3d %3d %3d %3d \n", col_uc.r, col_uc.g, col_uc.b, col_uc.a);
+    _v_color_uc01.push_back( col_uc );
     // u, v coordinate
     float u = read_float( file );
     float v = read_float( file );
@@ -134,6 +139,20 @@ void read_mesh_20h( FILE *file )
       ukn0[j] = read_uchar( file );
     }
     _v_ukn0.push_back( ukn0 );
+    // r,g,b,a as unsigned char
+    TColorUC col_uc;
+    col_uc.r = ukn0[0];
+    col_uc.g = ukn0[1];
+    col_uc.b = ukn0[2];
+    col_uc.a = ukn0[3];
+    printf( "     : %3d %3d %3d %3d \n", col_uc.r, col_uc.g, col_uc.b, col_uc.a);
+    _v_color_uc01.push_back( col_uc );
+    TColorUC col_uc2;
+    col_uc2.r = ukn0[4];
+    col_uc2.g = ukn0[5];
+    col_uc2.b = ukn0[6];
+    col_uc2.a = ukn0[7];
+    _v_color_uc02.push_back( col_uc2 );
     // u, v coordinate
     float u = read_float( file );
     float v = read_float( file );
@@ -144,6 +163,13 @@ void read_mesh_20h( FILE *file )
       ukn1[j] = read_uchar( file );
     }
     _v_ukn1.push_back( ukn1 );
+    TColorUC col_uc3;
+    col_uc3.r = ukn1[0];
+    col_uc3.g = ukn1[1];
+    col_uc3.b = ukn1[2];
+    col_uc3.a = ukn1[3];
+    _v_color_uc03.push_back( col_uc3 );
+
   }
   // read triangles to the end
   unsigned int adr_file = 0x44 + nb_vertex * size_vertex;
@@ -260,10 +286,10 @@ int main (int argc, char **argv)
   // read_mesh_18h( fp );
   FILE *fp = fopen( "data/ship_race2_s_t4/race2_s_t4.mdl-msh000", "r");
   read_mesh_20h( fp );
-  for( unsigned int i=0; i < _v_vertex.size(); ++i ) {
-    std::cout << "v[" << i << "]= " << _v_vertex[i] << "\n";
-  }
-
+  // for( unsigned int i=0; i < _v_vertex.size(); ++i ) {
+  //   std::cout << "v[" << i << "]= " << _v_vertex[i] << "\n";
+  // }
+  printf( "Read %d vertex, %d triangles\n", _v_vertex.size(), _v_indices.size()/3 );
 
   // Initialise GLFW
   if( !glfwInit() ) {
@@ -315,6 +341,9 @@ int main (int argc, char **argv)
   // Objects of the scene
   _triangles->attach_vertex( &(_v_vertex) );
   _triangles->attach_indices( &(_v_indices) );
+  _triangles->attach_color( &(_v_color_uc01) );
+  //_triangles->attach_color( &(_v_color_uc02) );
+  //_triangles->attach_color( &(_v_color_uc03) );
   _scene->add( _triangles );
 
   _scene->set_zoom(0.5);

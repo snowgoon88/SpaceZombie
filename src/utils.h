@@ -31,6 +31,7 @@
 #include <iomanip>
 /**
  * MACRO precision of 'p' for float.
+ * @todo : example of use.
  */
 #define SETPREC(P) std::setiosflags(std::ios::fixed) << std::setprecision(P)
 /**
@@ -48,6 +49,16 @@ typedef boost::shared_ptr<TVec2> TVec2Ptr;
 typedef TVec3 * TVec3Ptr;
 typedef TVec2 * TVec2Ptr;
 #endif
+
+/**
+ * Color
+ */
+typedef struct {
+  unsigned char r;
+  unsigned char g;
+  unsigned char b;
+  unsigned char a;
+} TColorUC;
 
 /**
  * Return a str line representation of a vector.

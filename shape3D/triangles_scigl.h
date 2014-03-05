@@ -78,8 +78,7 @@ public:
     /** Attach a set of indexes */
     virtual void attach_indices( std::vector<unsigned int> * v_indices );
     /** Attach a set of colors */
-    //virtual void attach_vertex( std::vector<TVec3> * v_vertex );
-
+    virtual void attach_color( std::vector<TColorUC> * v_color_uc );
 
     /** Position from TVec3 */
     void set_position( TVec3 p );
@@ -100,8 +99,8 @@ public:
     std::vector<TVec3> * _vertex;
     /** A set of indices */
     std::vector<unsigned int> * _indices_vertex;
-    /** A set of colors */
-    // @todo set of colors
+    /** A set of color unsigned char */
+    std::vector<TColorUC> * _color_uc;
 
     /** A set of arrow to depict vectors */
     std::vector<ArrowPtr> _arrow_normal;

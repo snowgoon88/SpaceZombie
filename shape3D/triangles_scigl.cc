@@ -34,7 +34,7 @@ Triangles::Triangles( void ) : Object()
   _nb_triangles = 0;
   _vertex = NULL;
   _indices_vertex = NULL;
-
+  _color_uc = NULL;
 
   orient_from_vec( TVec3( 1, 0, 0) );
 
@@ -85,7 +85,9 @@ void Triangles::render( void )
 
   // draw triangles
   glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-  glColor4fv (get_fg_color().data);
+  if (_color_uc == NULL ) {
+    glColor4fv (get_fg_color().data);
+  }
   glBegin (GL_TRIANGLES); {
     if ( _indices_vertex == NULL ) {
       for( unsigned int i=0; i < _vertex->size(); i += 3 ) {
@@ -104,8 +106,14 @@ void Triangles::render( void )
 	else {
 	  glNormal3f( 0, 0, 0 );
 	}
+	if (_color_uc != NULL ) 
+	  glColor3ub((GLubyte) (*_color_uc)[i+0].r, (GLubyte) (*_color_uc)[i+0].g, (GLubyte) (*_color_uc)[i+0].b );
 	glVertex3f( (*_vertex)[i+0](0), (*_vertex)[i+0](1), (*_vertex)[i+0](2) ); 
-	glVertex3f( (*_vertex)[i+1](0), (*_vertex)[i+1](1), (*_vertex)[i+1](2) ); 
+	if (_color_uc != NULL ) 
+	  glColor3ub((GLubyte) (*_color_uc)[i+1].r, (GLubyte) (*_color_uc)[i+1].g, (GLubyte) (*_color_uc)[i+1].b );
+	glVertex3f( (*_vertex)[i+1](0), (*_vertex)[i+1](1), (*_vertex)[i+1](2) );
+	if (_color_uc != NULL ) 
+	  glColor3ub((GLubyte) (*_color_uc)[i+2].r, (GLubyte) (*_color_uc)[i+2].g, (GLubyte) (*_color_uc)[i+2].b ); 
 	glVertex3f( (*_vertex)[i+2](0), (*_vertex)[i+2](1), (*_vertex)[i+2](2) ); 
       }
     }
@@ -114,7 +122,7 @@ void Triangles::render( void )
 	unsigned int i0 = (*_indices_vertex)[i];
 	unsigned int i1 = (*_indices_vertex)[i+1];
 	unsigned int i2 = (*_indices_vertex)[i+2];
-	std::cerr << "Triangle " << i0 << " - " << i1 << " - " << i2  << "\n";
+	//std::cerr << "Triangle " << i0 << " - " << i1 << " - " << i2  << "\n";
 	if( _fg_normal ) {
 	  _normals[i] = ((*_vertex)[i0] - (*_vertex)[i1]).cross( ((*_vertex)[i2] - (*_vertex)[i1]));
 	  _normals[i].normalize();
@@ -123,11 +131,17 @@ void Triangles::render( void )
 	else {
 	  glNormal3f( 0, 0, 0 );
 	}
-	std::cerr << "Pt0 = " << (*_vertex)[i0](0) << "; " << (*_vertex)[i0](1) << "; " << (*_vertex)[i0](2) << "\n";
-	std::cerr << "Pt1 = " << (*_vertex)[i1](0) << "; " << (*_vertex)[i1](1) << "; " << (*_vertex)[i1](2) << "\n";
-	std::cerr << "Pt2 = " << (*_vertex)[i2](0) << "; " << (*_vertex)[i2](1) << "; " << (*_vertex)[i2](2) << "\n";
+	// std::cerr << "Pt0 = " << (*_vertex)[i0](0) << "; " << (*_vertex)[i0](1) << "; " << (*_vertex)[i0](2) << "\n";
+	// std::cerr << "Pt1 = " << (*_vertex)[i1](0) << "; " << (*_vertex)[i1](1) << "; " << (*_vertex)[i1](2) << "\n";
+	// std::cerr << "Pt2 = " << (*_vertex)[i2](0) << "; " << (*_vertex)[i2](1) << "; " << (*_vertex)[i2](2) << "\n";
+	if (_color_uc != NULL ) 
+	  glColor3ub((GLubyte) (*_color_uc)[i0].r, (GLubyte) (*_color_uc)[i0].g, (GLubyte) (*_color_uc)[i0].b );
 	glVertex3f( (*_vertex)[i0](0), (*_vertex)[i0](1), (*_vertex)[i0](2) ); 
+	if (_color_uc != NULL ) 
+	  glColor3ub((GLubyte) (*_color_uc)[i1].r, (GLubyte) (*_color_uc)[i1].g, (GLubyte) (*_color_uc)[i1].b );
 	glVertex3f( (*_vertex)[i1](0), (*_vertex)[i1](1), (*_vertex)[i1](2) ); 
+	if (_color_uc != NULL ) 
+	  glColor3ub((GLubyte) (*_color_uc)[i2].r, (GLubyte) (*_color_uc)[i2].g, (GLubyte) (*_color_uc)[i2].b );
 	glVertex3f( (*_vertex)[i2](0), (*_vertex)[i2](1), (*_vertex)[i2](2) );
       }
     }
@@ -189,6 +203,10 @@ void Triangles::attach_indices( std::vector<unsigned int> * i )
 {
   _indices_vertex = i;
   _nb_triangles = _indices_vertex->size() / 3;
+}
+void Triangles::attach_color( std::vector<TColorUC> * col )
+{
+  _color_uc = col;
 }
 // ******************************************************************** POSITION
 void Triangles::set_position( TVec3 p )
