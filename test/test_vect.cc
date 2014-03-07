@@ -96,7 +96,8 @@ void test_product()
 void test_proj()
 {
   TVec3 pos3(1,2,3);
-  TVec2 pos2 = pos3.start(2);
+  //TVec2 pos2 = pos3.start(2); ==> Eigen2
+  TVec2 pos2 = pos3.head(2);
   std::cout << "pos3=" << line_repr( pos3 ) << "\n";
   std::cout << "pos2=" << line_repr( pos2 ) << "\n";
 }
