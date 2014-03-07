@@ -31,7 +31,7 @@
 #include <iomanip>
 /**
  * MACRO precision of 'p' for float.
- * @todo : example of use.
+ * Example : ss << SETPREC(int precision) << 12.345f ;
  */
 #define SETPREC(P) std::setiosflags(std::ios::fixed) << std::setprecision(P)
 /**
