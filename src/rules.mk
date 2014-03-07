@@ -9,8 +9,8 @@ d		:= $(dir)
 
 # Subdirectories, if any, in random order
 
-#dir	:= $(d)/test
-#include		$(dir)/Rules.mk
+# dir		:= $(d)/meshviwer
+# include		$(dir)/rules.mk
 
 # Next, we create an immediately evaluated variable $(OBJS_common) 
 # that holds all the objects in that directory.
