@@ -6,6 +6,9 @@
    void glColor3ub(GLubyte  red,  GLubyte  green,  GLubyte  blue);
    void glColor3us(GLushort  red,  GLushort  green,  GLushort  blue);
 ** réorganiser SCData en une lib comme les autres. 
+*** Model = Mesh
+*** Viewer = MeshViewer
+*** Anttweakbar pour switcher color, normal...
 ** bcp de chose devraient être sous src
 * Courant :
 ** TODO Game Model/Observer
