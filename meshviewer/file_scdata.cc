@@ -3,6 +3,7 @@
 #include "file_scdata.h"
 #include <iostream>
 #include <sstream>
+#include <stdio.h>
 
 //********************************************************************* CREATION
 /** Creation */
@@ -10,7 +11,7 @@ FileSCData::FileSCData(std::string filename)
 {
   _filename = filename;
 
-  _size_vertex = 0:
+  _size_vertex = 0;
   _nb_vertex = 0;
 
 }
@@ -23,43 +24,48 @@ std::string FileSCData::dump_string()
 {
   std::stringstream ss;
   
-  ss << "FileSCData::dump_string()" << "\n";
-  
+  ss << "FileSCData: " << _filename  << "\n";
+  ss << "  read " << _raw_vertex.size() << " vertex out of " << _nb_vertex;
+  ss << ", " << _v_indices.size() << " indices => " << _v_indices.size()/3 << " triangles";
+  ss << "\n";
+
   return ss.str();
 }
 //******************************************************************************
-void FileSCData::read( bool fg_verb=FALSE )
+void FileSCData::read( bool fg_verb )
 {
   // try to open file
   FILE *fp = NULL;
   fp = fopen( _filename.c_str(), "r");
   if (fp == NULL) {
-    std::cerr << "Error opening : " << filename << "\n";
+    std::cerr << "Error opening : " << _filename << "\n";
     return;
   }
   
   // read header
   // Unknown 0x00 -> 0x07
   for( int i = 0; i < 0x08; ++i) {
-    read_uchar( file );
+    unsigned char uc;
+    fread( (void*) (&uc), sizeof(uc), 1, fp);
   }
   // 0x08 : size vertex, 0x0C : nb vertex 
-  _size_vertex = read_uint( file );
-  _nb_vertex = read_uint( file );
+  fread( (void*) (&_size_vertex), sizeof(_size_vertex), 1, fp);
+  fread( (void*) (&_nb_vertex), sizeof(_nb_vertex), 1, fp);
   if (fg_verb) {
-    printf( "%02Xh : %02Xh => %d (size_vertex)\n", 0x08, size_vertex, size_vertex );
-    printf( "%02Xh : %02Xh => %d (nb_vertex)\n", 0x0C, nb_vertex, nb_vertex );
+    printf( "%02Xh : %02Xh => %d (size_vertex)\n", 0x08, _size_vertex, _size_vertex );
+    printf( "%02Xh : %02Xh => %d (nb_vertex)\n", 0x0C, _nb_vertex, _nb_vertex );
   }
   // Unknown -> 0x44
   for( int i = 0x10; i < 0x44; ++i) {
-    read_uchar( file );
+    unsigned char uc;
+    fread( (void*) (&uc), sizeof(uc), 1, fp);
   }
   
   // read_vertex
-  for( unsigned int i = 0; i < nb_vertex; ++i ) {
-    unsigned char vertex = new (unsigned char)[_size_vertex];
-    fread( (void*) (&vertex), sizeof(unsigned char), _size_vertex, fp);
-    _raw_vertex.push_back( &vertex );
+  for( unsigned int i = 0; i < _nb_vertex; ++i ) {
+    unsigned char *vertex = new unsigned char[_size_vertex];
+    fread( (void*) (vertex), sizeof(unsigned char), _size_vertex, fp);
+    _raw_vertex.push_back( vertex );
     // read xyz from vertex
     float x,y,z;
     memcpy( &x, &(vertex[0]), sizeof(float));
@@ -67,7 +73,6 @@ void FileSCData::read( bool fg_verb=FALSE )
     memcpy( &x, &(vertex[8]), sizeof(float));
     _v_xyz.push_back( TVec3(x,y,z) );
     // read rgba from vertex
-    unsigned char r,g,b,a;
     TColorUC col_uc;
     col_uc.r = vertex[12];
     col_uc.g = vertex[13];
@@ -78,19 +83,19 @@ void FileSCData::read( bool fg_verb=FALSE )
   
   // read indices to the end
   while( feof( fp ) == false ) {
-    unsigned short pt0 = read_ushort( file );
-    unsigned short pt1 = read_ushort( file );
-    unsigned short pt2 = read_ushort( file );
+    unsigned short pt0, pt1, pt2;
+    fread( (void*) (&pt0), sizeof(pt0), 1, fp);
+    fread( (void*) (&pt1), sizeof(pt2), 1, fp);
+    fread( (void*) (&pt2), sizeof(pt2), 1, fp);
     _v_indices.push_back( pt0 );
     _v_indices.push_back( pt1 );
     _v_indices.push_back( pt2 );
   }
   
-  close( fp );
+  fclose( fp );
   
   if (fg_verb) {
-    printf( "Read %d vertex (out of %d), %d indices, for %d triangles\n",
-	    _raw_vertex.size(), _nb_vertex, _v_indices.size(), _v_indices.size()/3 );
+    std::cout << dump_string() << "\n";
   }
 }
 
