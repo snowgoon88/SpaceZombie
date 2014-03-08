@@ -5,3 +5,25 @@
 Makefile
 # ignore files created by doc
 doc/html
+
+# ---- AUTOMATICALLY GENERATED -----
+# ignored executable detected with 
+# T=$(mktemp); (cat .gitignore; find . -executable -type f | sed -e 's%^\./%%' | sort) | uniq > $T; mv $T .gitignore
+
+test/test_arrow_scigl
+test/test_format
+test/test_model
+test/test_physic_scigl
+test/test_scigl
+test/test_timer
+test/test_torsor
+test/test_torsor_scigl
+test/test_triangles_scigl
+test/test_vect
+SCData/test/display_mesh
+SCData/test/test_read
+SCData/test/zpipe
+SCData/test/zscpipe
+meshviewer/test/r_scdata
+lua/test_account
+lua/test_line
