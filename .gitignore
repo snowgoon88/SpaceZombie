@@ -19,6 +19,7 @@ test/test_timer
 test/test_torsor
 test/test_torsor_scigl
 test/test_triangles_scigl
+test/test_type
 test/test_vect
 SCData/test/display_mesh
 SCData/test/test_read

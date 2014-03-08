@@ -36,6 +36,7 @@ CORE_SRC_$(d)	:= $(DIR_PROJET)/$(d)/test_model.cc \
                    $(DIR_PROJET)/$(d)/test_vect.cc \
                    $(DIR_PROJET)/$(d)/test_torsor.cc \
                    $(DIR_PROJET)/$(d)/test_torsor_scigl.cc \
+                   $(d)/test/test_type.cc \
 #                   $(DIR_PROJET)/$(d)/test_cell.cc \
 
 CORE_OBJS_$(d)	:= 
@@ -52,6 +53,7 @@ TGTS_$(d)	:= $(d)/test_model \
                    $(d)/test_vect \
                    $(d)/test_torsor \
                    $(d)/test_torsor_scigl \
+                   $(d)/test_type \
 #                   $(d)/test_cell \
 
 
@@ -196,6 +198,11 @@ $(d)/test_timer:	$(d)/test_timer.cc src/libsrc.a
 $(d)/test_format:	$(d)/test_format.cc
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
+
+$(d)/test_type:		$(d)/test_type.cc
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK)
+
 
 
 .PHONY : verbose_$(d)
