@@ -9,6 +9,10 @@
 
 /** 
  * Various function to read/write SCData files.
+ *
+ * @todo Struct of a SCData file :
+ * 
+ *
  */
 class FileSCData
 {
@@ -18,8 +22,10 @@ public:
   /** Destruction */
   virtual ~FileSCData();
   
-  /** display string */
-  std::string dump_string();
+  /** display brief string */
+  std::string str_brief();
+  /** dump on a stream */
+  void dump( std::ostream& out );
 
   /** size of a vertex */
   unsigned int _size_vertex;
@@ -39,6 +45,17 @@ public:
   
   /** read file */
   void read( bool fg_verb = false );
+  
+  /** read vertex starting at byte 'idx_start' as a TColorUC object */
+  void get_TColorUC( std::vector<TColorUC> *v_col,
+		     unsigned int idx_start = 0x0C);
+
+  // ****** PROTECTED *****
+  // @todo template ??
+  unsigned char read_uchar( FILE *file );
+  unsigned int read_ushort( FILE *file );
+  unsigned int read_uint( FILE *file );
+  float read_float( FILE *file );
 };
 
 #endif // __FILE_SCDATA_H__
