@@ -34,7 +34,9 @@ public:
   /** data vertex xyz : 3*sizeof(float) */
   std::vector<TVec3> _v_xyz;
   /** data vertex rgba (default), certainly false */
-  std::vector<TColorUC> _v_rgba;
+  std::vector<TColorUC> _v_rgba_uc;
+  /** data vertex rgba in "normal" char */
+  std::vector<TColorC> _v_rgba_c;
   /** data indices : sizeof(unsigned short)*/
   std::vector<unsigned short> _v_indices;
 

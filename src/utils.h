@@ -63,6 +63,12 @@ typedef struct {
   unsigned char b;
   unsigned char a;
 } TColorUC;
+typedef struct {
+  char r;
+  char g;
+  char b;
+  char a;
+} TColorC;
 
 /**
  * Return a str line representation of a vector.

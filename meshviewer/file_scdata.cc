@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
+#include "math.h"
 
 //********************************************************************* CREATION
 /** Creation */
@@ -31,16 +32,49 @@ std::string FileSCData::str_brief()
 
   return ss.str();
 }
+/**
+ * str_brief()
+ * Vertex :   [i] : xyz -- rgba_uc : norm -- rgba_u : norm
+ * Triangle : [i] : pt0, pt1, pt2
+ */
 void FileSCData::dump( std::ostream& out )
 {
   
   out << str_brief();
-  out << "Reading from _v_xyz.size()=" << _v_xyz.size() << "\n";
+  out << "Reading from _v_xyz[" << _v_xyz.size() << "]      ";
+  out << " -- _v_rgba_uc[" << _v_rgba_uc.size() << "]             ";
+  out << " -- _v_rgba_c[" << _v_rgba_c.size() << "]";
+  out << "\n";
   for( unsigned int i=0; i<_v_xyz.size(); ++i ) {
     out << DFORMAT(4) << i << " : ";
     out << FFORMAT(6,3) << _v_xyz[i](0) << ", ";
     out << FFORMAT(6,3) << _v_xyz[i](1) << ", ";
-    out << FFORMAT(6,3) << _v_xyz[i](2) << "\n";
+    out << FFORMAT(6,3) << _v_xyz[i](2);
+
+    out << " -- ";
+    out << DFORMAT(3) << static_cast<unsigned>(_v_rgba_uc[i].r) << ", ";
+    out << DFORMAT(3) << static_cast<unsigned>(_v_rgba_uc[i].g) << ", ";
+    out << DFORMAT(3) << static_cast<unsigned>(_v_rgba_uc[i].b) << ", ";
+    out << DFORMAT(3) << static_cast<unsigned>(_v_rgba_uc[i].a) << " :  ";
+    float norm_uc = sqrtf( static_cast<unsigned>(_v_rgba_uc[i].r) * static_cast<unsigned>(_v_rgba_uc[i].r) + static_cast<unsigned>(_v_rgba_uc[i].g) * static_cast<unsigned>(_v_rgba_uc[i].g) + static_cast<unsigned>(_v_rgba_uc[i].b) * static_cast<unsigned>(_v_rgba_uc[i].b) ); 
+    out << FFORMAT(4,1) << norm_uc;
+
+    out << " -- ";
+    out << DFORMAT(4) << static_cast<int>(_v_rgba_c[i].r) << ", ";
+    out << DFORMAT(4) << static_cast<int>(_v_rgba_c[i].g) << ", ";
+    out << DFORMAT(4) << static_cast<int>(_v_rgba_c[i].b) << ", ";
+    out << DFORMAT(4) << static_cast<int>(_v_rgba_c[i].a) << " :  ";
+    float norm_c = sqrtf( static_cast<int>(_v_rgba_c[i].r) * static_cast<int>(_v_rgba_c[i].r) + static_cast<int>(_v_rgba_c[i].g) * static_cast<int>(_v_rgba_c[i].g) + static_cast<int>(_v_rgba_c[i].b) * static_cast<int>(_v_rgba_c[i].b) ); 
+    out << FFORMAT(4,1) << norm_c;
+    out << "\n";
+  }
+  out << "Reading from _v_indices[" << _v_indices.size() << "]\n";
+  for( unsigned int i=0; i<_v_indices.size(); i = i+3 ) {
+    out << DFORMAT(4) << i << " : ";
+    out << DFORMAT(3) << _v_indices[i] << ", ";
+    out << DFORMAT(3) << _v_indices[i+1] << ", ";
+    out << DFORMAT(3) << _v_indices[i+2];
+    out << "\n";
   }
 }
 //******************************************************************************
@@ -88,7 +122,14 @@ void FileSCData::read( bool fg_verb )
     col_uc.g = vertex[13];
     col_uc.b = vertex[14];
     col_uc.a = vertex[15];
-    _v_rgba.push_back( col_uc );
+    _v_rgba_uc.push_back( col_uc );
+    TColorC col_c;
+    col_c.r = vertex[12];
+    col_c.g = vertex[13];
+    col_c.b = vertex[14];
+    col_c.a = vertex[15];
+    _v_rgba_c.push_back( col_c );
+    
   }
   
   // read indices to the end
