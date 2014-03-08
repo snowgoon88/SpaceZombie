@@ -24,6 +24,8 @@ public:
   
   /** display brief string */
   std::string str_brief();
+  /** display triangle (vertex, color) at index */
+  std::string str_triangle(unsigned int index);
   /** dump on a stream */
   void dump( std::ostream& out );
 

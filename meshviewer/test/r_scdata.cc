@@ -11,5 +11,11 @@ int main( int argc, char *argv[] )
 
   std::cout << "fscdata.dump() ********************" << "\n";
   fscdata.dump( std::cout );
+
+  std::cout << "fscdata.str_triangle() ************" << "\n";
+  std::cout << fscdata.str_triangle( 0 ) << "\n";
+  std::cout << fscdata.str_triangle( 3 ) << "\n";
+  std::cout << fscdata.str_triangle( 6 ) << "\n";
+  
   return 0;
 }

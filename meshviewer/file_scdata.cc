@@ -32,6 +32,41 @@ std::string FileSCData::str_brief()
 
   return ss.str();
 }
+std::string FileSCData::str_triangle(unsigned int index)
+{
+  std::stringstream ss;
+  
+  ss << DFORMAT(4) << index << " : ";
+  ss << DFORMAT(3) << _v_indices[index] << " -- ";
+  ss << DFORMAT(3) << _v_indices[index+1] << " -- ";
+  ss << DFORMAT(3) << _v_indices[index+2];
+  ss << "\n";
+  for( unsigned int i=0; i < 3; ++i) {
+    unsigned short pt = _v_indices[index+i];
+    ss << DFORMAT(4) << pt << " : ";
+    ss << FFORMAT(6,3) << _v_xyz[pt](0) << ", ";
+    ss << FFORMAT(6,3) << _v_xyz[pt](1) << ", ";
+    ss << FFORMAT(6,3) << _v_xyz[pt](2);
+
+    ss << " -- ";
+    ss << DFORMAT(3) << static_cast<unsigned>(_v_rgba_uc[pt].r) << ", ";
+    ss << DFORMAT(3) << static_cast<unsigned>(_v_rgba_uc[pt].g) << ", ";
+    ss << DFORMAT(3) << static_cast<unsigned>(_v_rgba_uc[pt].b) << ", ";
+    ss << DFORMAT(3) << static_cast<unsigned>(_v_rgba_uc[pt].a) << " :  ";
+    float norm_uc = sqrtf( static_cast<unsigned>(_v_rgba_uc[pt].r) * static_cast<unsigned>(_v_rgba_uc[pt].r) + static_cast<unsigned>(_v_rgba_uc[pt].g) * static_cast<unsigned>(_v_rgba_uc[pt].g) + static_cast<unsigned>(_v_rgba_uc[pt].b) * static_cast<unsigned>(_v_rgba_uc[pt].b) ); 
+    ss << FFORMAT(4,1) << norm_uc;
+
+    ss << " -- ";
+    ss << DFORMAT(4) << static_cast<int>(_v_rgba_c[pt].r) << ", ";
+    ss << DFORMAT(4) << static_cast<int>(_v_rgba_c[pt].g) << ", ";
+    ss << DFORMAT(4) << static_cast<int>(_v_rgba_c[pt].b) << ", ";
+    ss << DFORMAT(4) << static_cast<int>(_v_rgba_c[pt].a) << " :  ";
+    float norm_c = sqrtf( static_cast<int>(_v_rgba_c[pt].r) * static_cast<int>(_v_rgba_c[pt].r) + static_cast<int>(_v_rgba_c[pt].g) * static_cast<int>(_v_rgba_c[pt].g) + static_cast<int>(_v_rgba_c[pt].b) * static_cast<int>(_v_rgba_c[pt].b) ); 
+    ss << FFORMAT(4,1) << norm_c;
+    ss << "\n";
+  }
+  return ss.str();
+}
 /**
  * str_brief()
  * Vertex :   [i] : xyz -- rgba_uc : norm -- rgba_u : norm
