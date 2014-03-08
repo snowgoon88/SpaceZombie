@@ -34,6 +34,10 @@
  * Example : ss << SETPREC(int precision) << 12.345f ;
  */
 #define SETPREC(P) std::setiosflags(std::ios::fixed) << std::setprecision(P)
+/** MACRO format for float. W=total width, P=nb after digit */
+#define FFORMAT(W,P) std::setiosflags(std::ios::fixed) << std::setw(W) << std::setprecision(P)
+/** MACRO format for dec. W=total width */
+#define DFORMAT(W) std::dec << std::setw(W)
 /**
  * Vector types:
  * + TVec2 and TVec2Ptr : vector with 2 dimensions.
