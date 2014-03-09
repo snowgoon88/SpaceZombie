@@ -22,6 +22,7 @@ include		$(dir)/rules.mk
 # Local rules and target
 CORE_SRC_$(d)	:= $(d)/file_scdata.h \
                    $(d)/file_scdata.cc \
+                   $(d)/color.h \
 
 CORE_OBJS_$(d)	:= $(d)/file_scdata.o \
 
