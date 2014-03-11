@@ -5,6 +5,11 @@
 
 all:		targets
 
+# The variables TGT_*, CLEAN and CMD_INST* may be added to by the Makefile
+# fragments in the various subdirectories.
+TGT_DOC 	:= doc/config.doxygen
+CLEAN		:= $(CLEAN) doc/config.doxygen~
+CLEAN_DOC 	:= doc/html
 
 # Subdirectories, in random order
 
@@ -39,12 +44,7 @@ include		$(dir)/rules.mk
 %:		%.c
 		$(COMPLINK)
 
-TGT_DOC 	:= doc/config.doxygen
-CLEAN_DOC 	:= doc/html
-CLEAN		:= doc/config.doxygen~
-
-# The variables TGT_*, CLEAN and CMD_INST* may be added to by the Makefile
-# fragments in the various subdirectories.
+# TARGETS
 
 .PHONY:		targets
 targets:	$(TGT_BIN) $(TGT_SBIN) $(TGT_ETC) $(TGT_LIB)

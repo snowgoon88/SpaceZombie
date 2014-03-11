@@ -63,8 +63,8 @@ TGT_BIN		:= $(TGT_BIN) verbose_$(d) $(TGTS_$(d))
 
 TAR_SRC		:= $(TAR_SRC) $(CORE_SRC_$(d)) $(DIR_PROJET)/$(d)/rules.mk
 
-CLEAN		:= $(CLEAN) $(DEPS_$(d))
-VERYCLEAN	:= $(VERYCLEAN) $(TGTS_$(d)) $(d)/*~ $(d)/*.dSYM 
+CLEAN		:= $(CLEAN) $(DEPS_$(d)) $(d)/*~ $(d)/*.dSYM 
+VERYCLEAN	:= $(VERYCLEAN) $(TGTS_$(d)) 
 
 TAG_FILES	:= $(TAG_FILES)
 
