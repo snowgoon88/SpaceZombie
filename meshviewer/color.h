@@ -8,10 +8,25 @@
 #include <sstream>
 
 /**
+ * Abstract color, read from memory, can get
+ * red(), green(), blue(), alpha() as int.
+ */
+class IColor
+{
+  /** Creation from memory */
+  virtual int red() = 0;
+  virtual int green() = 0;
+  virtual int blue() = 0;
+  virtual int alpha() = 0;
+
+  /** display string */
+  std::string str_dump() { return "IColor is Abstract !!" };
+}
+/**
  * Une couleur a 4 variables : r,g,b et a.
  */
 template<typename T>
-class Color
+class Color : public IColor
 {
 protected:
   T red;
