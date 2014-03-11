@@ -14,14 +14,14 @@
 class IColor
 {
   /** Creation from memory */
-  virtual int red() = 0;
-  virtual int green() = 0;
-  virtual int blue() = 0;
-  virtual int alpha() = 0;
+  virtual int r() = 0;
+  virtual int g() = 0;
+  virtual int b() = 0;
+  virtual int a() = 0;
 
   /** display string */
-  std::string str_dump() { return "IColor is Abstract !!" };
-}
+  std::string str_dump() { return "IColor is Abstract !!"; };
+};
 /**
  * Une couleur a 4 variables : r,g,b et a.
  */

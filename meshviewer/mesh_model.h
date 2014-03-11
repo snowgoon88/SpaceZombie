@@ -3,31 +3,42 @@
 #ifndef __MESH_MODEL_H__
 #define __MESH_MODEL_H__
 
+#include <iostream>
+#include <string>
+#include "model.h"
+#include "color.h"
+#include "file_scdata.h"
+
 /**
  * A MeshModel is made of triangles of vertex:
  * + a vector of vertex (TVec3)
  * + [opt] a vector of indices : every set of 3 indices defines a triangle
  * + [opt] a vectof of color : one for every vertex
  */
-class MeshModel
+class MeshModel : public Model
 {
 public:
   /** Creation */
-  MeshModel(std::string name);
+  MeshModel();
   /** Destruction */
   virtual ~MeshModel();
   
   /** display string */
-  std::string dump_string();
+  std::string str_brief();
+  void dump(std::ostream& out, unsigned int nb_shown=12 );
 
+  /**
+   * Read from FileSCData.
+   * Copy vertex, indices and default color.
+   */
+  void read_from( FileSCData& fileobject );
 
   /** Vertex list */
-  std::vector<TVec3> _v_vertex;
+  std::vector<TVec3> * _v_vertex;
   /** Triangle list : every 3 indices makes a Triangle */
-  std::vector<unsigned int> _v_indices;
-  /** @test : Vector of TColorUC colors */
-  std::vector<TColorUC> _v_color_uc;
-  /** @todo : Vector of Color */
+  std::vector<unsigned short> * _v_indices;
+  /** Vector of Abstract Color, can be NULL*/
+  std::vector<IColor> * _v_color;
 };
 
 #endif // __MESH_MODEL_H__
