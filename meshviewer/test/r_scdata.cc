@@ -1,8 +1,8 @@
 /* -*- coding: utf-8 -*- */
 
-#include "file_scdata.h"
-#include "color.h"
-#include "mesh_model.h"
+#include "file_scdata.h"     // SC data files
+#include "color.h"           // IColor abstrat of TColor<T>
+#include "mesh_model.h"      // Mesh as triangles
 
 //******************************************************************************
 int main( int argc, char *argv[] )
@@ -19,8 +19,8 @@ int main( int argc, char *argv[] )
   std::cout << fscdata.str_triangle( 3 ) << "\n";
   std::cout << fscdata.str_triangle( 6 ) << "\n";
 
-  Color<char> col_c( (char *) &(fscdata._raw_vertex[0][12]) );
-  //Color<char> col_c;
+  TColor<char> col_c( (char *) &(fscdata._raw_vertex[0][12]) );
+  //TColor<char> col_c;
   std::cout << "COL_C=" << col_c.str_dump() << "\n";
 
   // Create Mesh

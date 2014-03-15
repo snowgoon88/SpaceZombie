@@ -6,8 +6,15 @@
 #include <iostream>
 #include <string>
 #include "model.h"
-#include "color.h"
+#include "color.h"       // IColor abstract of various TColor<T>
 #include "file_scdata.h"
+
+#ifdef HAVE_BOOST
+    #include <boost/shared_ptr.hpp>
+    typedef boost::shared_ptr<class MeshModel> MeshModelPtr;
+#else
+    typedef class MeshModel * MeshModelPtr;
+#endif
 
 /**
  * A MeshModel is made of triangles of vertex:

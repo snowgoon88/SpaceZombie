@@ -26,7 +26,7 @@ class IColor
  * Une couleur a 4 variables : r,g,b et a.
  */
 template<typename T>
-class Color : public IColor
+class TColor : public IColor
 {
 protected:
   T red;
@@ -36,11 +36,11 @@ protected:
 public:
   
   /** Creation */
-  Color();
+  TColor();
   /** Creation from array of char */
-  Color( char * address );
+  TColor( char * address );
   /** Destruction */
-  virtual ~Color();
+  virtual ~TColor();
   
   /** display string */
   std::string str_dump();
@@ -54,12 +54,12 @@ public:
 //********************************************************************* CREATION
 /** Creation */
 template<typename T>
-Color<T>::Color()
+TColor<T>::TColor()
 {
   red = green = blue = alpha = 0;
 }
 template<typename T>
-Color<T>::Color( char * address )
+TColor<T>::TColor( char * address )
 {
   unsigned int size_T = sizeof(T);
   memcpy( &red, &(address[0]), size_T);
@@ -69,12 +69,12 @@ Color<T>::Color( char * address )
 }
 /** Destruction */
 template<typename T>
-Color<T>::~Color()
+TColor<T>::~TColor()
 {
 }
 //*********************************************************************** STRING
 template<typename T>
-std::string Color<T>::str_dump()
+std::string TColor<T>::str_dump()
 {
   std::stringstream ss;
   

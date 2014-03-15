@@ -6,7 +6,7 @@
 
 //********************************************************************* CREATION
 /** Creation */
-MeshModel::MeshModel()
+MeshModel::MeshModel() : Model()
 {
   _v_vertex = NULL;
   _v_indices = NULL;
