@@ -93,7 +93,7 @@ $(TGTS_$(d)):	LL_TGT := \
 #$(OBJS_$(d)):	LF_TGT := -lgsl -lgslcblas -lm 
 #$(OBJS_$(d)):	LL_TGT := $(S_LL_INET) cpp/core.a dana-cpp/dana.a
 
-$(d)/r_scdata: 		$(d)/r_scdata.cc meshviewer/libmeshviewer.a #src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a shape3D/libshape.a
+$(d)/r_scdata: 		$(d)/r_scdata.cc meshviewer/libmeshviewer.a src/libsrc.a model/libmodel.a viewer/libviewer.a mvc/libmvc.a shape3D/libshape.a
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 

@@ -37,6 +37,7 @@ CORE_SRC_$(d)	:= $(DIR_PROJET)/$(d)/test_model.cc \
                    $(DIR_PROJET)/$(d)/test_torsor.cc \
                    $(DIR_PROJET)/$(d)/test_torsor_scigl.cc \
                    $(d)/test/test_type.cc \
+                   $(d)/meshviewer.cc \
 #                   $(DIR_PROJET)/$(d)/test_cell.cc \
 
 CORE_OBJS_$(d)	:= 
@@ -54,6 +55,7 @@ TGTS_$(d)	:= $(d)/test_model \
                    $(d)/test_torsor \
                    $(d)/test_torsor_scigl \
                    $(d)/test_type \
+                   $(d)/meshviewer \
 #                   $(d)/test_cell \
 
 
@@ -121,6 +123,7 @@ $(TGTS_$(d)):	CF_TGT := -I$(d) -Isrc \
                           -I$(SCIGL_ROOT)/scigl -I$(GLFW_HOME)/include \
                           -I$(SZ_ROOT)/model -I$(SZ_ROOT)/viewer -I$(SZ_ROOT)/mvc\
                           -I$(SZ_ROOT)/shape3D \
+                          -I$(SZ_ROOT)/meshviewer \
 
 $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 
@@ -131,6 +134,7 @@ $(TGTS_$(d)):	LF_TGT := $(SRC_FLAGS) \
 
 # il faut inclures les .a dans le bon ordre !!!!
 $(TGTS_$(d)):	LL_TGT := \
+                          $(SZ_ROOT)/meshviewer/libmeshviewer.a \
                           $(SZ_ROOT)/viewer/libviewer.a \
                           $(SZ_ROOT)/model/libmodel.a \
                           $(SZ_ROOT)/mvc/libmvc.a \
@@ -190,6 +194,9 @@ $(d)/test_triangles_scigl:	$(d)/test_triangles_scigl.cc src/libsrc.a model/libmo
 			@echo "===== Compiling and Linking $@"
 			$(COMPLINK)
 
+$(d)/meshviewer:	$(d)/meshviewer.cc meshviewer/libmeshviewer.a src/libsrc.a model/libmodel.a viewer/libviewer.a shape3D/libshape.a mvc/libmvc.a $(SCIGL_ROOT)/scigl/libscigl.a
+			@echo "===== Compiling and Linking $@"
+			$(COMPLINK)
 
 $(d)/test_timer:	$(d)/test_timer.cc src/libsrc.a
 			@echo "===== Compiling and Linking $@"

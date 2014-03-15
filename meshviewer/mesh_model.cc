@@ -15,8 +15,10 @@ MeshModel::MeshModel() : Model()
 /** Destruction */
 MeshModel::~MeshModel()
 {
+    std::cout << "~MeshModel START" << "\n";
     if (_v_vertex != NULL ) delete _v_vertex;
     if (_v_indices != NULL ) delete _v_indices;
+    std::cout << "~MeshModel END" << "\n";
 }
 //*********************************************************************** STRING
 std::string MeshModel::str_brief()

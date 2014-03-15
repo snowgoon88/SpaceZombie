@@ -23,11 +23,11 @@ dir		:= shape3D
 include		$(dir)/rules.mk
 dir		:= mvc
 include		$(dir)/rules.mk
+dir		:= meshviewer
+include		$(dir)/rules.mk
 dir		:= test
 include		$(dir)/rules.mk
 dir		:= lua
-include		$(dir)/rules.mk
-dir		:= meshviewer
 include		$(dir)/rules.mk
 
 # General directory independent rules

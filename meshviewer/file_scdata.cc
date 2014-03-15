@@ -19,6 +19,7 @@ FileSCData::FileSCData(std::string filename)
 /** Destruction */
 FileSCData::~FileSCData()
 {
+  std::cout << "~FileSCData" << "\n";
 }
 //*********************************************************************** STRING
 std::string FileSCData::str_brief()

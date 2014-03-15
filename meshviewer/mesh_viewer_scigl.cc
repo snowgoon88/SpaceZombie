@@ -22,10 +22,11 @@
 MeshViewer::MeshViewer( MeshModelPtr model ) : Object(), Observer()
 {
   _model = model;
+  _model->attach_observer( static_cast<ObserverPtr>(this) );
 
   set_visible( true );
   set_position( 0, 0, 0 );
-  set_fg_color( 0, 0, 1, 1); // blue
+  set_fg_color( 0, 0, 0, 1); // black
   alpha_ = 1.0f;
   fade_in_delay_ = 0;
   fade_out_delay_ = 0;
@@ -40,6 +41,7 @@ MeshViewer::MeshViewer( MeshModelPtr model ) : Object(), Observer()
 }
 MeshViewer::~MeshViewer( void )
 {
+  std::cout << "~MeshViewer for " << get_name() << "\n";
 }
 // ********************************************************************** RENDER
 void MeshViewer::render( void )
@@ -90,9 +92,9 @@ void MeshViewer::render( void )
       unsigned int i2 = (*_model->_v_indices)[i+2];
       //std::cerr << "Triangle " << i0 << " - " << i1 << " - " << i2  << "\n";
       glNormal3f( 0, 0, 0 );
-      // std::cerr << "Pt0 = " << (*_vertex)[i0](0) << "; " << (*_vertex)[i0](1) << "; " << (*_vertex)[i0](2) << "\n";
-      // std::cerr << "Pt1 = " << (*_vertex)[i1](0) << "; " << (*_vertex)[i1](1) << "; " << (*_vertex)[i1](2) << "\n";
-      // std::cerr << "Pt2 = " << (*_vertex)[i2](0) << "; " << (*_vertex)[i2](1) << "; " << (*_vertex)[i2](2) << "\n";
+      // std::cerr << "Pt0 = " << (*_model->_v_vertex)[i0](0) << "; " << (*_model->_v_vertex)[i0](1) << "; " << (*_model->_v_vertex)[i0](2) << "\n";
+      // std::cerr << "Pt1 = " << (*_model->_v_vertex)[i1](0) << "; " << (*_model->_v_vertex)[i1](1) << "; " << (*_model->_v_vertex)[i1](2) << "\n";
+      // std::cerr << "Pt2 = " << (*_model->_v_vertex)[i2](0) << "; " << (*_model->_v_vertex)[i2](1) << "; " << (*_model->_v_vertex)[i2](2) << "\n";
       glVertex3f( (*_model->_v_vertex)[i0](0), (*_model->_v_vertex)[i0](1), (*_model->_v_vertex)[i0](2) ); 
       glVertex3f( (*_model->_v_vertex)[i1](0), (*_model->_v_vertex)[i1](1), (*_model->_v_vertex)[i1](2) ); 
       glVertex3f( (*_model->_v_vertex)[i2](0), (*_model->_v_vertex)[i2](1), (*_model->_v_vertex)[i2](2) );

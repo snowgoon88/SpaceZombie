@@ -2,6 +2,8 @@
 #+STARTUP: hidestars
 
 * SCDAta => meshviewer/
+** MeshViewer : pd de double free
+http://stackoverflow.com/questions/13347193/stl-vector-push-back-memory-double-free
 ** MeshViewer_SCIGL : choisir la couleur, les normes, etc
 ** Couleur des triangles - faire un type spécial.
    void glColor3ub(GLubyte  red,  GLubyte  green,  GLubyte  blue);
