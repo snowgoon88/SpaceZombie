@@ -32,7 +32,7 @@ CORE_OBJS_$(d)	:= $(d)/file_scdata.o \
 
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 
-TGTS_$(d)	:= $(d)/libmeshview.a \
+TGTS_$(d)	:= $(d)/libmeshviewer.a \
 
 DEPS_$(d)	:= $(TGTS_$(d):%=%.d)
 

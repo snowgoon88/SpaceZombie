@@ -22,7 +22,7 @@
 MeshViewer::MeshViewer( MeshModelPtr model ) : Object(), Observer()
 {
   _model = model;
-  _model->attach_observer( static_cast<ObserverPtr>(this) );
+  _model->attach_observer( static_cast<MeshViewerPtr>(this) );
 
   set_visible( true );
   set_position( 0, 0, 0 );

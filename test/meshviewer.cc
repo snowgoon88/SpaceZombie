@@ -45,9 +45,6 @@ ScenePtr _scene = ScenePtr (new Scene);
 TextBoxPtr _textbox;
 TwBar *_bar;         // Pointer to a tweak bar
 
-// Scene
-MeshModelPtr _mesh_model = MeshModelPtr( new MeshModel );
-MeshViewerPtr _mesh_viewer = MeshViewerPtr( new MeshViewer( _mesh_model ) );
 
 // Mouse Wheel
 int _old_pos = 100;
@@ -181,6 +178,11 @@ int main (int argc, char **argv)
   // Some graphic parameters
   int width, height;
 
+  // Scene
+  MeshModelPtr _mesh_model = MeshModelPtr( new MeshModel );
+  MeshViewerPtr _mesh_viewer = MeshViewerPtr( new MeshViewer( _mesh_model ) );
+  //_mesh_model->attach_observer( _mesh_viewer );
+  
   // init mesh from SCData
   FileSCData fscdata( "SCData/data/misc/cube1m.mdl-msh000" );
   fscdata.read( true );
