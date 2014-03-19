@@ -36,6 +36,7 @@
 #include "ref_frame_scigl.h"
 #include "mesh_model.h"
 #include "mesh_viewer_scigl.h"
+#include "mesh_control.h"
 #include "textbox.h" 
 // AntTweakBar
 #include <AntTweakBar.h>
@@ -181,6 +182,7 @@ int main (int argc, char **argv)
   // Scene
   MeshModelPtr _mesh_model = MeshModelPtr( new MeshModel );
   MeshViewerPtr _mesh_viewer = MeshViewerPtr( new MeshViewer( _mesh_model ) );
+  MeshControlPtr _mesh_control = MeshControlPtr( new MeshControl( _mesh_model, _mesh_viewer) );
   //_mesh_model->attach_observer( _mesh_viewer );
   
   // init mesh from SCData
@@ -220,7 +222,9 @@ int main (int argc, char **argv)
   // Initialize AntTweakBar
   //  float tw_tri_dir[3] = {1, 0, 0}; // direction pointing to +x and +y
   TwInit(TW_OPENGL, NULL);
-//   // Create a tweak bar
+  //   // Create a tweak bar
+  _mesh_control->build_bar();
+
 //   _bar = TwNewBar("_scene");
 //   TwType tw_SVec3 = TwDefineStruct("Vec3", SVec3Members, 3, sizeof(SVec3), NULL, NULL);
 //   TwAddVarRW( _bar, "_vec0", tw_SVec3, &(_vec_vertex[0]), " Label='Point_0' ");

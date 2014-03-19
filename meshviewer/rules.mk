@@ -25,10 +25,12 @@ CORE_SRC_$(d)	:= $(d)/file_scdata.h \
                    $(d)/color.h \
                    $(d)/mesh_model.h $(d)/mesh_model.cc \
                    $(d)/mesh_viewer_scigl.h $(d)/mesh_viewer_scigl.cc \
+                   $(d)/mesh_control.h $(d)/mesh_control.cc \
 
 CORE_OBJS_$(d)	:= $(d)/file_scdata.o \
                    $(d)/mesh_model.o \
                    $(d)/mesh_viewer_scigl.o \
+                   $(d)/mesh_control.o \
 
 CORE_DEPS_$(d)	:= $(CORE_OBJS_$(d):%=%.d)
 
@@ -65,6 +67,7 @@ $(CORE_OBJS_$(d)):	$(d)/rules.mk
 $(CORE_OBJS_$(d)): 	CF_TGT := -I$(d) -Isrc \
                                   -Imvc \
                                   -I$(SCIGL_ROOT)/scigl \
+                                  -I$(ANTTW_HOME)/include \
 
 # Local libs
 # Force remake if rules are changed
