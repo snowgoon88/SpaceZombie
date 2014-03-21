@@ -22,12 +22,13 @@ include		$(dir)/rules.mk
 # Local rules and target
 CORE_SRC_$(d)	:= $(d)/file_scdata.h \
                    $(d)/file_scdata.cc \
-                   $(d)/color.h \
+                   $(d)/color.h $(d)/color.cc \
                    $(d)/mesh_model.h $(d)/mesh_model.cc \
                    $(d)/mesh_viewer_scigl.h $(d)/mesh_viewer_scigl.cc \
                    $(d)/mesh_control.h $(d)/mesh_control.cc \
 
 CORE_OBJS_$(d)	:= $(d)/file_scdata.o \
+                   $(d)/color.o \
                    $(d)/mesh_model.o \
                    $(d)/mesh_viewer_scigl.o \
                    $(d)/mesh_control.o \

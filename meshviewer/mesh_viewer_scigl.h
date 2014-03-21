@@ -94,6 +94,10 @@ public:
 
     /** Wireframe or Solid */
     bool _fg_wireframe;
+    /** With of without Lights */
+    bool _fg_light;
+    /** With or without Color */
+    bool _fg_color;
 };
 
 #endif // __MESH_VIEWER_SCIGL_H__

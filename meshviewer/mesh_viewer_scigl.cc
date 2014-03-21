@@ -22,7 +22,6 @@
 MeshViewer::MeshViewer( MeshModelPtr model ) : Object(), Observer()
 {
   _model = model;
-  _model->attach_observer( static_cast<MeshViewerPtr>(this) );
 
   set_visible( true );
   set_position( 0, 0, 0 );
@@ -32,7 +31,9 @@ MeshViewer::MeshViewer( MeshModelPtr model ) : Object(), Observer()
   fade_out_delay_ = 0;
   
   _fg_wireframe = true;
-  
+  _fg_color = false;
+  _fg_light = true;
+
   orient_from_vec( TVec3( 1, 0, 0) );
 
   std::ostringstream oss;
@@ -64,16 +65,16 @@ void MeshViewer::render( void )
   //   }
   // }
 
-  // // save Light Attributes
-  // glPushAttrib( GL_LIGHTING_BIT );
+  // save Light Attributes
+  glPushAttrib( GL_LIGHTING_BIT );
   
-  // // lighting or not
-  // if( _fg_light ) {
-  //   glEnable( GL_LIGHTING );
-  // }
-  // else {
-  //   glDisable( GL_LIGHTING );
-  // }
+  // lighting or not
+  if( _fg_light ) {
+    glEnable( GL_LIGHTING );
+  }
+  else {
+    glDisable( GL_LIGHTING );
+  }
 
   // save transformation matrix, then translate and scale.
   glPushMatrix();
@@ -95,8 +96,21 @@ void MeshViewer::render( void )
       // std::cerr << "Pt0 = " << (*_model->_v_vertex)[i0](0) << "; " << (*_model->_v_vertex)[i0](1) << "; " << (*_model->_v_vertex)[i0](2) << "\n";
       // std::cerr << "Pt1 = " << (*_model->_v_vertex)[i1](0) << "; " << (*_model->_v_vertex)[i1](1) << "; " << (*_model->_v_vertex)[i1](2) << "\n";
       // std::cerr << "Pt2 = " << (*_model->_v_vertex)[i2](0) << "; " << (*_model->_v_vertex)[i2](1) << "; " << (*_model->_v_vertex)[i2](2) << "\n";
+      if( _fg_color ) {
+	glColor3i( (GLint) (*_model->_v_color)[i0]->r(), (GLint) (*_model->_v_color)[i0]->g(), (GLint) (*_model->_v_color)[i0]->b() );
+      }
       glVertex3f( (*_model->_v_vertex)[i0](0), (*_model->_v_vertex)[i0](1), (*_model->_v_vertex)[i0](2) ); 
+
+      if( _fg_color ) {
+	glColor3i( (GLint) (*_model->_v_color)[i1]->r(), (GLint) (*_model->_v_color)[i1]->g(), (GLint) (*_model->_v_color)[i1]->b() );
+      }
+
       glVertex3f( (*_model->_v_vertex)[i1](0), (*_model->_v_vertex)[i1](1), (*_model->_v_vertex)[i1](2) ); 
+
+      if( _fg_color ) {
+	glColor3i( (GLint) (*_model->_v_color)[i2]->r(), (GLint) (*_model->_v_color)[i2]->g(), (GLint) (*_model->_v_color)[i2]->b() );
+      }
+
       glVertex3f( (*_model->_v_vertex)[i2](0), (*_model->_v_vertex)[i2](1), (*_model->_v_vertex)[i2](2) );
     }
   } glEnd();

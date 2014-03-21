@@ -40,7 +40,10 @@ public:
   MeshModelPtr _model;
   /** Viewer */
   MeshViewerPtr _viewer;
-
 };
-
+//@{
+/** CBK function to alter viewer->_fg_color */
+void TW_CALL get_fg_color_cbk( void *value, void *clientData );
+void TW_CALL set_fg_color_cbk( const void *value, void *clientData ); 
+//@}
 #endif // __MESH_CONTROL_H__

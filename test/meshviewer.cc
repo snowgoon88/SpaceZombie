@@ -162,7 +162,7 @@ void update_textbox()
  * Display the Scene, and thus every object in it.
  */
 void display (void) {
-    glClearColor (1,1,1,1);
+    glClearColor (1,1,1,1); 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _scene->render ();
     _textbox->render();
@@ -183,7 +183,7 @@ int main (int argc, char **argv)
   MeshModelPtr _mesh_model = MeshModelPtr( new MeshModel );
   MeshViewerPtr _mesh_viewer = MeshViewerPtr( new MeshViewer( _mesh_model ) );
   MeshControlPtr _mesh_control = MeshControlPtr( new MeshControl( _mesh_model, _mesh_viewer) );
-  //_mesh_model->attach_observer( _mesh_viewer );
+  _mesh_model->attach_observer( _mesh_viewer );
   
   // init mesh from SCData
   FileSCData fscdata( "SCData/data/misc/cube1m.mdl-msh000" );
@@ -191,6 +191,8 @@ int main (int argc, char **argv)
   std::cout << fscdata.str_brief() << "\n";
   _mesh_model->read_from( fscdata );
   _mesh_model->dump( std::cout );
+  _mesh_model->_v_color = _mesh_model->_v_color_default;
+
 
   // Initialise GLFW
   if( !glfwInit() ) {

@@ -44,8 +44,10 @@ public:
   std::vector<TVec3> * _v_vertex;
   /** Triangle list : every 3 indices makes a Triangle */
   std::vector<unsigned short> * _v_indices;
+  /** Default color : grey for everyone */
+  std::vector<IColorPtr> * _v_color_default;
   /** Vector of Abstract Color, can be NULL*/
-  std::vector<IColor> * _v_color;
+  std::vector<IColorPtr> * _v_color;
 };
 
 #endif // __MESH_MODEL_H__

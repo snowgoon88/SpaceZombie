@@ -2,6 +2,7 @@
 #+STARTUP: hidestars
 
 * SCDAta => meshviewer/
+** MesModel : couleur par défaut et enlever Ptr to v_vertex, indice et autres...
 ** MeshViewer_SCIGL : choisir la couleur, les normes, etc
 ** Couleur des triangles - faire un type spécial.
    void glColor3ub(GLubyte  red,  GLubyte  green,  GLubyte  blue);

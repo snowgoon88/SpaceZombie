@@ -18,6 +18,7 @@ MeshModel::~MeshModel()
     std::cout << "~MeshModel START" << "\n";
     if (_v_vertex != NULL ) delete _v_vertex;
     if (_v_indices != NULL ) delete _v_indices;
+    if (_v_color_default != NULL ) delete _v_color_default;
     std::cout << "~MeshModel END" << "\n";
 }
 //*********************************************************************** STRING
@@ -79,7 +80,14 @@ void MeshModel::read_from( FileSCData& fileobject )
   _v_vertex = new std::vector<TVec3>( fileobject._v_xyz );
   if (_v_indices != NULL ) delete _v_indices;
   _v_indices = new std::vector<unsigned short>( fileobject._v_indices );
-
+  // Make default color
+  if (_v_color_default != NULL ) delete _v_color_default;
+  _v_color_default = new std::vector<IColorPtr>;
+  IColorPtr col = IColorPtr( new TColorF( 1.0f, 0.0f, 0.0f, 1.0f ) );
+  for( unsigned int i = 0; i < _v_vertex->size(); ++i) {
+    _v_color_default->push_back( col );
+  }
+ 
   notify_observers();
 }
 //******************************************************************************
