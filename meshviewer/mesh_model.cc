@@ -83,7 +83,8 @@ void MeshModel::read_from( FileSCData& fileobject )
   // Make default color
   if (_v_color_default != NULL ) delete _v_color_default;
   _v_color_default = new std::vector<IColorPtr>;
-  IColorPtr col = IColorPtr( new TColorF( 1.0f, 0.0f, 0.0f, 1.0f ) );
+  IColorPtr col = IColorPtr( new TColorF( 0.8f, 0.8f, 0.8f, 1.0f ) );
+  std::cout << col->str_dump() << "\n";
   for( unsigned int i = 0; i < _v_vertex->size(); ++i) {
     _v_color_default->push_back( col );
   }

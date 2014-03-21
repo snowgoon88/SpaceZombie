@@ -98,6 +98,8 @@ public:
     bool _fg_light;
     /** With or without Color */
     bool _fg_color;
+    /** With or without Normals */
+    bool _fg_normal;
 };
 
 #endif // __MESH_VIEWER_SCIGL_H__

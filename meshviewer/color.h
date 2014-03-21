@@ -30,7 +30,7 @@ class IColor
   virtual int a() = 0;
 
   /** display string */
-  std::string str_dump() { return "IColor is Abstract !!"; };
+  virtual std::string str_dump() { return "IColor is Abstract !!"; };
 };
 /**
  * Une couleur a 4 variables : r,g,b et a. TOUTES ENTIERES
@@ -128,9 +128,9 @@ public:
   std::string str_dump();
 
   /** get various variables of color */
-  int r() {return (int) _red*INT_MAX;};
-  int g() {return (int) _green*INT_MAX;};
-  int b() {return (int) _blue*INT_MAX;};
-  int a() {return (int) _alpha*INT_MAX;};
+  int r() {float val = _red * INT_MAX; return (int) val;};
+  int g() {float val = _green * INT_MAX; return (int) val;};
+  int b() {float val = _blue * INT_MAX; return (int) val;};
+  int a() {float val = _alpha * INT_MAX; return (int) val;};
 };
 #endif // __Color_H__

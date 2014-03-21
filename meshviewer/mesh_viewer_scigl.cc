@@ -33,6 +33,7 @@ MeshViewer::MeshViewer( MeshModelPtr model ) : Object(), Observer()
   _fg_wireframe = true;
   _fg_color = false;
   _fg_light = true;
+  _fg_normal = false;
 
   orient_from_vec( TVec3( 1, 0, 0) );
 
@@ -92,7 +93,14 @@ void MeshViewer::render( void )
       unsigned int i1 = (*_model->_v_indices)[i+1];
       unsigned int i2 = (*_model->_v_indices)[i+2];
       //std::cerr << "Triangle " << i0 << " - " << i1 << " - " << i2  << "\n";
-      glNormal3f( 0, 0, 0 );
+      if (_fg_normal) {
+	TVec3 normal = ((*_model->_v_vertex)[i0] - (*_model->_v_vertex)[i1]).cross( ((*_model->_v_vertex)[i2] - (*_model->_v_vertex)[i1]));
+	normal.normalize();
+	glNormal3f( normal(0), normal(1), normal(2) );
+      }
+      else {
+	glNormal3f( 0, 0, 0 );
+      }
       // std::cerr << "Pt0 = " << (*_model->_v_vertex)[i0](0) << "; " << (*_model->_v_vertex)[i0](1) << "; " << (*_model->_v_vertex)[i0](2) << "\n";
       // std::cerr << "Pt1 = " << (*_model->_v_vertex)[i1](0) << "; " << (*_model->_v_vertex)[i1](1) << "; " << (*_model->_v_vertex)[i1](2) << "\n";
       // std::cerr << "Pt2 = " << (*_model->_v_vertex)[i2](0) << "; " << (*_model->_v_vertex)[i2](1) << "; " << (*_model->_v_vertex)[i2](2) << "\n";

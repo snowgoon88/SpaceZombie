@@ -38,6 +38,16 @@ void MeshControl::build_bar()
   // Add a bool to switch between NoColor and DefaultColor in model.
   TwAddVarCB( meshBar, "DefColor", TW_TYPE_BOOLCPP, set_fg_color_cbk, get_fg_color_cbk, this /*clientData*/,
 	      " label='(D)efColor' help='Switch between No or Default color' key=d"); 
+
+  // Add a variable bool to control fg_normal in viewer.
+  TwAddVarRW( meshBar, "Normals", TW_TYPE_BOOLCPP, &(_viewer->_fg_normal) ,
+	      " label='(N)ormals' help='With or without Normals' key=n");
+
+  // Add a variable bool to control fg_light in viewer.
+  TwAddVarRW( meshBar, "Light", TW_TYPE_BOOLCPP, &(_viewer->_fg_light) ,
+	      " label='(L)ight' help='With or without light' key=l");
+
+
 }
 //******************************************************************************
 
