@@ -10,6 +10,7 @@ doc/html
 # ignored executable detected with 
 # T=$(mktemp); (cat .gitignore; find . -executable -type f | sed -e 's%^\./%%' | sort) | uniq > $T; mv $T .gitignore
 
+test/meshviewer
 test/test_arrow_scigl
 test/test_format
 test/test_model
@@ -23,6 +24,7 @@ test/test_type
 test/test_vect
 SCData/test/display_mesh
 SCData/test/test_read
+SCData/test_w_float
 SCData/test/zpipe
 SCData/test/zscpipe
 meshviewer/test/r_scdata

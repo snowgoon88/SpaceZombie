@@ -2,11 +2,10 @@
 #+STARTUP: hidestars
 
 * SCDAta => meshviewer/
-** MesModel : couleur par défaut et enlever Ptr to v_vertex, indice et autres...
+** MeshControl+Viewer : enum pour choix entre col_def, no_col et col_custom
+Changer _v_color en _v_custom. Et le choix de la couleur à prendre se fait dans viewer 
+en fonction de l'enum ??
 ** MeshViewer_SCIGL : choisir la couleur, les normes, etc
-** Couleur des triangles - faire un type spécial.
-   void glColor3ub(GLubyte  red,  GLubyte  green,  GLubyte  blue);
-   void glColor3us(GLushort  red,  GLushort  green,  GLushort  blue);
 ** réorganiser SCData en une lib comme les autres. 
 *** Model = Mesh
 *** Viewer = MeshViewer
