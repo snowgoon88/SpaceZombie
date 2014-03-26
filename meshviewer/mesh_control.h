@@ -43,6 +43,8 @@ public:
 
   /** string for setting where custom color is read */
   std::string _color_custom_str;
+  /** function to decode __color_custom_str */
+  void decode_custom_str( void );
 };
 //@{
 /** CBK function to alter viewer->_fg_color */
