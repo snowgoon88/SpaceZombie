@@ -40,10 +40,18 @@ public:
   MeshModelPtr _model;
   /** Viewer */
   MeshViewerPtr _viewer;
+
+  /** string for setting where custom color is read */
+  std::string _color_custom_str;
 };
 //@{
 /** CBK function to alter viewer->_fg_color */
 void TW_CALL get_fg_color_cbk( void *value, void *clientData );
 void TW_CALL set_fg_color_cbk( const void *value, void *clientData ); 
+//@}
+//@{
+/** CBK function to alter control->_color_custom_str */
+void TW_CALL set_custom_color_str_cbk(const void *value, void * clientData );
+void TW_CALL get_custom_color_str_cbk(void *value, void *clientData);
 //@}
 #endif // __MESH_CONTROL_H__

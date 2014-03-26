@@ -10,6 +10,8 @@ MeshControl::MeshControl( MeshModelPtr model, MeshViewerPtr viewer )
 {
   _model = model;
   _viewer = viewer;
+
+  _color_custom_str = "type 01C4h";
 }
 /** Destruction */
 MeshControl::~MeshControl()
@@ -48,6 +50,10 @@ void MeshControl::build_bar()
   TwType EColorType = TwDefineEnum("ColorMode", enumColor, 3);  // create a new TwType associated to the enum defined by the enumColor array
   TwAddVarRW( meshBar, "Color", EColorType, &(_model->_e_color),
   	      " label='(C)olor' help='Switch Color Mode' key=c");
+  // Add a STDSTRING var to control where custom_color is read
+  TwAddVarCB( meshBar, "custColStr", TW_TYPE_STDSTRING,
+	      set_custom_color_str_cbk, get_custom_color_str_cbk, this,
+	      " label='->Custom' help='Define custom color using : <type> <address> string'");
 
   // Add a variable bool to control fg_normal in viewer.
   TwAddVarRW( meshBar, "Normals", TW_TYPE_BOOLCPP, &(_viewer->_fg_normal) ,
@@ -77,3 +83,19 @@ void TW_CALL set_fg_color_cbk( const void *value, void *clientData )
   mc->_viewer->_fg_color = *(const bool *)value;
 }
 //******************************************************************************
+void TW_CALL set_custom_color_str_cbk(const void *value, void * clientData )
+{
+  MeshControl *mc = static_cast<MeshControl *>(clientData); // stored in clientData
+  // Set: copy the value of _color_custom_str from AntTweakBar
+  const std::string *srcPtr = static_cast<const std::string *>(value);
+  mc->_color_custom_str = *srcPtr;
+  std::cout << "set_custom_color_str_cbk : " << mc->_color_custom_str << "\n";
+}
+void TW_CALL get_custom_color_str_cbk(void *value, void *clientData)
+{
+  MeshControl *mc = static_cast<MeshControl *>(clientData); // stored in clientData
+  // Get: copy the value of s to AntTweakBar
+  std::string *destPtr = static_cast<std::string *>(value);
+  TwCopyStdStringToLibrary(*destPtr, mc->_color_custom_str); // the use of TwCopyStdStringToLibrary is required here
+}
+// ***************************************************************************
