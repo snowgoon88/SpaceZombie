@@ -23,6 +23,12 @@ int main( int argc, char *argv[] )
   //TColor<char> col_c;
   std::cout << "COL_C=" << col_c.str_dump() << "\n";
 
+
+  fscdata.read_v_color<unsigned char>( (unsigned int) 0x0C );
+  for( unsigned int i=0; i<fscdata._v_color.size(); ++i ) {
+    std::cout << i << " " << fscdata._v_color[i]->str_dump() << "\n";
+  }
+
   // Create Mesh
   MeshModel mesh;
   std::cout << "****CREATION" << "\n";

@@ -2,9 +2,8 @@
 #+STARTUP: hidestars
 
 * SCDAta => meshviewer/
-** MeshControl+Viewer : enum pour choix entre col_def, no_col et col_custom
-Changer _v_color en _v_custom. Et le choix de la couleur à prendre se fait dans viewer 
-en fonction de l'enum ??
+** MeshModel : refactor to attach to fileSCDATA
+** then, able to change customcolor using fileSCDATA.read_v_color
 ** MeshViewer_SCIGL : choisir la couleur, les normes, etc
 ** réorganiser SCData en une lib comme les autres. 
 *** Model = Mesh

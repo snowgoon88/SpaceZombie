@@ -143,8 +143,8 @@ void FileSCData::read( bool fg_verb )
   
   // read_vertex
   for( unsigned int i = 0; i < _nb_vertex; ++i ) {
-    unsigned char *vertex = new unsigned char[_size_vertex];
-    fread( (void*) (vertex), sizeof(unsigned char), _size_vertex, fp);
+    char *vertex = new char[_size_vertex];
+    fread( (void*) (vertex), sizeof(char), _size_vertex, fp);
     _raw_vertex.push_back( vertex );
     // read xyz from vertex
     float x,y,z;
@@ -194,7 +194,7 @@ void FileSCData::get_TColorUC( std::vector<TColorUC> * v_col,
 
   for (unsigned int i=0; i < _raw_vertex.size(); ++i) {
     TColorUC color;
-    unsigned char * vertex = _raw_vertex[i];
+    char * vertex = _raw_vertex[i];
     memcpy( &(color.r), &(vertex[idx]), sizeof(unsigned char));
     idx_start += sizeof(unsigned char);
     memcpy( &(color.g), &(vertex[idx]), sizeof(unsigned char));
@@ -208,7 +208,6 @@ void FileSCData::get_TColorUC( std::vector<TColorUC> * v_col,
 
     v_col->push_back( color );
   }
-
 }
 //*************************************************************************** 
 //******************************************************************************

@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "utils.h"
+#include "color.h"     // IColorPtr, TColor<T>
 
 /** 
  * Various function to read/write SCData files.
@@ -41,11 +42,13 @@ public:
   std::vector<TColorC> _v_rgba_c;
   /** data indices : sizeof(unsigned short)*/
   std::vector<unsigned short> _v_indices;
+  /** vertex color */
+  std::vector<IColorPtr> _v_color;
 
   /** name of file */
   std::string _filename;
-  /** raw data vertex : _size_vertex * sizeof(unsigned char)*/
-  std::vector<unsigned char *> _raw_vertex;
+  /** raw data vertex : _size_vertex * sizeof(char)*/
+  std::vector<char *> _raw_vertex;
   
   /** read file */
   void read( bool fg_verb = false );
@@ -53,7 +56,16 @@ public:
   /** read vertex starting at byte 'idx_start' as a TColorUC object */
   void get_TColorUC( std::vector<TColorUC> *v_col,
 		     unsigned int idx_start = 0x0C);
-
+ template<typename T>
+   void read_v_color( unsigned int idx_start )
+   {
+     _v_color.clear();
+     for (unsigned int i=0; i < _raw_vertex.size(); ++i) {
+       char * vertex = _raw_vertex[i];
+       IColorPtr colptr = IColorPtr( new TColor<T>( &(vertex[idx_start]) ));
+       _v_color.push_back( colptr );
+     }
+   }
   // ****** PROTECTED *****
   // @todo template ??
   unsigned char read_uchar( FILE *file );
