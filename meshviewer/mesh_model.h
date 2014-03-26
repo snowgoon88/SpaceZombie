@@ -16,6 +16,8 @@
     typedef class MeshModel * MeshModelPtr;
 #endif
 
+
+
 /**
  * A MeshModel is made of triangles of vertex:
  * + a vector of vertex (TVec3)
@@ -40,6 +42,11 @@ public:
    */
   void read_from( FileSCData& fileobject );
 
+
+  /** Type of Color used */
+  enum EColor { NO_COLOR, DEFAULT_COLOR, CUSTOM_COLOR };
+  EColor _e_color;
+
   /** Vertex list */
   std::vector<TVec3> * _v_vertex;
   /** Triangle list : every 3 indices makes a Triangle */
@@ -47,7 +54,7 @@ public:
   /** Default color : grey for everyone */
   std::vector<IColorPtr> * _v_color_default;
   /** Vector of Abstract Color, can be NULL*/
-  std::vector<IColorPtr> * _v_color;
+  std::vector<IColorPtr> * _v_color_custom;
 };
 
 #endif // __MESH_MODEL_H__

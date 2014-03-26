@@ -10,7 +10,9 @@ MeshModel::MeshModel() : Model()
 {
   _v_vertex = NULL;
   _v_indices = NULL;
-  _v_color = NULL;
+  _v_color_default = NULL;
+  _v_color_custom = NULL;
+  _e_color = NO_COLOR;
 }
 /** Destruction */
 MeshModel::~MeshModel()

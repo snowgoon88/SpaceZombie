@@ -26,7 +26,7 @@ std::string MeshControl::str_dump()
 }
 //******************************************************************************
 void MeshControl::build_bar()
-{
+{ 
   // Create a tweak bar
   meshBar = TwNewBar( "Mesh" );
   TwDefine(" Mesh label='Mesh TweakBar' position='10 60' help='Use this bar to alter the Mesh and its rendering' ");
@@ -36,8 +36,18 @@ void MeshControl::build_bar()
 	      " label='(W)ire/Solid' help='Switch between WireFrame and Solid view' key=w");
  
   // Add a bool to switch between NoColor and DefaultColor in model.
-  TwAddVarCB( meshBar, "DefColor", TW_TYPE_BOOLCPP, set_fg_color_cbk, get_fg_color_cbk, this /*clientData*/,
-	      " label='(D)efColor' help='Switch between No or Default color' key=d"); 
+  // TwAddVarCB( meshBar, "DefColor", TW_TYPE_BOOLCPP, set_fg_color_cbk, get_fg_color_cbk, this /*clientData*/,
+  // 	      " label='(D)efColor' help='Switch between No or Default color' key=d"); 
+
+  // Add an enum variable for color control
+  TwEnumVal enumColor[] = {
+    { MeshModel::NO_COLOR, "NO color" },
+    { MeshModel::DEFAULT_COLOR, "DEFAULT color" },
+    { MeshModel::CUSTOM_COLOR, "CUSTOM color" }
+  };
+  TwType EColorType = TwDefineEnum("ColorMode", enumColor, 3);  // create a new TwType associated to the enum defined by the enumColor array
+  TwAddVarRW( meshBar, "Color", EColorType, &(_model->_e_color),
+  	      " label='(C)olor' help='Switch Color Mode' key=c");
 
   // Add a variable bool to control fg_normal in viewer.
   TwAddVarRW( meshBar, "Normals", TW_TYPE_BOOLCPP, &(_viewer->_fg_normal) ,

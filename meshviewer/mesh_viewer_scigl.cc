@@ -104,21 +104,52 @@ void MeshViewer::render( void )
       // std::cerr << "Pt0 = " << (*_model->_v_vertex)[i0](0) << "; " << (*_model->_v_vertex)[i0](1) << "; " << (*_model->_v_vertex)[i0](2) << "\n";
       // std::cerr << "Pt1 = " << (*_model->_v_vertex)[i1](0) << "; " << (*_model->_v_vertex)[i1](1) << "; " << (*_model->_v_vertex)[i1](2) << "\n";
       // std::cerr << "Pt2 = " << (*_model->_v_vertex)[i2](0) << "; " << (*_model->_v_vertex)[i2](1) << "; " << (*_model->_v_vertex)[i2](2) << "\n";
-      if( _fg_color ) {
-	glColor3i( (GLint) (*_model->_v_color)[i0]->r(), (GLint) (*_model->_v_color)[i0]->g(), (GLint) (*_model->_v_color)[i0]->b() );
+      switch( _model->_e_color ) {
+      case MeshModel::NO_COLOR:
+	break;
+      case MeshModel::DEFAULT_COLOR:
+	glColor3i( (GLint) (*_model->_v_color_default)[i0]->r(),
+		   (GLint) (*_model->_v_color_default)[i0]->g(),
+		   (GLint) (*_model->_v_color_default)[i0]->b() );
+	break;
+      case MeshModel::CUSTOM_COLOR:
+	glColor3i( (GLint) (*_model->_v_color_custom)[i0]->r(),
+		   (GLint) (*_model->_v_color_custom)[i0]->g(),
+		   (GLint) (*_model->_v_color_custom)[i0]->b() );
+	break;
       }
       glVertex3f( (*_model->_v_vertex)[i0](0), (*_model->_v_vertex)[i0](1), (*_model->_v_vertex)[i0](2) ); 
 
-      if( _fg_color ) {
-	glColor3i( (GLint) (*_model->_v_color)[i1]->r(), (GLint) (*_model->_v_color)[i1]->g(), (GLint) (*_model->_v_color)[i1]->b() );
+      switch( _model->_e_color ) {
+      case MeshModel::NO_COLOR:
+	break;
+      case MeshModel::DEFAULT_COLOR:
+	glColor3i( (GLint) (*_model->_v_color_default)[i1]->r(),
+		   (GLint) (*_model->_v_color_default)[i1]->g(),
+		   (GLint) (*_model->_v_color_default)[i1]->b() );
+	break;
+      case MeshModel::CUSTOM_COLOR:
+	glColor3i( (GLint) (*_model->_v_color_custom)[i1]->r(),
+		   (GLint) (*_model->_v_color_custom)[i1]->g(),
+		   (GLint) (*_model->_v_color_custom)[i1]->b() );
+	break;
       }
-
       glVertex3f( (*_model->_v_vertex)[i1](0), (*_model->_v_vertex)[i1](1), (*_model->_v_vertex)[i1](2) ); 
 
-      if( _fg_color ) {
-	glColor3i( (GLint) (*_model->_v_color)[i2]->r(), (GLint) (*_model->_v_color)[i2]->g(), (GLint) (*_model->_v_color)[i2]->b() );
+      switch( _model->_e_color ) {
+      case MeshModel::NO_COLOR:
+	break;
+      case MeshModel::DEFAULT_COLOR:
+	glColor3i( (GLint) (*_model->_v_color_default)[i2]->r(),
+		   (GLint) (*_model->_v_color_default)[i2]->g(),
+		   (GLint) (*_model->_v_color_default)[i2]->b() );
+	break;
+      case MeshModel::CUSTOM_COLOR:
+	glColor3i( (GLint) (*_model->_v_color_custom)[i2]->r(),
+		   (GLint) (*_model->_v_color_custom)[i2]->g(),
+		   (GLint) (*_model->_v_color_custom)[i2]->b() );
+	break;
       }
-
       glVertex3f( (*_model->_v_vertex)[i2](0), (*_model->_v_vertex)[i2](1), (*_model->_v_vertex)[i2](2) );
     }
   } glEnd();

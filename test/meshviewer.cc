@@ -191,7 +191,7 @@ int main (int argc, char **argv)
   std::cout << fscdata.str_brief() << "\n";
   _mesh_model->read_from( fscdata );
   _mesh_model->dump( std::cout );
-  _mesh_model->_v_color = _mesh_model->_v_color_default;
+  //_mesh_model->_v_color = _mesh_model->_v_color_default;
 
 
   // Initialise GLFW
@@ -248,7 +248,7 @@ int main (int argc, char **argv)
   // Add '_angZ' to bar : modifiable (RW), FLOAT, [0,360]
   //TwAddVarRW( _bar, "angZ", TW_TYPE_FLOAT, &_angZ, 
   //	      " label='AngZ' min=0 max=360 step=1.0 keyIncr=z KeyDecr=Z help='Rotation angle around Oy' ");
-  
+  std::cout << "MeshControl built" << "\n";
 
   std::cout << "Init GLEW\n";
   if( !glewInit() ) {
