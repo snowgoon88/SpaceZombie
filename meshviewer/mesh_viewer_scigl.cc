@@ -108,14 +108,14 @@ void MeshViewer::render( void )
       case MeshModel::NO_COLOR:
 	break;
       case MeshModel::DEFAULT_COLOR:
-	glColor3i( (GLint) (*_model->_v_color_default)[i0]->r(),
-		   (GLint) (*_model->_v_color_default)[i0]->g(),
-		   (GLint) (*_model->_v_color_default)[i0]->b() );
+	glColor3f( (GLfloat) (*_model->_v_color_default)[i0]->r(),
+		   (GLfloat) (*_model->_v_color_default)[i0]->g(),
+		   (GLfloat) (*_model->_v_color_default)[i0]->b() );
 	break;
       case MeshModel::CUSTOM_COLOR:
-	glColor3i( (GLint) (*_model->_v_color_custom)[i0]->r(),
-		   (GLint) (*_model->_v_color_custom)[i0]->g(),
-		   (GLint) (*_model->_v_color_custom)[i0]->b() );
+	glColor3f( (GLfloat) (*_model->_v_color_custom)[i0]->r(),
+		   (GLfloat) (*_model->_v_color_custom)[i0]->g(),
+		   (GLfloat) (*_model->_v_color_custom)[i0]->b() );
 	break;
       }
       glVertex3f( (*_model->_v_vertex)[i0](0), (*_model->_v_vertex)[i0](1), (*_model->_v_vertex)[i0](2) ); 
@@ -124,14 +124,14 @@ void MeshViewer::render( void )
       case MeshModel::NO_COLOR:
 	break;
       case MeshModel::DEFAULT_COLOR:
-	glColor3i( (GLint) (*_model->_v_color_default)[i1]->r(),
-		   (GLint) (*_model->_v_color_default)[i1]->g(),
-		   (GLint) (*_model->_v_color_default)[i1]->b() );
+	glColor3f( (GLfloat) (*_model->_v_color_default)[i1]->r(),
+		   (GLfloat) (*_model->_v_color_default)[i1]->g(),
+		   (GLfloat) (*_model->_v_color_default)[i1]->b() );
 	break;
       case MeshModel::CUSTOM_COLOR:
-	glColor3i( (GLint) (*_model->_v_color_custom)[i1]->r(),
-		   (GLint) (*_model->_v_color_custom)[i1]->g(),
-		   (GLint) (*_model->_v_color_custom)[i1]->b() );
+	glColor3f( (GLfloat) (*_model->_v_color_custom)[i1]->r(),
+		   (GLfloat) (*_model->_v_color_custom)[i1]->g(),
+		   (GLfloat) (*_model->_v_color_custom)[i1]->b() );
 	break;
       }
       glVertex3f( (*_model->_v_vertex)[i1](0), (*_model->_v_vertex)[i1](1), (*_model->_v_vertex)[i1](2) ); 
@@ -140,14 +140,14 @@ void MeshViewer::render( void )
       case MeshModel::NO_COLOR:
 	break;
       case MeshModel::DEFAULT_COLOR:
-	glColor3i( (GLint) (*_model->_v_color_default)[i2]->r(),
-		   (GLint) (*_model->_v_color_default)[i2]->g(),
-		   (GLint) (*_model->_v_color_default)[i2]->b() );
+	glColor3f( (GLfloat) (*_model->_v_color_default)[i2]->r(),
+		   (GLfloat) (*_model->_v_color_default)[i2]->g(),
+		   (GLfloat) (*_model->_v_color_default)[i2]->b() );
 	break;
       case MeshModel::CUSTOM_COLOR:
-	glColor3i( (GLint) (*_model->_v_color_custom)[i2]->r(),
-		   (GLint) (*_model->_v_color_custom)[i2]->g(),
-		   (GLint) (*_model->_v_color_custom)[i2]->b() );
+	glColor3f( (GLfloat) (*_model->_v_color_custom)[i2]->r(),
+		   (GLfloat) (*_model->_v_color_custom)[i2]->g(),
+		   (GLfloat) (*_model->_v_color_custom)[i2]->b() );
 	break;
       }
       glVertex3f( (*_model->_v_vertex)[i2](0), (*_model->_v_vertex)[i2](1), (*_model->_v_vertex)[i2](2) );

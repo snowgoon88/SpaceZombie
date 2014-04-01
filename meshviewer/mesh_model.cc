@@ -60,6 +60,25 @@ void MeshModel::dump(std::ostream& out, unsigned int nb_shown)
       out << FFORMAT(6,3) << (*_v_vertex)[i](0) << ", ";
       out << FFORMAT(6,3) << (*_v_vertex)[i](1) << ", ";
       out << FFORMAT(6,3) << (*_v_vertex)[i](2);
+
+      switch( _e_color ) {
+      case NO_COLOR:
+	out << " --- no color";
+	break;
+      case DEFAULT_COLOR:
+	out << " -D- " << (*_v_color_default)[i]->str_dump();
+	// << (* _v_color_default)[i]->r() << ", ";
+	// out << (* _v_color_default)[i]->g() << ", ";
+	// out << (* _v_color_default)[i]->b();
+	break;
+      case CUSTOM_COLOR:
+	out << " -C- " << (* _v_color_custom)[i]->str_dump();
+	// << ", ";
+	// out << (* _v_color_custom)[i]->g() << ", ";
+	// out << (* _v_color_custom)[i]->b();
+	break;
+      }
+	
       out << "\n";
     }
   }
@@ -75,6 +94,7 @@ void MeshModel::dump(std::ostream& out, unsigned int nb_shown)
       out << "\n";
     }
   }
+  
 }
 // ********************************************************************** ATTACH
 void MeshModel::attach( FileSCData *fileobject ) 
@@ -100,15 +120,24 @@ void MeshModel::custom_color_from_scdata( std::string type_name, unsigned int ad
 {
   // uint
   if (type_name.compare( "uchar" ) == 0) {
+    std::cout <<  "MeshModel::custom_color_from_scdata : uchar addr=" << address << "\n";
     _scdata->read_v_color<unsigned char>( address );
   }
   else {
     std::cout << "MeshModel::custom_color_from_scdata : unknown type_name=" << type_name << "\n";
+    return;
   }
-  // Copy to custom
-  _v_color_custom->clear();
-  for( unsigned int i = 0; i < _scdata->_v_color.size(); ++i) {
-    _v_color_custom->push_back( _scdata->_v_color[i] );
-  }
+  // clean up if not NULL
+  if (_v_color_custom != NULL ) delete _v_vertex;
+  _v_color_custom = new std::vector<IColorPtr>( _scdata->_v_color );
+  
+  // // Copy to custom
+  // _v_color_custom->clear();
+  // for( unsigned int i = 0; i < _scdata->_v_color.size(); ++i) {
+  //   std::cout << i << " " << _scdata->_v_color[i]->str_dump() << "\n";
+  //   _v_color_custom->push_back( _scdata->_v_color[i] );
+  // }
+
+  notify_observers();
 }
 //******************************************************************************

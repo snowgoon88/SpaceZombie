@@ -24,10 +24,10 @@ class IColor
 {
  public:
   /** Creation from memory */
-  virtual int r() = 0;
-  virtual int g() = 0;
-  virtual int b() = 0;
-  virtual int a() = 0;
+  virtual float r() = 0;
+  virtual float g() = 0;
+  virtual float b() = 0;
+  virtual float a() = 0;
 
   /** display string */
   virtual std::string str_dump() { return "IColor is Abstract !!"; };
@@ -58,10 +58,10 @@ public:
   std::string str_dump();
 
   /** get various variables of color */
-  int r() {return (int) _red;};
-  int g() {return (int) _green;};
-  int b() {return (int) _blue;};
-  int a() {return (int) _alpha;};
+  float r();
+  float g();
+  float b();
+  float a();
 };
 //********************************************************************* CREATION
 /** Creation */
@@ -93,13 +93,37 @@ template<typename T>
 TColor<T>::~TColor()
 {
 }
+// ******************************************************************* CONVERT
+template<typename T>
+float TColor<T>::r() 
+{
+  return (float) _red / (float) std::numeric_limits<T>::max(); 
+}
+template<typename T>
+float TColor<T>::g() 
+{
+  return (float) _green / (float) std::numeric_limits<T>::max(); 
+}
+template<typename T>
+float TColor<T>::b() 
+{
+  return (float) _blue / (float) std::numeric_limits<T>::max(); 
+}
+template<typename T>
+float TColor<T>::a() 
+{
+  return (float) _alpha / (float) std::numeric_limits<T>::max(); 
+}
+
 //*********************************************************************** STRING
 template<typename T>
 std::string TColor<T>::str_dump()
 {
   std::stringstream ss;
 
-  ss << r() << ", " << g() << ", " << b() << ", " << a();
+  ss << FFORMAT(6,3) << r() << ", " << FFORMAT(6,3) << g();
+  ss << ", " << FFORMAT(6,3) << b() << ", " << FFORMAT(6,3) << a();
+  ss << " [" << (int) _red << ", " << (int) _green << ", " << (int) _blue << ", " << (int) _alpha << "]";
   return ss.str();
 }
 //******************************************************************************
@@ -128,9 +152,9 @@ public:
   std::string str_dump();
 
   /** get various variables of color */
-  int r() {float val = _red * INT_MAX; return (int) val;};
-  int g() {float val = _green * INT_MAX; return (int) val;};
-  int b() {float val = _blue * INT_MAX; return (int) val;};
-  int a() {float val = _alpha * INT_MAX; return (int) val;};
+  float r() {return _red;};
+  float g() {return _green;};
+  float b() {return _blue;};
+  float a() {return _alpha;};
 };
 #endif // __Color_H__

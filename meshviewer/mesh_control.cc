@@ -13,7 +13,7 @@ MeshControl::MeshControl( MeshModelPtr model, MeshViewerPtr viewer )
   _model = model;
   _viewer = viewer;
 
-  _color_custom_str = "short 0x0C";
+  _color_custom_str = "uchar 0x0C";
 }
 /** Destruction */
 MeshControl::~MeshControl()
@@ -64,6 +64,10 @@ void MeshControl::build_bar()
   // Add a variable bool to control fg_light in viewer.
   TwAddVarRW( meshBar, "Light", TW_TYPE_BOOLCPP, &(_viewer->_fg_light) ,
 	      " label='(L)ight' help='With or without light' key=l");
+
+  // Add a button to dump mesh
+  TwAddButton( meshBar, "Dump", act_str_dump, this,
+	       " label='(D)ump' help='Dump Mesh' key=d");
 }
 //******************************************************************************
 void MeshControl::decode_custom_str( void ) 
@@ -110,6 +114,8 @@ void MeshControl::decode_custom_str( void )
   /* If we got here, strtol() successfully parsed a number */
   std::cout << "strtol = " << val  << "\n";
   std::cout << " asint = " << add_custom  << "\n";
+  
+  _model->custom_color_from_scdata( type, (unsigned int) val );
 
 }
 // ***************************************************************************
@@ -144,5 +150,12 @@ void TW_CALL get_custom_color_str_cbk(void *value, void *clientData)
   // Get: copy the value of s to AntTweakBar
   std::string *destPtr = static_cast<std::string *>(value);
   TwCopyStdStringToLibrary(*destPtr, mc->_color_custom_str); // the use of TwCopyStdStringToLibrary is required here
+}
+// ***************************************************************************
+//******************************************************************************
+void TW_CALL act_str_dump( void *clientData ) 
+{
+  MeshControl *mc = static_cast<MeshControl *>(clientData); // stored in clientData
+  mc->_model->dump( std::cout, 50);
 }
 // ***************************************************************************

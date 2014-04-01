@@ -2,9 +2,6 @@
 #+STARTUP: hidestars
 
 * SCDAta => meshviewer/
-** MeshModel : refactor to attach to fileSCDATA
-** then, able to change customcolor using fileSCDATA.read_v_color
-** MeshViewer_SCIGL : choisir la couleur, les normes, etc
 ** réorganiser SCData en une lib comme les autres. 
 *** Model = Mesh
 *** Viewer = MeshViewer

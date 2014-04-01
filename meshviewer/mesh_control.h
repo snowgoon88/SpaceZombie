@@ -56,4 +56,6 @@ void TW_CALL set_fg_color_cbk( const void *value, void *clientData );
 void TW_CALL set_custom_color_str_cbk(const void *value, void * clientData );
 void TW_CALL get_custom_color_str_cbk(void *value, void *clientData);
 //@}
+/** CBK function to dump mesh */
+void TW_CALL act_str_dump( void *clientData );
 #endif // __MESH_CONTROL_H__
