@@ -34,7 +34,7 @@ int main( int argc, char *argv[] )
   std::cout << "****CREATION" << "\n";
   mesh.dump( std::cout );
   std::cout << "****COPY from SCData" << "\n";
-  mesh.read_from( fscdata );
+  mesh.attach( &fscdata );
   mesh.dump( std::cout );
   return 0;
 }

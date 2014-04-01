@@ -189,7 +189,7 @@ int main (int argc, char **argv)
   FileSCData fscdata( "SCData/data/misc/cube1m.mdl-msh000" );
   fscdata.read( true );
   std::cout << fscdata.str_brief() << "\n";
-  _mesh_model->read_from( fscdata );
+  _mesh_model->attach( &fscdata );
   _mesh_model->dump( std::cout );
   //_mesh_model->_v_color = _mesh_model->_v_color_default;
 

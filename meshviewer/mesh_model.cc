@@ -13,6 +13,8 @@ MeshModel::MeshModel() : Model()
   _v_color_default = NULL;
   _v_color_custom = NULL;
   _e_color = NO_COLOR;
+  
+  _scdata = NULL;
 }
 /** Destruction */
 MeshModel::~MeshModel()
@@ -74,14 +76,15 @@ void MeshModel::dump(std::ostream& out, unsigned int nb_shown)
     }
   }
 }
-//************************************************************************* READ
-void MeshModel::read_from( FileSCData& fileobject ) 
+// ********************************************************************** ATTACH
+void MeshModel::attach( FileSCData *fileobject ) 
 {
+  _scdata = fileobject;
   // clean up if not NULL
   if (_v_vertex != NULL ) delete _v_vertex;
-  _v_vertex = new std::vector<TVec3>( fileobject._v_xyz );
+  _v_vertex = new std::vector<TVec3>( fileobject->_v_xyz );
   if (_v_indices != NULL ) delete _v_indices;
-  _v_indices = new std::vector<unsigned short>( fileobject._v_indices );
+  _v_indices = new std::vector<unsigned short>( fileobject->_v_indices );
   // Make default color
   if (_v_color_default != NULL ) delete _v_color_default;
   _v_color_default = new std::vector<IColorPtr>;
@@ -92,5 +95,20 @@ void MeshModel::read_from( FileSCData& fileobject )
   }
  
   notify_observers();
+}
+void MeshModel::custom_color_from_scdata( std::string type_name, unsigned int address ) 
+{
+  // uint
+  if (type_name.compare( "uchar" ) == 0) {
+    _scdata->read_v_color<unsigned char>( address );
+  }
+  else {
+    std::cout << "MeshModel::custom_color_from_scdata : unknown type_name=" << type_name << "\n";
+  }
+  // Copy to custom
+  _v_color_custom->clear();
+  for( unsigned int i = 0; i < _scdata->_v_color.size(); ++i) {
+    _v_color_custom->push_back( _scdata->_v_color[i] );
+  }
 }
 //******************************************************************************

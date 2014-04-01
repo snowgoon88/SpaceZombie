@@ -36,11 +36,14 @@ public:
   std::string str_brief();
   void dump(std::ostream& out, unsigned int nb_shown=12 );
 
-  /**
-   * Read from FileSCData.
+  /** 
+   * Attach to a FileSCData.
    * Copy vertex, indices and default color.
    */
-  void read_from( FileSCData& fileobject );
+  void attach( FileSCData *fileobject );
+  /**
+   * change custom_color using attached scdata */
+  void custom_color_from_scdata( std::string type_name, unsigned int address );
 
 
   /** Type of Color used */
@@ -50,11 +53,19 @@ public:
   /** Vertex list */
   std::vector<TVec3> * _v_vertex;
   /** Triangle list : every 3 indices makes a Triangle */
-  std::vector<unsigned short> * _v_indices;
+  std::vector<unsigned short> * _v_indices;  /**
+   * Read from FileSCData.
+   * Copy vertex, indices and default color.
+   */
+  void read_from( FileSCData& fileobject );
+
   /** Default color : grey for everyone */
   std::vector<IColorPtr> * _v_color_default;
   /** Vector of Abstract Color, can be NULL*/
   std::vector<IColorPtr> * _v_color_custom;
+
+  /** Attached FileSCData */
+  FileSCData * _scdata;
 };
 
 #endif // __MESH_MODEL_H__
