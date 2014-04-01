@@ -2,6 +2,8 @@
 #+STARTUP: hidestars
 
 * SCDAta => meshviewer/
+** afficher un petit dump de la mémoire
+entre ligne et ligne, (2 spin int)
 ** réorganiser SCData en une lib comme les autres. 
 *** Model = Mesh
 *** Viewer = MeshViewer
