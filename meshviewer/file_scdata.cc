@@ -113,6 +113,38 @@ void FileSCData::dump( std::ostream& out )
     out << "\n";
   }
 }
+/**
+ * str_dump_mem() depending on _vertex_size
+ * [i] : xyz -- uchar -- uv -- uchar
+ */
+std::string FileSCData::str_mem(unsigned int index)
+{
+  std::stringstream ss;
+  char *vertex = _raw_vertex[index];
+
+  ss << DFORMAT(4) << index << " : ";
+  ss << FFORMAT(6,3) << _v_xyz[index](0) << ", ";
+  ss << FFORMAT(6,3) << _v_xyz[index](1) << ", ";
+  ss << FFORMAT(6,3) << _v_xyz[index](2);
+
+  if (_size_vertex == 24 ) { // small format
+    ss << " -- ";
+    for( unsigned int i=12; i<16; ++i) {
+      unsigned char c = (unsigned char) vertex[i];
+      ss << HFORMAT(2) << (unsigned int) c << " ";
+    }
+  }
+  else {
+    ss << "unknown format";
+  }
+  
+  ss << " -- ";
+  ss << FFORMAT(6,3) << _v_uv[index](0) << ", ";
+  ss << FFORMAT(6,3) << _v_uv[index](1);
+
+  return ss.str();
+}
+  
 //******************************************************************************
 void FileSCData::read( bool fg_verb )
 {
@@ -152,6 +184,12 @@ void FileSCData::read( bool fg_verb )
     memcpy( &y, &(vertex[4]), sizeof(float));
     memcpy( &z, &(vertex[8]), sizeof(float));
     _v_xyz.push_back( TVec3(x,y,z) );
+    // read uv from vertex
+    float u,v;;
+    memcpy( &u, &(vertex[16]), sizeof(float));
+    memcpy( &v, &(vertex[20]), sizeof(float));
+    _v_uv.push_back( TVec2(u,v) );
+
     // read rgba from vertex
     TColorUC col_uc;
     col_uc.r = vertex[12];

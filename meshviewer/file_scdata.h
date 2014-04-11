@@ -29,6 +29,8 @@ public:
   std::string str_triangle(unsigned int index);
   /** dump on a stream */
   void dump( std::ostream& out );
+  /** display raw memory at index */
+  std::string str_mem(unsigned int index);
 
   /** size of a vertex */
   unsigned int _size_vertex;
@@ -36,6 +38,8 @@ public:
   unsigned int _nb_vertex;
   /** data vertex xyz : 3*sizeof(float) */
   std::vector<TVec3> _v_xyz;
+  /** data vertex uv : 2*sizeof(float) */
+  std::vector<TVec2> _v_uv;
   /** data vertex rgba (default), certainly false */
   std::vector<TColorUC> _v_rgba_uc;
   /** data vertex rgba in "normal" char */

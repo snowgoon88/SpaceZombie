@@ -47,15 +47,16 @@ std::string MeshModel::str_brief()
 
   return ss.str();
 }
-void MeshModel::dump(std::ostream& out, unsigned int nb_shown)
+void MeshModel::dump(std::ostream& out,unsigned int nb_shown, unsigned int nb_start )
 {
   
   out << str_brief();
 
   out << "Dump from _v_vertex \n";
   if( _v_vertex != NULL ) {
+    unsigned min_shown = std::min((unsigned int)_v_vertex->size()-1, nb_start);
     unsigned max_shown = std::min((unsigned int)_v_vertex->size(), nb_shown);
-    for( unsigned int i=0; i < max_shown; ++i) {
+    for( unsigned int i=min_shown; i < max_shown; ++i) {
       out << DFORMAT(4) << i << " : ";
       out << FFORMAT(6,3) << (*_v_vertex)[i](0) << ", ";
       out << FFORMAT(6,3) << (*_v_vertex)[i](1) << ", ";
@@ -85,8 +86,9 @@ void MeshModel::dump(std::ostream& out, unsigned int nb_shown)
   
   out << "Dump from _v_indices\n";
   if( _v_indices != NULL ) {
+    unsigned min_shown = std::min((unsigned int)_v_vertex->size()-1, nb_start);
     unsigned max_shown = std::min((unsigned int)_v_indices->size(), nb_shown);
-    for( unsigned int i=0; i < max_shown; ++i) {
+    for( unsigned int i=min_shown; i < max_shown; ++i) {
       out << DFORMAT(4) << i << " : ";
       out << DFORMAT(3) << (*_v_indices)[i] << ", ";
       out << DFORMAT(3) << (*_v_indices)[i+1] << ", ";

@@ -34,7 +34,7 @@ public:
   
   /** display string */
   std::string str_brief();
-  void dump(std::ostream& out, unsigned int nb_shown=12 );
+  void dump(std::ostream& out, unsigned int nb_shown=12, unsigned int nb_start=0 );
 
   /** 
    * Attach to a FileSCData.

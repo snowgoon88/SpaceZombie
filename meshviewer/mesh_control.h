@@ -40,6 +40,10 @@ public:
   MeshModelPtr _model;
   /** Viewer */
   MeshViewerPtr _viewer;
+  /** Where to start memory dumping */
+  unsigned int _mem_start;
+  /** Nb of lines when memory dumpin */
+  unsigned int _mem_nb;
 
   /** string for setting where custom color is read */
   std::string _color_custom_str;
@@ -58,4 +62,6 @@ void TW_CALL get_custom_color_str_cbk(void *value, void *clientData);
 //@}
 /** CBK function to dump mesh */
 void TW_CALL act_str_dump( void *clientData );
+/** CBK function to dump memory */
+void TW_CALL act_mem_dump( void *clientData ); 
 #endif // __MESH_CONTROL_H__

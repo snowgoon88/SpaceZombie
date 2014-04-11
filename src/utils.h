@@ -38,6 +38,9 @@
 #define FFORMAT(W,P) std::setiosflags(std::ios::fixed) << std::setw(W) << std::setprecision(P)
 /** MACRO format for dec. W=total width */
 #define DFORMAT(W) std::dec << std::setw(W)
+/** MACRO format for hexadecimal. W=total width */
+#define HFORMAT(W) std::hex << std::setw(W) << std::setfill('0')
+
 /**
  * Vector types:
  * + TVec2 and TVec2Ptr : vector with 2 dimensions.

@@ -14,6 +14,8 @@ MeshControl::MeshControl( MeshModelPtr model, MeshViewerPtr viewer )
   _viewer = viewer;
 
   _color_custom_str = "uchar 0x0C";
+  _mem_start = 0;
+  _mem_nb = 12;
 }
 /** Destruction */
 MeshControl::~MeshControl()
@@ -50,12 +52,12 @@ void MeshControl::build_bar()
     { MeshModel::CUSTOM_COLOR, "CUSTOM color" }
   };
   TwType EColorType = TwDefineEnum("ColorMode", enumColor, 3);  // create a new TwType associated to the enum defined by the enumColor array
-  TwAddVarRW( meshBar, "Color", EColorType, &(_model->_e_color),
-  	      " label='(C)olor' help='Switch Color Mode' key=c");
+  TwAddVarRW( meshBar, "FgColor", EColorType, &(_model->_e_color),
+  	      " label='(C)olor' group=Color help='Switch Color Mode' key=c");
   // Add a STDSTRING var to control where custom_color is read
   TwAddVarCB( meshBar, "custColStr", TW_TYPE_STDSTRING,
 	      set_custom_color_str_cbk, get_custom_color_str_cbk, this,
-	      " label='->Custom' help='Define custom color using : <type> <address> string'");
+	      " label='->Custom' group=Color help='Define custom color using : <type> <address> string'");
 
   // Add a variable bool to control fg_normal in viewer.
   TwAddVarRW( meshBar, "Normals", TW_TYPE_BOOLCPP, &(_viewer->_fg_normal) ,
@@ -68,6 +70,15 @@ void MeshControl::build_bar()
   // Add a button to dump mesh
   TwAddButton( meshBar, "Dump", act_str_dump, this,
 	       " label='(D)ump' help='Dump Mesh' key=d");
+
+  // Add 2 variables to control dump extends
+  TwAddVarRW( meshBar, "MemS", TW_TYPE_UINT32, &(_mem_start),
+	      " label='Mem Start' group=Memory help='First memory line to be dumped'");
+  TwAddVarRW( meshBar, "MemN", TW_TYPE_UINT32, &(_mem_nb),
+	      " label='Mem Nb' group=Memory help='Nb of memory lines to be dumped'");
+  TwAddButton( meshBar, "MemDump", act_mem_dump, this,
+	       " label='(M)em Dump' group=memory help='Dump Memory' key=m");
+
 }
 //******************************************************************************
 void MeshControl::decode_custom_str( void ) 
@@ -156,6 +167,18 @@ void TW_CALL get_custom_color_str_cbk(void *value, void *clientData)
 void TW_CALL act_str_dump( void *clientData ) 
 {
   MeshControl *mc = static_cast<MeshControl *>(clientData); // stored in clientData
-  mc->_model->dump( std::cout, 50);
+  mc->_model->dump( std::cout, mc->_mem_nb, mc->_mem_start);
+}
+// ***************************************************************************
+//******************************************************************************
+void TW_CALL act_mem_dump( void *clientData ) 
+{
+  MeshControl *mc = static_cast<MeshControl *>(clientData); // stored in clientData
+  FileSCData *sc = mc->_model->_scdata;
+  unsigned min_shown = std::min((unsigned int)sc->_raw_vertex.size()-1, mc->_mem_start);
+  unsigned max_shown = std::min((unsigned int)sc->_raw_vertex.size(), mc->_mem_start+mc->_mem_nb);
+  for( unsigned int i = min_shown; i < max_shown; ++i) {
+    std::cout << sc->str_mem(i) << "\n";
+  }
 }
 // ***************************************************************************
