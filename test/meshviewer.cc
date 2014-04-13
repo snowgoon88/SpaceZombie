@@ -176,6 +176,7 @@ void display (void) {
 
 int main (int argc, char **argv)
 {
+  std::cout << "ARGC=" << argc << "\n";
   // Some graphic parameters
   int width, height;
 
@@ -185,8 +186,15 @@ int main (int argc, char **argv)
   MeshControlPtr _mesh_control = MeshControlPtr( new MeshControl( _mesh_model, _mesh_viewer) );
   _mesh_model->attach_observer( _mesh_viewer );
   
+  std::string filename = "SCData/data/misc/cube1m.mdl-msh000";
+  // read argv[1] if provided
+  if (argc > 1) {
+    filename.assign(argv[1]);
+  }
   // init mesh from SCData
-  FileSCData fscdata( "SCData/data/misc/cube1m.mdl-msh000" );
+  // FileSCData fscdata( "SCData/data/misc/cube1m.mdl-msh000" );
+  // FileSCData fscdata( "SCData/data/race1_l_t1.mdl-msh000" );
+  FileSCData fscdata( filename );
   fscdata.read( true );
   std::cout << fscdata.str_brief() << "\n";
   _mesh_model->attach( &fscdata );

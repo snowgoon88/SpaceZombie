@@ -7,7 +7,8 @@
 //******************************************************************************
 int main( int argc, char *argv[] )
 {
-  FileSCData fscdata( "SCData/data/misc/cube1m.mdl-msh000" );
+  // FileSCData fscdata( "SCData/data/misc/cube1m.mdl-msh000" );
+  FileSCData fscdata( "SCData/data/race1_l_t1.mdl-msh000" );
   std::cout << fscdata.str_brief() << "\n";
   fscdata.read( true );
 
